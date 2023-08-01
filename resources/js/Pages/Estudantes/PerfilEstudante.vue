@@ -858,11 +858,11 @@
                                                 v-for="item in inscricoes"
                                                 :key="item"
                                               >
-                                                <td>{{ item.codigo }}</td>
-                                                <td>{{ item.disciplina }}</td>
-                                                <td>{{ item.classe }}</td>
-                                                <td>{{ item.duracao }}</td>
-                                                <td>{{ item.semestre }}</td>
+                                                <td>{{ item.codigo ?? '' }}</td>
+                                                <td>{{ item.disciplina ?? '' }}</td>
+                                                <td>{{ item.classe ?? '' }}</td>
+                                                <td>{{ item.duracao ?? '' }}</td>
+                                                <td>{{ item.semestre ?? '' }}</td>
                                                 <td>
                                                   {{
                                                     item.horario ??

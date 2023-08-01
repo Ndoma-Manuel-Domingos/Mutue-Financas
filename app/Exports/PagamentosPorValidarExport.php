@@ -77,7 +77,6 @@ class PagamentosPorValidarExport implements FromCollection,
     */
     public function collection()
     {
-        $ano = AnoLectivo::where('estado', 'Activo')->first();
 
         $pagamentos = Pagamento::when($this->prestacao, function ($query, $value) {
                 $query->where('mes_temp.id', $value);
@@ -98,7 +97,6 @@ class PagamentosPorValidarExport implements FromCollection,
                 $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
             })
             ->where('tb_pagamentos.estado', 0)
-            ->where('tb_pagamentos.AnoLectivo', $ano->Codigo)
             ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
             ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
             ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')

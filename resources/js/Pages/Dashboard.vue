@@ -210,7 +210,7 @@
                         type="text"
                         class="form-control col-12 col-md-6"
                         v-model="mes_temp_id"
-                        @change="search"
+                        @change="search_meses"
                       >
                         <option value="" disabled>Selecione</option>
                         <option :value="mes.id" v-for="mes in mesTemps" :key="mes.id">{{ mes.designacao }}</option>
@@ -337,13 +337,11 @@ export default {
   },
 
   mounted() {
-
-    this.carregar_grafico_pagamentos_por_meses(this.ano.Codigo);
-    this.carregar_grafico_pagamentos_por_turnos(this.ano.Codigo);
     this.carregar_grafico_estudantes_devedores(this.ano.Codigo);
     this.carregar_grafico_estudantes_propinas_pagas(this.ano.Codigo);
     this.carregar_grafico_estudantes_bolseiros(this.ano.Codigo);
-
+    this.carregar_grafico_pagamentos_por_turnos(this.ano.Codigo);
+    this.carregar_grafico_pagamentos_por_meses(this.ano.Codigo);
   },
   methods: {
     search(value) {
@@ -386,6 +384,12 @@ export default {
         this.mes_temp_id,
         this.estado_pagamentos
       );
+      this.carregar_grafico_estudantes_bolseiros(
+        this.ano_lectivo_selecionado,
+        this.mes_temp_id,
+        this.estado_pagamentos
+      );
+      // ************************************************************/  
       this.carregar_grafico_estudantes_devedores(
         this.ano_lectivo_selecionado,
         this.mes_temp_id,
@@ -396,7 +400,15 @@ export default {
         this.mes_temp_id,
         this.estado_pagamentos
       );
-      this.carregar_grafico_estudantes_bolseiros(
+    },
+    
+    search_meses(){
+      this.carregar_grafico_estudantes_devedores(
+        this.ano_lectivo_selecionado,
+        this.mes_temp_id,
+        this.estado_pagamentos
+      );
+      this.carregar_grafico_estudantes_propinas_pagas(
         this.ano_lectivo_selecionado,
         this.mes_temp_id,
         this.estado_pagamentos
@@ -450,7 +462,6 @@ export default {
           this.$Progress.fail();
         });
     },
-    
         
     carregar_grafico_estudantes_devedores(index, mes_temp_id, estado) {
       this.$Progress.start();
@@ -472,7 +483,6 @@ export default {
           this.$Progress.fail();
         });
     },
-    
 
     carregar_grafico_estudantes_propinas_pagas(index, mes_temp_id, estado) {
       this.$Progress.start();

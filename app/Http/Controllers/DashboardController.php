@@ -231,6 +231,7 @@ class DashboardController extends Controller
             $bolseiros_sem_renuncia = 0;
             
         }else{
+            
             $bolseiros = Bolseiro::where(function ($query) {
                 $query->whereHas('instituicao', function ($query) {
                     $query->where('tipo_instituicao', 2);
@@ -239,7 +240,7 @@ class DashboardController extends Controller
                 });
             })
             ->with('instituicao')
-            ->where('codigo_anoLectivo', $ano->Codigo)
+            ->where('codigo_anoLectivo', $ano_lectivo_selectionado->Codigo)
             ->where('status', 0)
             ->get();
             
@@ -251,6 +252,7 @@ class DashboardController extends Controller
         $data["bolseiros"] = number_format( $bolseiros_total, 2, ',', '.');
         $data["bolseiros_sem_renuncia"] = number_format( $bolseiros_sem_renuncia, 2, ',', '.');
         $data["bolseiros_com_renuncia"] = number_format( $bolseiros_com_renuncia, 2, ',', '.');
+        
    
         return response()->json($data);
     }

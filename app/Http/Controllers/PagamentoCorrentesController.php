@@ -383,7 +383,6 @@ class PagamentoCorrentesController extends Controller
                 $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
             })
             ->where('tb_pagamentos.estado', 0)
-            ->where('tb_pagamentos.AnoLectivo', $ano->Codigo)
             ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
             ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
             ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')
@@ -406,9 +405,8 @@ class PagamentoCorrentesController extends Controller
             ->withQueryString();
 
 
-
         $data['motivos'] = MotivoRejeicao::get();
-        $data['servicos'] = TipoServico::where('TipoServico', '!=', NULL)->where('codigo_ano_lectivo', $ano->Codigo)->get();
+        $data['servicos'] = TipoServico::where('TipoServico', '!=', NULL)->get();
         $data['prestacoes'] = MesTemp::where('ano_lectivo', $ano->Codigo)->get();
         $data['formaPagamentos'] = FormaPagamento::orderBy('descricao')->get();
         $data["filtros"] = $request->all("prestacao", "forma_pagamento", "data_inicio", "data_final","grau_academico",);
@@ -437,7 +435,6 @@ class PagamentoCorrentesController extends Controller
             $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
         })
         ->where('tb_pagamentos.estado', 0)
-        ->where('tb_pagamentos.AnoLectivo', $ano->Codigo)
         ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
         ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
         ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')

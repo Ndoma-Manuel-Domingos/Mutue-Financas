@@ -338,10 +338,14 @@ class EstudanteController extends Controller
                 'tb_periodos.Designacao AS turno',
             )->first();
 
+        
+        
         $data["preco_curso"] = TipoServico::where('polo_id', $data['estudante']['poloId'])
-            ->where('codigo_ano_lectivo', $this->anoLectivoActivo())
+            // ->where('codigo_ano_lectivo', $this->anoLectivoActivo())
             ->where('Descricao', 'Propina ' . $data['estudante']['curso'])
             ->first();
+
+        // dd($data["preco_curso"]);
 
         $data['bolseiro'] = Bolseiro::where('codigo_matricula', $matricula->Codigo)->where('status', 0)
             ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
