@@ -72,18 +72,18 @@ class EstudantePropinaPagaExport implements FromCollection,
     {
         // recuperar os servicos deste ano lectivo primeiramente mais somente servicos de propinas
         $servicos = TipoServico::where('Descricao', 'like', 'Propina %')->pluck('Codigo');
-        
+
         $grade_curriculares = GradeCurricularAluno::when($this->a, function ($query, $value) {
             $query->where('codigo_ano_lectivo', '=', $value);
             $query->whereIn('Codigo_Status_Grade_Curricular', [2,3]);
         })->distinct('codigo_matricula')->pluck('codigo_matricula');
-        
-        
-        
+
+
+
         $query = Pagamento::when($this->a, function ($query, $value) {
             $query->where('tb_pagamentos.AnoLectivo', '=', $value);
         });
-        
+
         if ($this->a >= 2 AND $this->a <= 15){
             $query->when($this->searchMes, function ($query, $value) {
                 $query->where('tb_pagamentosi.mes_id', '=', $value);
@@ -93,7 +93,7 @@ class EstudantePropinaPagaExport implements FromCollection,
                 $query->where('tb_pagamentosi.mes_temp_id', '=', $value);
             });
         }
-     
+
         $query->when($this->searchFaculdade, function ($query, $value) {
             $query->where('tb_cursos.faculdade_id', '=', $value);
         })
@@ -114,7 +114,7 @@ class EstudantePropinaPagaExport implements FromCollection,
         ->where('tb_pagamentos.estado', 1)
         // ->whereIn('tb_matriculas.Codigo', $grade_curriculares)
         ->whereIn('tb_pagamentosi.Codigo_Servico', $servicos);
-                
+
         if ($this->a >= 2 AND $this->a <= 15){
             $query->join('meses', 'tb_pagamentosi.mes_id', '=', 'meses.codigo');
             $query->select(
@@ -148,7 +148,7 @@ class EstudantePropinaPagaExport implements FromCollection,
         }
 
         return  $query->get();
-        
+
     }
 
     /**

@@ -58,11 +58,12 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/estudante/propina-pagar/pdf-imprimir', [ControloPagamentoPropinaController::class, 'pdfImprimirestudantePropinaPaga'])->name('mf.estudante-propina-paga-pdf');
     Route::get('/estudante/propina-pagar/excel-imprimir', [ControloPagamentoPropinaController::class, 'excelImprimirestudantePropinaPaga'])->name('mf.estudante-propina-pagas-excel');
 
-    Route::get('/estudante/devedores/pdf-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'pdfImprimirestudantePropinaPaga'])->name('mf.estudante-devedores-propina-paga-pdf');
-    Route::get('/estudante/devedores/excel-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'excelImprimirestudantePropinaPaga'])->name('mf.estudante-devedores-propina-pagas-excel');
+    Route::get('/estudante/devedores/pdf-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'ImprimirPDFestudanteDevedores'])->name('mf.estudante-devedores-propina-paga-pdf');
+    Route::get('/estudante/devedores/excel-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'excelImprimirestudanteDevedor'])->name('mf.estudante-devedores-propina-pagas-excel');
 
 
     Route::get('/estudantes/devedores', [ControloPagamentoPropinaController::class, 'estudanteDevedores'])->name('mf.estudante-devedores');
+
     Route::get('/pagamentos/propinas-por-mes/{id?}', [ControloPagamentoPropinaController::class, 'pagamentosPorMes'])->name('mf.estudante-por-mes');
     Route::get('/pagamentos/propinas-por-mes/pdf-imprimir/{id?}', [ControloPagamentoPropinaController::class, 'pdfImprimirpagamentosPorMes'])->name('mf.estudante-por-mes-pdf');
     Route::get('/pagamentos/propinas-por-mes/excel-imprimir/{id?}', [ControloPagamentoPropinaController::class, 'excelImprimirpagamentosPorMes'])->name('mf.estudante-por-mes-excel');
@@ -175,6 +176,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/visualizar-desconto/{item}', [GestaodeBolsaeDescontoController::class, 'visualizarDesconto'])->name('mf.visualizar-desconto');
 
     Route::get('/listagem/bolserios/pdf-imprimir/{AnoLectivo?}/{Curso?}/{Instituicao?}/{TipoBolsa?}{Estado?}/{Desconto?}/{Semestre?}',[GestaodeBolsaeDescontoController::class, 'pdfimprimirbolseiros'])->name('mf.imprimir-bolseiros');
+    Route::get('/listagem/bolserios/pdf-imprimir/{AnoLectivo?}/{Curso?}/{Instituicao?}/{TipoBolsa?}{Estado?}/{Desconto?}/{Semestre?}',[GestaodeBolsaeDescontoController::class, 'excelimprimirbolseiros'])->name('mf.imprimir-bolseiros');
+
     Route::get('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseiros'])->name('mf.pagamentoBolseiros');
     Route::post('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseirosCreate'])->name('mf.pagamentoBolseirosCreate');
 
