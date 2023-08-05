@@ -10,7 +10,7 @@
                         <h1 class="m-0 text-uppercase">Listar Bolseiros</h1>
                     </div>
                     <div class="col-sm-6">
-                        <a href="" class="btn btn-success btn-sm float-sm-right"><i class="fas fa-file-excel"></i>
+                        <a @click="imprimirExcel" href="" class="btn btn-success btn-sm float-sm-right"><i class="fas fa-file-excel"></i>
                             Excel</a>
                             <a @click="imprimirPDF" href="" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
                     </div>
@@ -702,6 +702,10 @@ export default {
       window.open("/listagem/bolserios/pdf-imprimir?AnoLectivo="+this.AnoLectivo+"&Curso="+this.Curso+"&Instituicao="+this.Instituicao+"&Desconto="+this.Desconto+"&Estado="+this.Estado+"&Semestre="+this.Semestre, "_blank");
     },
 
+
+    imprimirExcel() {
+      window.open("/listagem/bolserios/pdf-imprimir?AnoLectivo="+this.AnoLectivo+"&Curso="+this.Curso+"&Instituicao="+this.Instituicao+"&Desconto="+this.Desconto+"&Estado="+this.Estado+"&Semestre="+this.Semestre, "_blank");
+    },
  }
 }
 

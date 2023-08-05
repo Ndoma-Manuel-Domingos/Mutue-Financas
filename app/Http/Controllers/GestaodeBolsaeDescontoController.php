@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\InstituicaoExport;
+use App\Exports\ListarBolseirosExport;
 use App\Models\AlunoAdmissao;
 use App\Models\AnoLectivo;
 use App\Models\Banco;
@@ -124,8 +125,8 @@ class GestaodeBolsaeDescontoController extends Controller
         ->join('tb_status','tb_descontos_alunoo.estatus_desconto_id','=','tb_status.Codigo')
         ->join('tb_admissao','tb_matriculas.Codigo_Aluno','=','tb_admissao.Codigo')
         ->join('tb_preinscricao','tb_preinscricao.Codigo','=','tb_admissao.pre_incricao')
-        
-        ->select('tb_matriculas.Codigo AS matricula','tb_ano_lectivo.Designacao As Ano','tb_Instituicao.Instituicao AS NomeInstituicao','tb_tipo_descontos.designacao AS tipoDesconto','tb_descontos_alunoo.estatus_desconto_id', 
+
+        ->select('tb_matriculas.Codigo AS matricula','tb_ano_lectivo.Designacao As Ano','tb_Instituicao.Instituicao AS NomeInstituicao','tb_tipo_descontos.designacao AS tipoDesconto','tb_descontos_alunoo.estatus_desconto_id',
         'tb_descontos_alunoo.afectacao','tb_semestres.Designacao AS semestre','tb_tipo_descontos.valor_desconto AS valor','tb_status.Designacao AS status', 'tb_preinscricao.Nome_Completo', 'tb_descontos_alunoo.codigo_anoLectivo',
         'tb_descontos_alunoo.instituicao_id', 'tb_descontos_alunoo.semestre AS semestre_id', 'tb_descontos_alunoo.codigo_tipo_desconto', 'tb_descontos_alunoo.codigo', 'tb_descontos_alunoo.codigo_matricula')
         ->paginate(50);
@@ -136,18 +137,18 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function atribuicaoBolsaCarregarInstituicao(Request $request)
     {
-        
+
         $instituicao = Instituicacao::findOrFail($request->instituicao);
-    
+
         $resultado = TipoBolsaInsitituicao::when($request->instituicao, function ($query, $value) {
             $query->where('instituicao', '=', $value);
         })
         ->join('tb_tipo_bolsas', 'tb_tipo_bolsa_instituicao.tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
         ->select('tb_tipo_bolsas.codigo', 'tb_tipo_bolsas.designacao')
         ->get();
-            
+
         return response()->json(['tipo_bolsas' => $resultado, 'instituicao' => $instituicao], 200);
-            
+
     }
 
     // pagamento por validar
@@ -343,7 +344,7 @@ class GestaodeBolsaeDescontoController extends Controller
             'tipo_bolsa.required' => "Selecione o tipo de Bolsa.",
             'instituicao.required' => "Campo de caracter obrigatório.",
         ]);
-        
+
         $request = TipoBolsaInsitituicao::create([
             'tipo_bolsa' => $request->tipo_bolsa,
             'instituicao' => $request->instituicao,
@@ -476,11 +477,11 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function bolseiros(Request $request)
     {
-    
+
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
-        
+
         $data['bolsa'] = Bolsa::get();
         $data['anolectivos'] = AnoLectivo::orderBy('ordem', 'asc')->get();        $data['turnos'] = Turno::get();
         $data['semestres'] = Simestre::get();
@@ -491,7 +492,7 @@ class GestaodeBolsaeDescontoController extends Controller
         $data['mesTemps'] = MesTemp::when($request->AnoLectivo, function ($query, $value) {
             $query->where('ano_lectivo', $value);
         })->get();
-        
+
         // busca_matricula
         // busca_nome
         // busca_curso
@@ -521,29 +522,29 @@ class GestaodeBolsaeDescontoController extends Controller
         ->when($request->Semestre, function ($query, $value) {
             $query->where('tb_bolseiros.semestre', $value);
         })
-        //BUSCAS DOS INPUTS 
+        //BUSCAS DOS INPUTS
         ->when($request->busca_nome, function ($query, $value) {
             $query->where('tb_preinscricao.Nome_Completo', "like" ,"%".$value."%");
         })
-        
+
         ->when($request->busca_matricula, function ($query, $value) {
             $query->where('tb_matriculas.Codigo', $value);
         })
-        
+
         ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
         ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
         ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
         ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
         ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
         ->join('tb_semestres', 'tb_bolseiros.semestre', '=', 'tb_semestres.Codigo')
-         ->select('tb_matriculas.Codigo AS matricula', 'tb_cursos.Designacao AS curso', 'tb_bolseiros.codigo_matricula', 'tb_bolseiros.codigo', 'tb_tipo_bolsas.designacao AS tipobolsa', 
+         ->select('tb_matriculas.Codigo AS matricula', 'tb_cursos.Designacao AS curso', 'tb_bolseiros.codigo_matricula', 'tb_bolseiros.codigo', 'tb_tipo_bolsas.designacao AS tipobolsa',
         'tb_bolseiros.desconto', 'tb_bolseiros.status', 'tb_semestres.Designacao AS semestreItem', 'tb_preinscricao.Nome_Completo As nome', 'tb_bolseiros.codigo_anoLectivo',
         'tb_bolseiros.codigo_Instituicao',
         'tb_bolseiros.semestre',
         'tb_bolseiros.afectacao',
         'tb_bolseiros.codigo_tipo_bolsa',
         'tb_bolseiros.desconto',
-        'tb_bolseiros.status', 
+        'tb_bolseiros.status',
         'tb_preinscricao.Codigo AS preninscricaoCodigo'
         )
         ->paginate($request->page_size ?? 7)
@@ -551,54 +552,54 @@ class GestaodeBolsaeDescontoController extends Controller
 
         return Inertia::render('GestaoCreditoInstituicional/ListarBolseiros', $data);
     }
-    
+
     public function visualizarBolseiros(Request $request, $id)
     {
-    
+
         // "codigo" => "4470"
         // "codigo_matriula" => "21212"
-        
-        
+
+
         $matricula = Matricula::findOrFail($id);
         $admissao = AlunoAdmissao::findOrFail($matricula->Codigo_Aluno);
         $data['aluno'] = PreInscricao::findOrFail($admissao->pre_incricao);
-        
+
         $data['matricula'] = $matricula;
         $data['admissao'] = $admissao;
-        
+
         $data['bolsa'] = Bolseiro::join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
         ->join('mca_tb_utilizador', 'tb_bolseiros.codigo_utilizador', '=', 'mca_tb_utilizador.codigo_importado')
         ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
         ->select('tb_bolseiros.desconto', 'mca_tb_utilizador.nome', 'tb_tipo_bolsas.designacao', 'tb_Instituicao.Instituicao', 'tb_Instituicao.nif' , 'tb_Instituicao.contacto', 'tb_Instituicao.Endereco', 'tb_bolseiros.data_inicio_bolsa', 'tb_bolseiros.data_fim_bolsa' )
         ->findOrFail($request->codigo);
-        
+
         return response()->json($data, 200);
     }
-    
+
     public function mudarEstadoBolseiros($id)
     {
         $update = Bolseiro::findOrFail($id);
-        
+
         $novo_status = null;
-        
+
         if($update->status == 0){
             $novo_status = 1;
         }
-        
+
         if($update->status == 1){
             $novo_status = 0;
         }
-        
+
         $update->status = $novo_status;
         $update->update();
-        
+
         return redirect()->back();
-        
+
     }
 
     public function updateBolseiros(Request $request, $id)
     {
-        
+
         $request->validate([
             'anolectivo' => 'required',
             'instituicao' => 'required',
@@ -607,14 +608,14 @@ class GestaodeBolsaeDescontoController extends Controller
             'desconto' => 'required',
             'semestre' => 'required',
         ], []);
-        
+
         $bolsaInicio = 0;
         $bolsaFinal = 0;
-        
+
         $update = Bolseiro::findOrFail($id);
-        
+
         $ano = AnoLectivo::where('Codigo', $request->anolectivo)->first();
-        
+
         if($request->semestre == 1){
             $bolsaInicio = $ano->dataInicioPrimeiroSemestre;
             $bolsaFinal = $ano->dataFimPrimeiroSemestre;
@@ -623,7 +624,7 @@ class GestaodeBolsaeDescontoController extends Controller
             $bolsaInicio = $ano->dataInicioSegundoSemestre;
             $bolsaFinal = $ano->dataFimSegundoSemestre;
         }
-        
+
         $update->codigo_anoLectivo =  $request->anolectivo;
         $update->codigo_tipo_bolsa =  $request->tipo_bolsa;
         $update->codigo_Instituicao =  $request->instituicao;
@@ -632,9 +633,9 @@ class GestaodeBolsaeDescontoController extends Controller
         $update->desconto = $request->desconto;
         $update->data_inicio_bolsa = $bolsaInicio;
         $update->data_fim_bolsa = $bolsaFinal;
-        
+
         $update->update();
-        
+
         return redirect()->back();
     }
 
@@ -700,35 +701,43 @@ class GestaodeBolsaeDescontoController extends Controller
     }
 
 
-    public function excelImprimirBolseiros()
+    public function excelImprimirBolseiros(Request $request)
     {
-        dd("Bolseiros EXCEL");
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
+
+        $anoSelecionado = $request->searchAnoLectivo;
+
+        if (!$anoSelecionado) {
+            $anoSelecionado = $ano->Codigo;
+        }
+
+        return Excel::download(new ListarBolseirosExport($anoSelecionado, $request), 'estudante-com-propinas-pagas.xlsx');
     }
 
     //** DESCONTOS */
-    
+
     public function mudarEstadoDesconto($id)
     {
         $update = DescontoAluno::findOrFail($id);
-        
+
         $novo_status = null;
-        
+
         if($update->estatus_desconto_id == 1){
             $novo_status = 2;
         }
-        
+
         if($update->estatus_desconto_id == 2){
             $novo_status = 1;
         }
-        
+
         $update->estatus_desconto_id = $novo_status;
         $update->update();
-        
+
         return redirect()->back();
-        
+
     }
-    
-    
+
+
     public function updateDesconto(Request $request, $id)
     {
         $request->validate([
@@ -738,18 +747,18 @@ class GestaodeBolsaeDescontoController extends Controller
             'desconto' => 'required',
             'semestre' => 'required',
         ], []);
-  
+
         $update = DescontoAluno::findOrFail($id);
-  
+
         $update->codigo_anoLectivo =  $request->anolectivo;
         $update->instituicao_id =  $request->instituicao_id;
         $update->semestre = $request->semestre;
         $update->afectacao = $request->afectacao;
         $update->codigo_tipo_desconto = $request->desconto;
         $update->estatus_desconto_id = $request->status;
-        
+
         $update->update();
-        
+
         return redirect()->back();
     }
 
@@ -947,7 +956,7 @@ class GestaodeBolsaeDescontoController extends Controller
             }
         }
     }
-    
+
     // NOVOS MODULOS
     /**
     * TUDO SOBRE DESCONTO CRIAÇÃO,  ALTERACAOES, ELIMANACAO E LISTAGEM START
@@ -955,11 +964,11 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public  function listarDescontos(Request $request)
     {
-       
+
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
-       
+
         $Descontos = tipo_Desconto::when($request->codigo_busca, function ($query, $value) {
             $query->where('tb_tipo_descontos.Codigo', '=', $value);
         })
@@ -996,7 +1005,7 @@ class GestaodeBolsaeDescontoController extends Controller
 
         return redirect()->back();
     }
-    
+
 
     public function EditarTipoDesconto(Request $request, $id)
     {
@@ -1013,16 +1022,16 @@ class GestaodeBolsaeDescontoController extends Controller
         $update->valor_desconto = $request->valor_desconto;
         $update->codigo_status = $request->estado;
         $update->update();
-        
+
         return redirect()->back();
     }
-    
-    
+
+
     public function eliminarTipoDesconto($id)
     {
         $update = tipo_Desconto::findOrFail($id);
         $update->delete();
-        
+
         return redirect()->back();
     }
 

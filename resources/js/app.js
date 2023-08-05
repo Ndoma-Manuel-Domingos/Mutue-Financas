@@ -66,7 +66,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(VueProgressBar, options)
-      .use(ZiggyVue, Ziggy) 
+      .use(ZiggyVue, Ziggy)
       .use(VueChartkick, { adapter: Highcharts })
       .component("infinite-loading", InfiniteLoading)
       .component('Select2', Select2)

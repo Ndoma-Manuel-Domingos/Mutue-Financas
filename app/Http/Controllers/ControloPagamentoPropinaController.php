@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EstudanteDevedorExport;
 use App\Exports\EstudantePropinaPagaExport;
 use App\Exports\PagamentoPropinasPorMesExport;
 use App\Models\AnoLectivo;
@@ -499,7 +500,172 @@ class ControloPagamentoPropinaController extends Controller
     // estudantes devedores
     public function estudanteDevedores(Request $request)
     {
+        $searchFaculdade = $request->input('searchFaculdade', null);
+        $searchCurso = $request->input('searchCurso', null);
+        $searchTurno = $request->input('searchTurno', null);
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
 
+        $anoSelecionado = $request->searchAnoLectivo;
+
+        if (!$anoSelecionado) {
+            $anoSelecionado = $ano->Codigo;
+        }
+
+        $data['facturas'] = Matricula::select('tb_matriculas.Codigo as matricula', 'tb_preinscricao.Nome_Completo as nome', 'tb_cursos.Designacao as curso', 'tb_periodos.Designacao as turno', 'tb_faculdade.designacao AS faculdade', 'factura_items.Mes AS parcela')
+            ->when($request->searchMes, function ($query, $value) {
+                $query->where('tb_pagamentosi.mes_temp_id', '!=', $value);
+            })
+            ->when($request->searchCurso, function ($query, $value) {
+                $query->where('tb_cursos.Codigo', '=', $value);
+            })
+            ->when($request->searchTurno, function ($query, $value) {
+                $query->where('tb_periodos.Codigo', '=', $value);
+            })
+            ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
+            ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+            ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
+            ->join('tb_periodos', 'tb_periodos.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
+            ->join('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
+            ->join('factura', 'factura.CodigoMatricula', '=', 'tb_matriculas.Codigo')
+            ->leftJoin('factura_items', 'factura_items.CodigoFactura', '=', 'factura.Codigo')
+            ->leftjoin('mes_temp', 'factura_items.mes_temp_id', '=','factura_items.codigo')
+            // INNER JOIN factura  ON  factura.CodigoMatricula = tb_matriculas.Codigo
+            // LEFT JOIN factura_items ON factura_items.CodigoFactura = factura.Codigo
+            ->whereIn('tb_matriculas.Codigo', function ($query) use ($anoSelecionado) {
+                $query->select('codigo_matricula')
+                    ->from('tb_grade_curricular_aluno')
+                    ->where('codigo_ano_lectivo', $anoSelecionado) // Filtrar pelo ano lectivo selecionado
+                    ->whereIn('Codigo_Status_Grade_Curricular', [2, 3]);
+            })
+            ->whereNotIn('tb_matriculas.Codigo', function ($query) use ($anoSelecionado) {
+                $query->select('tb_matriculas.Codigo')
+                    ->from('tb_matriculas')
+                    ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
+                    ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+                    ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
+                    ->join('tb_periodos', 'tb_periodos.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
+                    ->join('tb_pagamentos', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
+                    ->leftJoin('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
+                    ->leftJoin('tb_pagamentosi', 'tb_pagamentosi.Codigo_Pagamento', '=', 'tb_pagamentos.Codigo')
+                    ->where('tb_pagamentos.estado',1)
+                    ->where('tb_pagamentosi.mes_id',8);
+            })
+
+
+            ->when($searchFaculdade, function ($query, $value) {
+                $query->where('tb_cursos.faculdade_id', '=', $value); // Filtrar pela ID da faculdade selecionada
+            })
+            ->when($searchCurso, function ($query, $value) {
+                $query->where('tb_cursos.Codigo', '=', $value); // Filtrar pela ID da faculdade selecionada
+            })
+
+            ->when($searchTurno, function ($query, $value) {
+                $query->where('tb_preinscricao.Codigo_Turno', '=', $value); // Filtrar pela ID da faculdade selecionada
+            })
+
+            ->paginate(15);
+
+        $data["anolectivos"] = AnoLectivo::orderBy('ordem', 'asc')->get();
+        $data["turnos"] = Turno::where('status', 1)->get();
+        $data["faculdades"] = Faculdade::where('estado', 1)->get();
+
+        $data["mesTemps"] = MesTemp::when($request->searchAnoLectivo, function ($query, $value) {
+            $query->where('ano_lectivo',$value);
+        })->get();
+
+        $data["cursos"] = Curso::when($request->searchFaculdade, function ($query, $value) {
+            $query->where('faculdade_id', $value);
+        })->get();
+
+
+        //Ano lectivo ativo
+        $data["anolectivoactivo"] = AnoLectivo::where('Codigo', $anoSelecionado)->first();
+
+        $data["filters"] = $request->all("searchAnoLectivo", "searchTurno", "searchMes", "searchCurso", "searchFaculdade");
+
+        return Inertia::render('AreaFinanceira/EstudanteDevedores', $data);
+    }
+
+
+    public function ImprimirPDFestudanteDevedores(Request $request)
+    {
+        $searchFaculdade = $request->input('searchFaculdade', null);
+        $searchCurso = $request->input('searchCurso', null);
+        $searchTurno = $request->input('searchTurno', null);
+
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
+
+        $anoSelecionado = $request->searchAnoLectivo;
+
+        if (!$anoSelecionado) {
+            $anoSelecionado = $ano->Codigo;
+        }
+        $servicos = TipoServico::where('Descricao', 'like', 'Propina %')->pluck('Codigo');
+
+        $grade_curriculares = GradeCurricularAluno::when($anoSelecionado, function ($query, $value) {
+            $query->where('codigo_ano_lectivo', '=', $value);
+            $query->whereIn('Codigo_Status_Grade_Curricular', [2, 3]);
+        })->distinct('codigo_matricula')->pluck('codigo_matricula');
+
+        $data['items'] = Matricula::select('tb_matriculas.Codigo as matricula', 'tb_preinscricao.Nome_Completo as nome', 'tb_cursos.Designacao as curso', 'tb_periodos.Designacao as turno', 'tb_faculdade.designacao AS faculdade', 'factura_items.Mes AS parcela')
+        ->when($request->searchMes, function ($query, $value) {
+            $query->where('tb_pagamentosi.mes_temp_id', '!=', $value);
+        })
+
+        ->when($request->searchCurso, function ($query, $value) {
+            $query->where('tb_cursos.Codigo', '=', $value);
+        })
+        ->when($request->searchTurno, function ($query, $value) {
+            $query->where('tb_periodos.Codigo', '=', $value);
+        })
+            ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
+            ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+            ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
+            ->join('tb_periodos', 'tb_periodos.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
+            ->join('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
+            ->join('factura', 'factura.CodigoMatricula', '=', 'tb_matriculas.Codigo')
+            ->leftJoin('factura_items', 'factura_items.CodigoFactura', '=', 'factura.Codigo')
+            // INNER JOIN factura  ON  factura.CodigoMatricula = tb_matriculas.Codigo
+            // LEFT JOIN factura_items ON factura_items.CodigoFactura = factura.Codigo
+            ->whereIn('tb_matriculas.Codigo', function ($query) use ($anoSelecionado) {
+                $query->select('codigo_matricula')
+                    ->from('tb_grade_curricular_aluno')
+                    ->where('codigo_ano_lectivo', $anoSelecionado) // Filtrar pelo ano lectivo selecionado
+                    ->whereIn('Codigo_Status_Grade_Curricular', [2, 3]);
+            })
+            ->whereNotIn('tb_matriculas.Codigo', function ($query) use ($anoSelecionado) {
+                $query->select('tb_matriculas.Codigo')
+                    ->from('tb_matriculas')
+                    ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
+                    ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+                    ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
+                    ->join('tb_periodos', 'tb_periodos.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
+                    ->join('tb_pagamentos', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
+                    ->leftJoin('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
+                    ->leftJoin('tb_pagamentosi', 'tb_pagamentosi.Codigo_Pagamento', '=', 'tb_pagamentos.Codigo')
+                    ->where('tb_pagamentos.estado', 1)
+                    ->where('tb_pagamentosi.mes_id', 8);
+
+                })
+
+                ->limit(2000)
+                ->get();
+
+        $data['faculdade'] = Faculdade::find($request->searchFaculdade);
+        $data['curso'] = Curso::find($request->searchCurso);
+        $data['turno'] = Turno::find($request->searchTurno);
+        $data['mes'] = MesTemp::find($request->searchMes);
+        $data['ano'] = AnoLectivo::find($anoSelecionado);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('pdf.estudantes.estudante-devedores', $data);
+        $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
+        return $pdf->stream();
+    }
+
+
+    public function excelImprimirestudanteDevedor(Request $request)
+
+    {
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
@@ -509,100 +675,7 @@ class ControloPagamentoPropinaController extends Controller
             $anoSelecionado = $ano->Codigo;
         }
 
-        $grade_curriculares = GradeCurricularAluno::when($anoSelecionado, function ($query, $value) {
-            $query->where('codigo_ano_lectivo', '=', $value);
-            $query->whereIn('Codigo_Status_Grade_Curricular', [2, 3]);
-        })->distinct('codigo_matricula')->pluck('codigo_matricula');
-
-        $lista_mes_temps = MesTemp::when($anoSelecionado, function ($query, $value) {
-            $query->where('ano_lectivo', $value);
-        })->pluck('id');
-
-$data = Matricula::select('tb_matriculas.Codigo as matricula', 'tb_preinscricao.Nome_Completo as nome', 'tb_cursos.Designacao as curso', 'tb_periodos.Designacao as turno')
-    ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-    ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-    ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
-    ->join('tb_periodos', 'tb_periodos.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
-    ->where('tb_matriculas.Codigo', function ($query) use ($ano_lectivo) {
-        $query->select('codigo_matricula')
-            ->from('tb_grade_curricular_aluno')
-            ->where('codigo_ano_lectivo', $ano_lectivo)
-            ->whereIn('Codigo_Status_Grade_Curricular', [2, 3]);
-    })
-    ->whereNotIn('tb_matriculas.Codigo', function ($query) use ($mes_id) {
-        $query->select('tm_pp.Codigo')
-            ->from('tb_matriculas as tm_pp')
-            ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_pp.Codigo_Aluno')
-            ->join('tb_preinscricao as tp_p', 'tp_p.Codigo', '=', 'ta_p.pre_incricao')
-            ->join('tb_cursos as tc2', 'tc2.Codigo', '=', 'tm_pp.Codigo_Curso')
-            ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tp_p.Codigo_Turno')
-            ->join('tb_pagamentos as tp', 'tp.Codigo_PreInscricao', '=', 'tp_p.Codigo')
-            ->leftJoin('tb_pagamentosi as tpi', 'tpi.Codigo_Pagamento', '=', 'tp.Codigo')
-            ->where('tp.estado', 1)
-            ->where('tpi.mes_id', $mes_id);
-    })
-    ->where('tb_preinscricao.Codigo_Turno', $Codigo_Turno)
-    ->where('tb_cursos.Codigo', $Codigo_Curso)
-    ->where('tb_cursos.faculdade_id', $faculdade_id)
-    ->orderBy('tb_preinscricao.Nome_Completo', 'ASC')
-    ->distinct()
-    ->get();
-
-        // $data['facturas'] = Pagamento::when($anoSelecionado, function ($query, $value) {
-        //     $query->where('tb_pagamentos.AnoLectivo', '=', $value);
-        // })
-        // ->when($request->searchMes, function ($query, $value) {
-        //     $query->where('tb_pagamentosi.mes_temp_id', '!=', $value);
-        // })
-        // ->when($request->searchFaculdade, function ($query, $value) {
-        //     $query->where('tb_cursos.faculdade_id', '=', $value);
-        // })
-        // ->when($request->searchCurso, function ($query, $value) {
-        //     $query->where('tb_cursos.Codigo', '=', $value);
-        // })
-        // ->when($request->searchTurno, function ($query, $value) {
-        //     $query->where('tb_periodos.Codigo', '=', $value);
-        // })
-        // ->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
-        // ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-        // ->leftJoin('mes_temp', 'tb_pagamentosi.mes_temp_id', '=', 'mes_temp.id')
-        // ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        // ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        // ->leftJoin('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-        // ->leftJoin('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
-        // ->leftJoin('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
-        // ->whereNotIn('tb_pagamentosi.mes_temp_id', $lista_mes_temps)
-        // // ->whereNotIn('tb_matriculas.Codigo', $grade_curriculares)
-        // ->select('tb_matriculas.Codigo AS matricula',
-        //     'tb_preinscricao.Nome_Completo AS aluno',
-        //     'tb_cursos.Designacao AS curso',
-        //     'tb_periodos.Designacao AS turno',
-        //     'mes_temp.designacao AS servico',
-        //     'tb_faculdade.designacao AS faculdade',
-        //     'tb_pagamentos.Totalgeral AS valores'
-        // )
-        // ->distinct('tb_matriculas.Codigo')
-        // ->paginate(5)
-        // ->withQueryString();
-
-
-        // $data["anolectivos"] = AnoLectivo::orderBy('ordem', 'asc')->get();
-        // $data["turnos"] = Turno::where('status', 1)->get();
-        // $data["faculdades"] = Faculdade::where('estado', 1)->get();
-
-        // $data["mesTemps"] = MesTemp::when($request->searchAnoLectivo, function($query, $value){
-        //     $query->where('ano_lectivo', $value);
-        // })->get();
-
-        // $data["cursos"] = Curso::when($request->searchFaculdade, function($query, $value){
-        //     $query->where('faculdade_id', $value);
-        // })->get();
-
-        // //Ano lectivo ativo
-        // $data["anolectivoactivo"] = AnoLectivo::where('Codigo', $anoSelecionado)->first();
-
-        // $data["filters"] = $request->all("searchAnoLectivo" , "searchTurno" , "searchMes" ,"searchCurso", "searchFaculdade");
-
-        return Inertia::render('AreaFinanceira/EstudanteDevedores', $data);
+        return Excel::download(new EstudanteDevedorExport($anoSelecionado, $request), 'estudante-devedores.xlsx');
     }
+
 }

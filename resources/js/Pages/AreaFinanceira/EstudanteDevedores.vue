@@ -100,22 +100,22 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4>Em Analise com os dados do gestão academica</h4>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- <div class="row">
+                <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
                             <div class="card-header bg-light">
-                                <h5>TOTAL REGISTROS: {{ facturas.total }}</h5>
+                                <!-- <h5>TOTAL REGISTROS: {{ facturas.total }}</h5> -->
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -133,14 +133,14 @@
                                         </thead>
                                         <tbody>
                                             <tr v-for="factura in facturas.data" :key="factura.matricula">
-                                                <td>{{ factura.matricula }}</td>
-                                                <td>{{ factura.aluno }}</td>
+                                                <td>{{ factura.matricula}}</td>
+                                                <td>{{ factura.nome}}</td>
                                                 <td>{{ factura.faculdade }}</td>
-                                                <td>{{ factura.curso }}</td>
-                                                <td>{{ factura.turno }}</td>
-                                                <td>{{ factura.servico }}</td>
+                                                <td>{{ factura.curso}}</td>
+                                                <td>{{ factura.turno}}</td>
+                                                <td>{{ factura.parcela}}</td>
                                                 <td>
-                                                    <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)"
+                                                    <a :href="route('mf.estudante-visualizar-perfil',factura.matricula)"
                                                         class="btn-sm btn-primary">
                                                         <i class="fas fa-user-graduate"></i>
                                                     </a>
@@ -153,14 +153,14 @@
 
                             <div class="card-footer">
                                 <Link href="" class="text-secondary">
-                                TOTAL REGISTROS: {{ facturas.total }}
+                                <!-- TOTAL REGISTROS: {{ facturas.total }} -->
                                 </Link>
-                                <Paginacao :links="facturas.links" :prev="facturas.prev_page_url"
-                                    :next="facturas.next_page_url" />
+                                <!-- <Paginacao :links="facturas.links" :prev="facturas.prev_page_url"
+                                    :next="facturas.next_page_url"/> -->
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
             </div>
         </div>
@@ -171,34 +171,37 @@
 <script>
     import { Link } from '@inertiajs/inertia-vue3'
     import Paginacao from '../../Shared/Paginacao.vue'
-    
+
     export default {
-        
+
         props: [
             "anolectivos",
             "mesTemps",
             "turnos",
             "faculdades",
             "facturas",
+            "cursos",
+
         ],
-        
+
         components: {
             Link,
-            Paginacao
+            Paginacao,
+
         },
-        
+
         data(){
             return {
-                searchAnoLectivo: "18",
+                 searchAnoLectivo: "18",
                 searchMes: "",
                 searchFaculdade: "",
                 searchCurso: "",
                 searchTurno: "",
-                
+
                 params: {},
             }
         },
-        
+
         watch: {
           options: function(val) {
             this.params.page = val.page;
@@ -233,7 +236,7 @@
             this.updateData();
           }
         },
-        
+
         methods: {
             updateData() {
                 this.$Progress.start();
@@ -245,11 +248,11 @@
                   }
                 });
             },
-        
+
             imprimirPDF () {
                 window.open("/estudante/devedores/pdf-imprimir?searchAnoLectivo="+this.searchAnoLectivo+"&searchMes="+this.searchMes+"&searchFaculdade="+this.searchFaculdade+"&searchCurso="+this.searchCurso+"&searchTurno="+this.searchTurno, "_blank");
             },
-        
+
             imprimirEXCEL () {
                 window.open("/estudante/devedores/excel-imprimir?searchAnoLectivo="+this.searchAnoLectivo+"&searchMes="+this.searchMes+"&searchFaculdade="+this.searchFaculdade+"&searchCurso="+this.searchCurso+"&searchTurno="+this.searchTurno, "_blank");
             }
