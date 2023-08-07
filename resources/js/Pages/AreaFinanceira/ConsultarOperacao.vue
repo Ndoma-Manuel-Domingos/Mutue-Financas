@@ -65,7 +65,7 @@
                                             <tr v-for="pagamento in pagamentos.data" :key="pagamento.Codigo">
                                                 <td>{{ pagamento.preinscricao.Nome_Completo }}</td>
                                                 <td>{{ pagamento.Data }}</td>
-                                                <td>AOA {{ pagamento.valor_depositado }}</td>
+                                                <td>{{ formatValor(pagamento.valor_depositado) }}</td>
                                                 <td>{{ pagamento.anolectivo.Designacao }}</td>
                                                 <td class="text-danger">{{ pagamento.canal.designacao }}</td>
                                                 <td>

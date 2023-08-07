@@ -153,7 +153,7 @@
 
                             <div class="card-footer">
                                 <Link href="" class="text-secondary">
-                                <!-- TOTAL REGISTROS: {{ facturas.total }} -->
+                                    TOTAL REGISTROS: {{ facturas.total }}
                                 </Link>
                                 <!-- <Paginacao :links="facturas.links" :prev="facturas.prev_page_url"
                                     :next="facturas.next_page_url"/> -->
@@ -181,15 +181,11 @@
             "faculdades",
             "facturas",
             "cursos",
-
         ],
-
         components: {
             Link,
             Paginacao,
-
         },
-
         data(){
             return {
                  searchAnoLectivo: "18",

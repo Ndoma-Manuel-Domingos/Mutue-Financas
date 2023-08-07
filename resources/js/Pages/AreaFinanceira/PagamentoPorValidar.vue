@@ -411,7 +411,7 @@
             },
 
         },
-
+            
         methods: {
             updateData() {
                 this.$Progress.start();

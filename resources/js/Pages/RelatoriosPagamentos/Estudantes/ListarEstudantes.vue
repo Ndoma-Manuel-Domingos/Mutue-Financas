@@ -186,6 +186,7 @@ export default{
         "faculdades",
         "cursos",
         "turnos",
+        "ano_lectivo_activo"
     ],
     components: {
         Link,
@@ -195,7 +196,7 @@ export default{
         return {
             params: {},
           
-            anolectivo: 18,
+            anolectivo: this.ano_lectivo_activo.Codigo,
             faculdade: "",
             curso: "",
             turno: "",

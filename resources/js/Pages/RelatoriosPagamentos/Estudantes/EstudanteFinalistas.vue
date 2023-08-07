@@ -113,7 +113,7 @@
                     </thead>
                     <tbody>
                       <tr v-for="item in estudantes.data" :key="item.matricula">
-                        <td>{{ item.matricula }}</td>
+                        <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.matricula }}</a></td>
                         <td>{{ item.bilhete }}</td>
                         <td>{{ item.nome }}</td>
                         <td>{{ item.curso }}</td>
@@ -146,14 +146,14 @@ import { Link } from "@inertiajs/inertia-vue3";
 import Paginacao from "../../../Shared/Paginacao.vue";
 
 export default {
-  props: ["estudantes", "cursos", "turnos", "anolectivos"],
+  props: ["estudantes", "cursos", "turnos", "anolectivos", "ano_lectivo_activo"],
 
   components: { Link, Paginacao },
   data() {
     return {
       searchCurso: "",
       searchTurno: "",
-      anolectivo: "",
+      anolectivo: this.ano_lectivo_activo.Codigo,
 
       params: {},
     };

@@ -1463,6 +1463,7 @@ class EstudanteController extends Controller
         $data["anolectivos"] = AnoLectivo::orderBy('ordem', 'asc')->get();
         $data["turnos"] = Turno::where('status', 1)->get();
         $data["cursos"] = Curso::get();
+        $data["ano_lectivo_activo"] = $ano;
 
         return Inertia::render('RelatoriosPagamentos/Estudantes/EstudanteFinalistas', $data);
     }

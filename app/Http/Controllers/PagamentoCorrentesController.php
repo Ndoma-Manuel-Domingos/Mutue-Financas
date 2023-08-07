@@ -198,7 +198,7 @@ class PagamentoCorrentesController extends Controller
             'tb_actualizacao_saldo_aluno.obs',
             'tb_actualizacao_saldo_aluno.id',
         )
-        ->paginate($request->page_size ?? 10)
+        ->paginate($request->page_size ?? 5)
         ->withQueryString();
 
         // grupos permitido em acessar o sistema
@@ -361,6 +361,12 @@ class PagamentoCorrentesController extends Controller
         $ano = AnoLectivo::where('estado', 'Activo')->first();
         $data['grau'] = GrauAcademico::get();
 
+        if($request->data_inicio) {
+            $request->data_inicio =  $request->data_inicio;
+        }else{
+            $request->data_inicio = date('Y-m-d');
+        }
+
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
         })
@@ -508,6 +514,12 @@ class PagamentoCorrentesController extends Controller
         // dd($request->all());
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
+        
+        if($request->data_inicio) {
+            $request->data_inicio =  $request->data_inicio;
+        }else{
+            $request->data_inicio = date('Y-m-d');
+        }
 
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
@@ -524,8 +536,8 @@ class PagamentoCorrentesController extends Controller
         ->when($request->operador, function ($query, $value) {
             $query->where('fk_utilizador', '=', $value);
         })
-        ->where('AnoLectivo', $ano->Codigo)
-        ->where('estado', 3)
+        ->whereIn('estado', [3])
+        ->where('corrente', 0)
         ->with('preinscricao.polo')
         ->with('preinscricao.curso')
         ->with('anolectivo')

@@ -93,9 +93,7 @@ class RelatorioFinanceiroController extends Controller
         // recuperar os servicos deste ano lectivo primeiramente mais somente servicos de propinas
         $servicos = TipoServico::where('Descricao', 'like', 'Propina %')->where('codigo_ano_lectivo', $anoSelecionado)->pluck('Codigo');
 
-
-
-         $data['items'] = Pagamento::when($anoSelecionado, function ($query, $value) {
+        $data['items'] = Pagamento::when($anoSelecionado, function ($query, $value) {
             $query->where('AnoLectivo', $value);
         })
         ->with('items.mes_temps', 'anolectivo', 'preinscricao.polo', 'preinscricao.grau_academico')
@@ -708,6 +706,7 @@ class RelatorioFinanceiroController extends Controller
         $data['faculdades'] = Faculdade::where('estado', 1)->get();
         $data['cursos'] = Curso::get();
         $data['turnos'] = Turno::where('status', 1)->get();
+        $data['ano_lectivo_activo'] = $ano;
 
 
         return Inertia::render('RelatoriosPagamentos/Estudantes/ListarEstudantes', $data);

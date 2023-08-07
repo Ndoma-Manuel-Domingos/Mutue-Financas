@@ -112,6 +112,9 @@
           </div>
 
           <div class="card-footer">
+            <Link href="" class="text-secondary">
+              TOTAL REGISTROS: {{ saldos.total }}
+            </Link>
             <Paginacao
               :links="saldos.links"
               :prev="saldos.prev_page_url"
@@ -190,6 +193,12 @@ export default {
       detalhe: [],
     }
   },
+  mounted()
+  {
+    this.params.data_inicio = new Date().toISOString().substr(0, 10)
+    this.updateData();
+  },
+        
   watch: {
     options: function (val) {
       this.params.page = val.page;
