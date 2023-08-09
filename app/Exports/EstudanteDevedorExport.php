@@ -3,9 +3,12 @@
 namespace App\Exports;
 
 use App\Http\Controllers\TraitHelpers;
+use App\Models\AnoLectivo;
 use App\Models\GradeCurricularAluno;
 use App\Models\Pagamento;
 use App\Models\TipoServico;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -28,41 +31,37 @@ class EstudanteDevedorExport implements FromCollection,
 {
     use TraitHelpers;
 
-    public $a , $searchMes , $searchFaculdade , $searchCurso , $searchTurno;
+    protected $facturas;
 
-    public function __construct($a , $request)
+    public function __construct($facturas)
     {
-        $this->a = $a;
-        $this->searchMes = $request->searchMes;
-        $this->searchFaculdade = $request->searchFaculdade;
-        $this->searchCurso = $request->searchCurso;
-        $this->searchTurno = $request->searchTurno;
+        $this->facturas = $facturas;
     }
 
     public function headings():array
     {
         return[
-            'Nº Matricula',
+            'Matricula',
             'Nome',
-            'Faculdade',
             'Curso',
             'Turno',
-            'Mês/Parcela',
+
+
             // 'Ano Lectivo',
         ];
     }
 
     public function map($caixa):array
     {
-        return[
-            $caixa->matricula,
-            $caixa->aluno,
-            $caixa->faculdade,
-            $caixa->curso,
-            $caixa->turno,
-            $caixa->servico,
-            // $caixa->AnoLectivoPagamento,
-        ];
+
+            return[
+                $caixa->matricula,
+                $caixa->nome,
+                $caixa->curso,
+                $caixa->turno,
+            ];
+
+
     }
 
     /**
@@ -70,84 +69,11 @@ class EstudanteDevedorExport implements FromCollection,
     */
     public function collection()
     {
-        // recuperar os servicos deste ano lectivo primeiramente mais somente servicos de propinas
-        $servicos = TipoServico::where('Descricao', 'like', 'Propina %')->pluck('Codigo');
 
-        $grade_curriculares = GradeCurricularAluno::when($this->a, function ($query, $value) {
-            $query->where('codigo_ano_lectivo', '=', $value);
-            $query->whereIn('Codigo_Status_Grade_Curricular', [2,3]);
-        })->distinct('codigo_matricula')->pluck('codigo_matricula');
+        return collect($this->facturas);
 
 
 
-        $query = Pagamento::when($this->a, function ($query, $value) {
-            $query->where('tb_pagamentos.AnoLectivo', '=', $value);
-        });
-
-        if ($this->a >= 2 AND $this->a <= 15){
-            $query->when($this->searchMes, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_id', '=', $value);
-            });
-        }else{
-            $query->when($this->searchMes, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_temp_id', '=', $value);
-            });
-        }
-
-        $query->when($this->searchFaculdade, function ($query, $value) {
-            $query->where('tb_cursos.faculdade_id', '=', $value);
-        })
-        ->when($this->searchCurso, function ($query, $value) {
-            $query->where('tb_cursos.Codigo', '=', $value);
-        })
-        ->when($this->searchTurno, function ($query, $value) {
-            $query->where('tb_periodos.Codigo', '=', $value);
-        })
-        ->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
-        ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-        ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-        ->join('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
-        ->join('tb_ano_lectivo', 'tb_pagamentos.AnoLectivo', '=', 'tb_ano_lectivo.Codigo')
-        ->join('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
-        ->where('tb_pagamentos.estado', 1)
-        // ->whereIn('tb_matriculas.Codigo', $grade_curriculares)
-        ->whereIn('tb_pagamentosi.Codigo_Servico', $servicos);
-
-        if ($this->a >= 2 AND $this->a <= 15){
-            $query->join('meses', 'tb_pagamentosi.mes_id', '=', 'meses.codigo');
-            $query->select(
-                'meses.mes AS servico',
-                'meses.codigo AS IdServico',
-                'tb_matriculas.Codigo AS matricula',
-                'tb_preinscricao.Nome_Completo AS aluno',
-                'tb_cursos.Designacao AS curso',
-                'tb_periodos.Designacao AS turno',
-                'tb_faculdade.designacao AS faculdade',
-                'tb_pagamentos.Totalgeral AS valores',
-                'tb_ano_lectivo.Designacao AS anolectivo',
-                'tb_pagamentos.Codigo AS CodigoPagamento',
-                'tb_pagamentosi.Valor_Pago AS valorPago',
-            );
-        }else{
-            $query->join('mes_temp', 'tb_pagamentosi.mes_temp_id', '=', 'mes_temp.id');
-            $query->select(
-                'mes_temp.designacao AS servico',
-                'mes_temp.id AS IdServico',
-                'tb_matriculas.Codigo AS matricula',
-                'tb_preinscricao.Nome_Completo AS aluno',
-                'tb_cursos.Designacao AS curso',
-                'tb_periodos.Designacao AS turno',
-                'tb_faculdade.designacao AS faculdade',
-                'tb_pagamentos.Totalgeral AS valores',
-                'tb_pagamentos.Codigo AS CodigoPagamento',
-                'tb_pagamentosi.Valor_Pago AS valorPago',
-            );
-
-        }
-
-        return  $query->get();
 
     }
 

@@ -36,7 +36,7 @@ class ControloPagamentoPropinaController extends Controller
     {
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
-       
+
         $anoSelecionado = $request->searchAnoLectivo;
 
         if (!$anoSelecionado) {
@@ -60,7 +60,7 @@ class ControloPagamentoPropinaController extends Controller
                 $query->where('tb_pagamentosi.mes_temp_id', '=', $value);
             });
         }
-        
+
         $query->when($request->searchFaculdade, function ($query, $value) {
             $query->where('tb_cursos.faculdade_id', '=', $value);
         })
@@ -498,27 +498,27 @@ class ControloPagamentoPropinaController extends Controller
     {
         $searchFaculdade = $request->input('searchFaculdade', null);
         $searchCurso = $request->searchCurso;
-        $searchTurno = $request->searchTurno; 
+        $searchTurno = $request->searchTurno;
         $searchMes = $request->searchMes;
-        
+
         if($searchTurno){
             $searchTurno =  $searchTurno;
         }else {
             $searchTurno = "";
         }
-        
+
         if($searchMes){
             $searchMes =  $searchMes;
         }else {
             $searchMes = "";
         }
-        
+
         if($searchCurso){
             $searchCurso =  $searchCurso;
         }else {
             $searchCurso = "";
         }
-        
+
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
         $anoSelecionado = $request->searchAnoLectivo;
@@ -526,7 +526,7 @@ class ControloPagamentoPropinaController extends Controller
         if (!$anoSelecionado) {
             $anoSelecionado = $ano->Codigo;
         }
-            
+
         $data['facturas'] = DB::table('tb_matriculas as tm_p')
         ->select('tm_p.Codigo as matricula', 'tp_p.Nome_Completo as nome', 'tc2.Designacao as curso', 'tp2.Designacao as turno')
         ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_p.Codigo_Aluno')
@@ -670,13 +670,64 @@ class ControloPagamentoPropinaController extends Controller
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
+        $searchFaculdade = $request->input('searchFaculdade', null);
+        $searchCurso = $request->searchCurso;
+        $searchTurno = $request->searchTurno;
+        $searchMes = $request->searchMes;
         $anoSelecionado = $request->searchAnoLectivo;
-
         if (!$anoSelecionado) {
             $anoSelecionado = $ano->Codigo;
         }
+        $facturasQuery= DB::table('tb_matriculas as tm_p')
+        ->select('tm_p.Codigo as matricula', 'tp_p.Nome_Completo as nome', 'tc2.Designacao as curso', 'tp2.Designacao as turno')
+        ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_p.Codigo_Aluno')
+        ->join('tb_preinscricao as tp_p', 'tp_p.Codigo', '=', 'ta_p.pre_incricao')
+        ->join('tb_cursos as tc2', 'tc2.Codigo', '=', 'tm_p.Codigo_Curso')
+        ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tp_p.Codigo_Turno')
+        ->whereRaw('tm_p.Codigo IN (SELECT tgca.codigo_matricula FROM tb_grade_curricular_aluno tgca WHERE tgca.codigo_ano_lectivo = ? AND tgca.Codigo_Status_Grade_Curricular IN (2, 3))', [$anoSelecionado])
+        ->whereNotIn('tm_p.Codigo', function ($query) use($searchMes) {
+            $query->select('tm_pp.Codigo')
+                ->from('tb_matriculas as tm_pp')
+                ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_pp.Codigo_Aluno')
+                ->join('tb_preinscricao as tp_p', 'tp_p.Codigo', '=', 'ta_p.pre_incricao')
+                ->join('tb_cursos as tc2', 'tc2.Codigo', '=', 'tm_pp.Codigo_Curso')
+                ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tp_p.Codigo_Turno')
+                ->join('factura as f', 'f.CodigoMatricula', '=', 'tm_pp.Codigo')
+                ->leftJoin('factura_items as fi', 'fi.CodigoFactura', '=', 'f.Codigo')
+                ->where('fi.estado', 1)
+                ->where('fi.mes_temp_id', $searchMes);
+        });
 
-        return Excel::download(new EstudanteDevedorExport($anoSelecionado, $request), 'estudante-devedores.xlsx');
+        if (!empty($searchMes)) {
+            $facturasQuery->whereNotIn('tm_p.Codigo', function ($query) use ($searchMes) {
+                // ...
+            });
+        }
+
+        if (!empty($searchTurno)) {
+            $facturasQuery->when($searchTurno, function ($query) use ($searchTurno) {
+                // ...
+            });
+        }
+
+        if (!empty($searchCurso)) {
+            $facturasQuery->when($searchCurso, function ($query) use ($searchCurso) {
+                // ...
+            });
+        }
+
+        if (!empty($searchFaculdade)) {
+            $facturasQuery->when($searchFaculdade, function ($query) use ($searchFaculdade) {
+                // ...
+            });
+        }
+
+        $facturas = $facturasQuery->get();
+
+        $export = new EstudanteDevedorExport($facturas);
+
+
+        return Excel::download($export,'Estudante Devedores.xlsx');
     }
 
 }

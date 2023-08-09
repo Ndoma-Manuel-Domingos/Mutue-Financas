@@ -83,7 +83,6 @@
                                             <div class="input-group input-group">
                                                 <select v-model="form.tipoDesconto" disabled class="form-control" id="tipo_Desconto"
                                                     :class="{ 'is-invalid': form.errors.semestre }">
-                                                    <option value="">TODOS</option>
                                                     <option :value="tipoDesconto.Codigo" v-for="tipoDesconto in tipoDesconto"
                                                         :key="tipoDesconto.Codigo">
                                                         {{ tipoDesconto.designacao}}
@@ -282,17 +281,18 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Mudar Estado</h5>
+                <h5 class="modal-title">Mudar o estado do Desconto</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <p>Tem certeza que pretende mudar o estado da bolsa?</p>
+                <p>Tem certeza que pretende mudar o estado do Desconto?</p>
               </div>
               <div class="modal-footer">
-                <button type="button" @click="cancelarStatus" class="btn-sm btn-danger">Cancelar</button>
-                <button type="button" @click="confirmarMudarStatus" class="btn-sm btn-primary" data-dismiss="modal">Confirmar</button>
+                <button type="button" @click="confirmarMudarStatus" class="btn-sm btn-primary" data-dismiss="modal">SIM</button>
+                <button type="button" @click="cancelarStatus" class="btn-sm btn-danger">NÃO</button>
+
               </div>
             </div>
           </div>
