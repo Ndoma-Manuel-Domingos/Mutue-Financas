@@ -61,7 +61,6 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/estudante/devedores/pdf-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'ImprimirPDFestudanteDevedores'])->name('mf.estudante-devedores-propina-paga-pdf');
     Route::get('/estudante/devedores/excel-imprimir/{a?}/{m?}/{f?}/{c?}/{t?}', [ControloPagamentoPropinaController::class, 'excelImprimirestudanteDevedor'])->name('mf.estudante-devedores-propina-pagas-excel');
 
-
     Route::get('/estudantes/devedores', [ControloPagamentoPropinaController::class, 'estudanteDevedores'])->name('mf.estudante-devedores');
 
     Route::get('/pagamentos/propinas-por-mes/{id?}', [ControloPagamentoPropinaController::class, 'pagamentosPorMes'])->name('mf.estudante-por-mes');

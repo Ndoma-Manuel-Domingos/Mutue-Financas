@@ -33,6 +33,7 @@ use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PagamentoCorrentesController extends Controller
@@ -359,12 +360,12 @@ class PagamentoCorrentesController extends Controller
         }else{
             $request->ano_lectivo = $ano->Codigo;
         }
-
-        if($request->data_inicio) {
-            $request->data_inicio =  $request->data_inicio;
-        }else{
-            // $request->data_inicio = date('Y-m-d');
-        }
+        
+        // if($request->data_inicio) {
+        //     $request->data_inicio =  $request->data_inicio;
+        // }else{
+        //     // $request->data_inicio = date('Y-m-d');
+        // }
 
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
@@ -377,24 +378,24 @@ class PagamentoCorrentesController extends Controller
             $query->where('tb_pagamentos.forma_pagamento', $value);
         })
         ->when($request->tipo_servico, function ($query, $value) {
-            $query->where('factura_items.CodigoProduto', $value);
+            $query->where('tb_pagamentosi.Codigo_Servico', $value);
         })
         ->when($request->grau_academico, function ($query, $value) {
             $query->where('tb_tipo_candidatura.id', ($value));
         })
         ->when($request->data_inicio, function ($query, $value) {
-            $query->whereDate('tb_pagamentos.Data', '>=', Carbon::createFromDate($value));
+            $query->whereDate('tb_pagamentos.created_at', '>=', Carbon::createFromDate($value));
         })
         ->when($request->data_final, function ($query, $value) {
-            $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
+            $query->whereDate('tb_pagamentos.created_at', '<=', Carbon::createFromDate($value));
         })
         ->where('tb_pagamentos.estado', 0)
-        ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
-        ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
-        // ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')
+        ->where('tb_pagamentos.AnoLectivo', $request->ano_lectivo)
+        ->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
+        ->join('tb_tipo_servicos', 'tb_pagamentosi.Codigo_Servico', '=', 'tb_tipo_servicos.Codigo')
         ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-        ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        ->join('tb_matriculas', 'tb_admissao.Codigo', '=', 'tb_matriculas.Codigo_Aluno')
+        ->leftjoin('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+        ->leftjoin('tb_matriculas', 'tb_admissao.Codigo', '=', 'tb_matriculas.Codigo_Aluno')
         ->join('tb_tipo_candidatura', 'tb_preinscricao.codigo_tipo_candidatura', '=', 'tb_tipo_candidatura.id')
         ->select(
             'tb_matriculas.Codigo AS matricula',
@@ -405,14 +406,12 @@ class PagamentoCorrentesController extends Controller
             'tb_pagamentos.Data',
             'tb_pagamentos.estado',
             'tb_pagamentos.forma_pagamento',
-            // 'mes_temp.designacao AS prestacao',
             'tb_pagamentos.valor_depositado',
             'tb_tipo_candidatura.designacao AS grau_academico',
             'tb_tipo_servicos.Descricao AS servico',
         )
         ->paginate(5)
         ->withQueryString();
-        
 
 
         $data['motivos'] = MotivoRejeicao::get();
@@ -482,22 +481,15 @@ class PagamentoCorrentesController extends Controller
 
     public function validarPagamentoStore($id)
     {
-        $pagamento = Pagamento::findOrFail($id);
-        $pagamento->estado = 1;
-        $pagamento->update();
+        $user = auth()->user();
+     
+        $pagamento = Pagamento::findOrFail($id);   
         
-        $factura = Factura::where('Codigo', $pagamento->codigo_factura)->first();
-        
-        $total_pagamentos_factura = Pagamento::where('codigo_factura', $factura->Codigo)->sum('valor_depositado');
-        
-        if(number_format($total_pagamentos_factura, 2, '.', '') >= number_format($factura->ValorAPagar, 2, '.', '')){
-            $fact = Factura::findOrFail($factura->Codigo);
-            $fact->estado = 1;
-            $fact->ValorEntregue = $total_pagamentos_factura;
-            $fact->update();
-        }
+        $response = Http::get("http://10.10.6.158:8080/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
+        $data = $response->json();
 
-        return redirect()->back();
+        return response()->json($data);
+        
     }
 
     public function rejeitarPagamentoStore($id, $motivos = null)

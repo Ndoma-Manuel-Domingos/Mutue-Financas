@@ -155,8 +155,13 @@
                                         </thead>
                                         <tbody>
                                             <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
-                                                <td><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.matricula }}</a></td>
-                                                <td><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.Nome_Completo }}</a></td>
+                                                
+                                                <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.matricula }}</a></td>
+                                                <td v-else>#####</td>
+                                                
+                                                <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.Nome_Completo }}</a></td>
+                                                <td v-else>{{ pagamento.Nome_Completo  }}</td>
+                                                
                                                 <td>{{ pagamento.codigo_factura }}</td>
                                                 <td>{{ pagamento.Codigo }}</td>
                                                 <td>{{ pagamento.servico }}</td>
@@ -527,12 +532,24 @@
                     axios
                       .get("../pagamento/validar-pagamento/store/" + item)
                       .then((response) => {
-
-                        sweetSuccess("Pagamento validado com sucesso!")
-
-                        $('#modalDetalhesPagamento').modal('hide');
-
-                        this.$Progress.finish();
+                        
+                        if(response.data.code == 200){
+                            sweetSuccess(response.data.descricao)
+    
+                            $('#modalDetalhesPagamento').modal('hide');
+                            
+                            this.$Progress.finish();
+                            window.location.reload();
+                        }else                        
+                        if(response.data.code == 400){
+                            sweetError(response.data.descricao)
+                            this.$Progress.fail();
+                        }else{
+                            this.$Progress.fail();
+                            sweetError("erro ao tentar validar Pagmento !"); 
+                            this.$Progress.finish();
+                        }
+                       
                     }).catch(() => {
                         this.$Progress.fail();
                         sweetError("erro ao tentar validar Pagmento !");

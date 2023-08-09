@@ -548,16 +548,13 @@ class ControloPagamentoPropinaController extends Controller
         })
         ->where('tc2.tipo_candidatura', 1)
         ->when($searchTurno, function ($query) use ($searchTurno) {
-            $query->where('tp_p.Codigo_Turno', $searchTurno)
-                ->orWhere($searchTurno, '=', 404);
+            $query->where('tp_p.Codigo_Turno', $searchTurno);
         })
         ->when($searchCurso, function ($query) use ($searchCurso) {
-            $query->where('tc2.Codigo', $searchCurso)
-            ->orWhere($searchCurso, '=', 404);
+            $query->where('tc2.Codigo', $searchCurso);
         })
         ->when($searchFaculdade, function ($query) use ($searchFaculdade) {
-            $query->where('tc2.faculdade_id', $searchFaculdade)
-            ->orWhere($searchFaculdade, '=', 404);
+            $query->where('tc2.faculdade_id', $searchFaculdade);
         })
         ->whereNotIn('tm_p.Codigo', function ($query) use($anoSelecionado) {
             $query->select('codigo_matricula')
