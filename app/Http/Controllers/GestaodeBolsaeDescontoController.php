@@ -88,6 +88,8 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function atribuicaoDesconto(Request $request)
     {
+
+
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
@@ -477,6 +479,7 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function bolseiros(Request $request)
     {
+
 
         if ($request->page_size == -1) {
             $request->page_size = 15;

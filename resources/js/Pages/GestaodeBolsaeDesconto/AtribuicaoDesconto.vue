@@ -135,7 +135,7 @@
                                             <div class="input-group input-group">
                                                 <select v-model="form.semestre" disabled class="form-control" id="semestre"
                                                     :class="{ 'is-invalid': form.errors.semestre }">
-                                                    <option value="">TODOS</option>
+
                                                     <option :value="semestre.Codigo" v-for="semestre in semestres"
                                                         :key="semestre.Codigo">
                                                         {{semestre.Designacao}}

@@ -546,7 +546,8 @@ class ControloPagamentoPropinaController extends Controller
                 ->where('fi.estado', 1)
                 ->where('fi.mes_temp_id', $searchMes);
         })
-        ->where('tc2.tipo_candidatura', 1)
+
+        ->where('tc2.tipo_candidatura',1)
         ->when($searchTurno, function ($query) use ($searchTurno) {
             $query->where('tp_p.Codigo_Turno', $searchTurno);
         })
@@ -666,9 +667,7 @@ class ControloPagamentoPropinaController extends Controller
 
     public function excelImprimirestudanteDevedor(Request $request)
 
-    {
-
-        $ano = AnoLectivo::where('estado', 'Activo')->first();
+    {  $ano = AnoLectivo::where('estado', 'Activo')->first();
 
         $searchFaculdade = $request->input('searchFaculdade', null);
         $searchCurso = $request->searchCurso;
