@@ -26,6 +26,7 @@ use App\Models\Isencao;
 use App\Models\IsencaoMulta;
 use App\Models\ListaTipoMovimento;
 use App\Models\Matricula;
+use App\Models\Mes;
 use App\Models\MesTemp;
 use App\Models\MotivoEliminaFacturaPagamento;
 use App\Models\MotivoIsencao;
@@ -41,6 +42,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+
+use Illuminate\Support\Facades\Http;
 
 class EstudanteController extends Controller
 {
@@ -224,6 +227,14 @@ class EstudanteController extends Controller
         session()->put('confirmar_estudante_bolsa_mutue_finance', $numero);
     }
 
+    public function carregarEstado($id)
+    {
+        $response = Http::get("10.10.6.143:8080/mutue/mga/estado_matricula?matricula={$id}");
+        $data = $response->json();
+        
+        return response()->json(['data' => $data], 200);
+    }
+
     public function visualizarPerfilEstudante($id)
     {
         $ano = AnoLectivo::where('estado', 'Activo')->first();
@@ -242,10 +253,10 @@ class EstudanteController extends Controller
         $total_grade_curricular_quinto_ano = 0;
 
         $grades = GradeCurricularAluno::join('tb_grade_curricular', 'tb_grade_curricular_aluno.codigo_grade_curricular', '=', 'tb_grade_curricular.Codigo')
-        ->where('Codigo_Status_Grade_curricular', '2')
-        ->where('codigo_matricula', $matricula->Codigo)
-        ->where('codigo_ano_lectivo', $this->anoLectivoActivo())
-        ->get();
+            ->where('Codigo_Status_Grade_curricular', '2')
+            ->where('codigo_matricula', $matricula->Codigo)
+            ->where('codigo_ano_lectivo', $this->anoLectivoActivo())
+            ->get();
         
         if ($grades) {
             foreach ($grades as $grade) {
@@ -309,8 +320,6 @@ class EstudanteController extends Controller
             ->join('tb_ocupacao', 'tb_preinscricao.Codigo_Ocupacao', '=', 'tb_ocupacao.Codigo')
             ->join('tb_profissao', 'tb_preinscricao.Codigo_Profissao', '=', 'tb_profissao.Codigo')
             ->join('tb_nacionalidades', 'tb_preinscricao.Codigo_Nacionalidade', '=', 'tb_nacionalidades.Codigo')
-            // ->join('tb_provincias', 'tb_preinscricao.Provincia_Trabalho', '=', 'tb_provincias.Codigo')
-
             ->select(
                 'tb_matriculas.Codigo AS codigo',
                 'tb_preinscricao.Codigo AS codigo_preinscricao',
@@ -341,17 +350,18 @@ class EstudanteController extends Controller
         
         
         $data["preco_curso"] = TipoServico::where('polo_id', $data['estudante']['poloId'])
-            // ->where('codigo_ano_lectivo', $this->anoLectivoActivo())
             ->where('Descricao', 'Propina ' . $data['estudante']['curso'])
             ->first();
 
-        // dd($data["preco_curso"]);
 
-        $data['bolseiro'] = Bolseiro::where('codigo_matricula', $matricula->Codigo)->where('status', 0)
+        $data['bolseiro'] = Bolseiro::where('codigo_matricula', $matricula->Codigo)
+            ->where('codigo_anoLectivo', $ano->Codigo)
+            ->where('status', 0)
             ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
             ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
             ->first();
 
+        // $data["anolectivos"] = AnoLectivo::get();
         $data["anolectivos"] = AnoLectivo::whereIn('Codigo', $this->anoLectivoEstudante($id))->orderBy('Codigo', 'desc')->get();
         
         $data["anolectivosinscritosactual"] = AnoLectivo::where('Codigo', $this->anoLectivoActivo())->has('mes_temps')->orderBy('Codigo', 'desc')->first();
@@ -396,6 +406,7 @@ class EstudanteController extends Controller
             $prestacao['factura_item'] = $prestacaoPaga;
             //Verificar isenção
             $prestacao['suspenso'] = $this->checkIsencao($matricula->Codigo, $prestacao->id, $this->anoLectivoActivo(), $preinscricao);
+            $prestacao['bolseiro'] = $this->BolsaPorSemestre($matricula->Codigo, $this->anoLectivoActivo(), $prestacao->semestre);
       
             $prestacoes->push($prestacao);
         }
@@ -409,6 +420,7 @@ class EstudanteController extends Controller
             $prestacao['factura_item_anterior'] = $prestacaoPaga_anterior;
             //Verificar isenção
             $prestacao['suspenso_anterior'] = $this->checkIsencao($matricula->Codigo, $prestacao->id, $this->anoLectivoActivoAnterior(), $preinscricao);
+            $prestacao['bolseiro'] = $this->BolsaPorSemestre($matricula->Codigo, $this->anoLectivoActivoAnterior(), $prestacao->semestre);
       
             $prestacoes_anterior->push($prestacao);
         }
@@ -440,19 +452,48 @@ class EstudanteController extends Controller
         $data["ano_lectivo_mestrado"] = AnoLectivo::where('Codigo', $this->anoLectivoActivoMestrado())->first();
         $data["ano_lectivo_doutorado"] = AnoLectivo::where('Codigo', $this->anoLectivoActivoDoutorado())->first();
         
+        $data["ano_lectivo_activo"] = $ano;
 
         $data['motivos'] = MotivoIsencao::get();
 
         return Inertia::render('Estudantes/PerfilEstudante', $data);
     }
     
-    public function checkIsencao($codigo_matricula, $mes_temp_id, $codigo_anoLectivo, $preinscricao){
-        
+    public function checkIsencao($codigo_matricula, $mes_temp_id, $codigo_anoLectivo, $preinscricao)
+    {
         $isencoes = Isencao::where('estado_isensao', 'Activo')->where('codigo_matricula', $codigo_matricula)->where('mes_temp_id', $mes_temp_id)->where('codigo_anoLectivo', $codigo_anoLectivo)->get();
-        
+       
         return filled($isencoes);
     }
-
+    
+    
+    public function BolsaPorSemestre($codigo_matricula,$codigo_anoLectivo,$semestre_id)
+    {
+         // estado ativo é 0 e desativado é 1
+       $bolseiro = DB::table('tb_bolseiros')
+        ->join('tb_tipo_bolsas','tb_tipo_bolsas.codigo','tb_bolseiros.codigo_tipo_bolsa')
+        ->where('tb_bolseiros.codigo_matricula', $codigo_matricula)
+        ->where('tb_bolseiros.codigo_anoLectivo', $codigo_anoLectivo)
+        ->where('tb_bolseiros.semestre', $semestre_id)
+      //  ->where('status', $this->anoAtualPrincipal->index()==$codigo_anoLectivo ? 0 : 1)->select('*','tb_tipo_bolsas.designacao as tipo_bolsa')->first(); //Abordagem do ano 2021-2022 
+        ->where('status', 0)->select('*','tb_tipo_bolsas.designacao as tipo_bolsa')
+        ->first(); //Abordagem do ano Actual
+        
+      
+       return $bolseiro;
+    }
+    
+    public function bolseiro_siiuma($codigo_matricula, $codigo_anoLectivo){
+        $bolseiro = DB::table('tb_bolseiro_siiuma')
+        ->where('tb_bolseiro_siiuma.codigo_matricula', $codigo_matricula)
+        ->where('tb_bolseiro_siiuma.ano', $codigo_anoLectivo)
+        ->select('*')->first();
+    
+        return $bolseiro;
+    
+     }
+    
+  
     public function carregarInscricoes($id, $ano)
     {
         $query = GradeCurricularAluno::where('codigo_matricula', $id)->whereIn('Codigo_Status_Grade_Curricular', [2, 3])
@@ -537,9 +578,16 @@ class EstudanteController extends Controller
     public function carregarIsencaoPagamento($ano_id, $matricula)
     {
         $ano = AnoLectivo::findOrFail($ano_id);
-        $meses = MesTemp::where('ano_lectivo', $ano->Codigo)->get();
+        
+        if ($ano->Codigo >= 2 and $ano->Codigo <= 15) {
+            $meses = Mes::select('codigo AS id', 'mes AS designacao')->get();
+        } else {
+            $meses = MesTemp::where('ano_lectivo', $ano->Codigo)->where('activo', 1)->get();
+        }
+        
+        
         $servicos = TipoServico::where('codigo_ano_lectivo', $ano->Codigo)->get();
-
+   
         $isencoes_pagamentos = Isencao::join('tb_tipo_servicos', 'tb_isencoes.codigo_servico', '=', 'tb_tipo_servicos.Codigo')
             ->join('mes_temp', 'tb_isencoes.mes_temp_id', '=', 'mes_temp.id')
             ->where('codigo_matricula',  $matricula)
@@ -831,13 +879,14 @@ class EstudanteController extends Controller
             ->where('mes_temp_id', $request->mes_isencao)
             ->where('codigo_matricula', $request->codigo)
             ->first();
-
+        
         if ($verificar) {
             return response()->json([
                 "message" => "Este Pagamento  já esta isentado!"
             ], 201);
         }
-
+    
+        
         Isencao::create([
             'codigo_matricula' => $request->codigo,
             'codigo_servico' => $request->servico_isencao,
@@ -852,6 +901,7 @@ class EstudanteController extends Controller
             'mes_id' => NULL,
             'ref_utilizado' => $arrays,
         ]);
+        
 
         $isencoes_pagamentos = Isencao::join('tb_tipo_servicos', 'tb_isencoes.codigo_servico', '=', 'tb_tipo_servicos.Codigo')
             ->join('mes_temp', 'tb_isencoes.mes_temp_id', '=', 'mes_temp.id')

@@ -24,6 +24,21 @@
                             <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
+                                
+                                
+                                    <div class="col-12 col-md-2">
+                                        <div class="form-group">
+                                            <label for="" class="text-secondary">Ano Lectivo</label>
+                                            <div class="input-group input-group">
+                                                <select v-model="ano_lectivo"
+                                                    class="form-control">
+                                                    <option value="">TODAS</option>
+                                                    <option :value="item.Codigo" v-for="item in anos_lectivos"
+                                                        :key="item.Codigo">{{ item.Designacao }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
@@ -41,7 +56,7 @@
 
 
 
-                                    <div class="col-12 col-md-2">
+                                    <!-- <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label for="" class="text-secondary">Prestação</label>
                                             <div class="input-group input-group">
@@ -53,7 +68,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
 
 
@@ -133,22 +148,22 @@
                                                 <th>Data Pagamento</th>
                                                 <th>Data Inserção</th>
                                                 <th>Valor Depositado</th>
-                                                <th>Prestação</th>
+                                                <!-- <th>Prestação</th> -->
                                                 <th>Forma Pagamento</th>
                                                 <th width="100px">Acções</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
-                                                <td>23523</td>
-                                                <td>{{ pagamento.Nome_Completo }}</td>
+                                                <td><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.matricula }}</a></td>
+                                                <td><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.Nome_Completo }}</a></td>
                                                 <td>{{ pagamento.codigo_factura }}</td>
                                                 <td>{{ pagamento.Codigo }}</td>
                                                 <td>{{ pagamento.servico }}</td>
                                                 <td>{{ formatData(pagamento.DataBanco)  }}</td>
                                                 <td>{{ pagamento.Data }}</td>
                                                 <td>{{ formatValor(pagamento.valor_depositado) }}</td>
-                                                <td>{{ pagamento.prestacao }}</td>
+                                                <!-- <td>{{ pagamento.prestacao }}</td> -->
                                                 <td>{{ pagamento.forma_pagamento }}</td>
                                                 <td>
                                                     <a class="btn-sm btn-success mr-1" @click="visualizar_detalhes(pagamento)">
@@ -251,7 +266,7 @@
                                                     </tr>
 
                                                     <tr>
-                                                      <td>{{ dados_pagamentos.valor }}</td>
+                                                      <td>{{ formatValor(dados_pagamentos.valor) }}</td>
                                                       <td>{{ formatData(dados_pagamentos.data_banco )}}</td>
                                                       <td>{{ formatData(dados_pagamentos.data_registro)}}</td>
                                                       <td>{{ formatData(dados_pagamentos.data_validacao)}}</td>
@@ -343,23 +358,28 @@
             "formaPagamentos",
             "servicos",
             "motivos",
+            "anos_lectivos",
         ],
         components: {
             Link,
             Paginacao
         },
+        
         data() {
             return {
+                ano_lectivo: "",
                 tipo_servico: "",
                 forma_pagamento: "",
                 prestacao: "",
                 grau_academico: "",
-                data_inicio: new Date().toISOString().substr(0, 10),
-                data_final: new Date().toISOString().substr(0, 10),
+                data_inicio: "",
+                // data_inicio: new Date().toISOString().substr(0, 10),
+                data_final: "",
+                // data_final: new Date().toISOString().substr(0, 10),
 
                 movito_rejeicao: "",
                 params: {},
-
+                
                 dados_estudante: {},
                 dados_pagamentos: {},
 
@@ -407,6 +427,11 @@
 
             data_final: function(val) {
               this.params.data_final = val;
+              this.updateData();
+            },
+            
+            ano_lectivo: function(val) {
+              this.params.ano_lectivo = val;
               this.updateData();
             },
 
@@ -490,7 +515,7 @@
 
                 Swal.fire({
                   title: 'Atenção!',
-                  text: "Que pretendes Validar este pagamento?",
+                  text: "Pretendes validar este pagamento?",
                   icon: 'warning',
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',

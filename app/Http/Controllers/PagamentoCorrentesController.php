@@ -10,6 +10,7 @@ use App\Models\AnoLectivo;
 use App\Models\Bolseiro;
 use App\Models\Curso;
 use App\Models\EstadoPagamento;
+use App\Models\Factura;
 use App\Models\FormaPagamento;
 use App\Models\GrauAcademico;
 use App\Models\Grupo;
@@ -82,16 +83,14 @@ class PagamentoCorrentesController extends Controller
 
     function percentagemAproveitamento(Request $request)
     {
-
-        // ano_lectivo
-        // grau
-        // curso
-        // instituicao
-        // tipo_bolsa
-        // semestre
-        // percentagem
-        // estado
-
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
+    
+        if($request->ano_lectivo){
+            $request->ano_lectivo = $request->ano_lectivo;
+        }else {
+            $request->ano_lectivo = $ano->Codigo;
+        }
+    
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
@@ -100,55 +99,53 @@ class PagamentoCorrentesController extends Controller
         })->when(!isset($request->sort_by), function ($query) {
             $query->latest();
         })
-            ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
-            ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-            ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
-            ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
-            ->join('tb_semestres', 'tb_bolseiros.semestre', '=', 'tb_semestres.Codigo')
-            ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
-            ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
-            ->join('tb_grau_academico', 'tb_preinscricao.codigo_grau_academico', '=', 'tb_grau_academico.Codigo')
+        ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
+        ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
+        ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
+        ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
+        ->join('tb_semestres', 'tb_bolseiros.semestre', '=', 'tb_semestres.Codigo')
+        ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
+        ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+        ->join('tb_grau_academico', 'tb_preinscricao.codigo_grau_academico', '=', 'tb_grau_academico.Codigo')
 
-            ->when($request->ano_lectivo, function ($query, $value) {
-                $query->where('tb_bolseiros.codigo_anoLectivo', $value);
-            })
+        ->when($request->ano_lectivo, function ($query, $value) {
+            $query->where('tb_bolseiros.codigo_anoLectivo', $value);
+        })
+        ->when($request->instituicao, function ($query, $value) {
+            $query->where('tb_bolseiros.codigo_Instituicao', $value);
+        })
+        ->when($request->tipo_bolsa, function ($query, $value) {
+            $query->where('tb_bolseiros.codigo_tipo_bolsa', $value);
+        })
 
-            ->when($request->instituicao, function ($query, $value) {
-                $query->where('tb_bolseiros.codigo_Instituicao', $value);
-            })
+        ->when($request->percentagem, function ($query, $value) {
+            $query->where('tb_bolseiros.desconto', $value);
+        })
 
-            ->when($request->tipo_bolsa, function ($query, $value) {
-                $query->where('tb_bolseiros.codigo_tipo_bolsa', $value);
-            })
+        ->when($request->semestre, function ($query, $value) {
+            $query->where('tb_bolseiros.semestre', $value);
+        })
 
-            ->when($request->percentagem, function ($query, $value) {
-                $query->where('tb_bolseiros.desconto', $value);
-            })
+        ->when($request->curso, function ($query, $value) {
+            $query->where('tb_matriculas.Codigo_Curso', $value);
+        })
 
-            ->when($request->semestre, function ($query, $value) {
-                $query->where('tb_bolseiros.semestre', $value);
-            })
-
-            ->when($request->curso, function ($query, $value) {
-                $query->where('tb_matriculas.Codigo_Curso', $value);
-            })
-
-            ->when($request->grau, function ($query, $value) {
-                $query->where('tb_preinscricao.codigo_grau_academico', $value);
-            })
-            // ->orderBy('nome')
-            ->select(
-                'tb_matriculas.Codigo AS Cod_Matricula',
-                'tb_preinscricao.Nome_Completo',
-                'tb_cursos.Designacao AS curso',
-                'tb_Instituicao.Instituicao',
-                'tb_semestres.Designacao AS semestre',
-                'tb_grau_academico.Designacao AS grau'
-                // ,
-                // DB::select("SELECT COUNT(*) FROM tb_grade_curricular_aluno AS total WHERE Codigo_Status_Grade_Curricular IN ('2', '3')")
-            )
-            ->paginate($request->page_size ?? 7)
-            ->withQueryString();
+        ->when($request->grau, function ($query, $value) {
+            $query->where('tb_preinscricao.codigo_grau_academico', $value);
+        })
+        // ->orderBy('nome')
+        ->select(
+            'tb_matriculas.Codigo AS Cod_Matricula',
+            'tb_preinscricao.Nome_Completo',
+            'tb_cursos.Designacao AS curso',
+            'tb_Instituicao.Instituicao',
+            'tb_semestres.Designacao AS semestre',
+            'tb_grau_academico.Designacao AS grau'
+            // ,
+            // DB::select("SELECT COUNT(*) FROM tb_grade_curricular_aluno AS total WHERE Codigo_Status_Grade_Curricular IN ('2', '3')")
+        )
+        ->paginate($request->page_size ?? 7)
+        ->withQueryString();
 
         $data['semestres'] = Simestre::get();
         $data['graus'] = GrauAcademico::get();
@@ -158,6 +155,8 @@ class PagamentoCorrentesController extends Controller
         $data['bolsas'] = TipoBolsa::when($request->instituicao, function ($query, $value) {
             $query->where('tb_tipo_bolsa_instituicao.instituicao', $value);
         })->join('tb_tipo_bolsa_instituicao', 'tb_tipo_bolsas.codigo', '=', 'tb_tipo_bolsa_instituicao.tipo_bolsa')->get();
+        
+        $data["ano_lectivo_activo"] = $ano;
 
         return Inertia::render('GestaoCreditoInstituicional/Percentagem/Index', $data);
     }
@@ -320,12 +319,6 @@ class PagamentoCorrentesController extends Controller
                 $mes = $details->Mes;
             }
 
-            // if ($details->Ano) {
-            //     $ano = AnoLectivo::find($details->codigo_anoLectivo)->Designacao;
-            // } else {
-            //     $ano = "#";
-            // }
-
             $arrays[] = [
                 "Mes" => $mes,
                 "ano" => $details->Ano,
@@ -360,60 +353,73 @@ class PagamentoCorrentesController extends Controller
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
         $data['grau'] = GrauAcademico::get();
+        
+        if($request->ano_lectivo){
+            $request->ano_lectivo = $request->ano_lectivo;
+        }else{
+            $request->ano_lectivo = $ano->Codigo;
+        }
 
         if($request->data_inicio) {
             $request->data_inicio =  $request->data_inicio;
         }else{
-            $request->data_inicio = date('Y-m-d');
+            // $request->data_inicio = date('Y-m-d');
         }
 
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
         })
-            ->when($request->prestacao, function ($query, $value) {
-                $query->where('mes_temp.id', $value);
-            })
-            ->when($request->forma_pagamento, function ($query, $value) {
-                $query->where('tb_pagamentos.forma_pagamento', $value);
-            })
-            ->when($request->tipo_servico, function ($query, $value) {
-                $query->where('factura_items.CodigoProduto', $value);
-            })
-            ->when($request->grau_academico, function ($query, $value) {
-                $query->where('tb_tipo_candidatura.id', ($value));
-            })
-            ->when($request->data_inicio, function ($query, $value) {
-                $query->whereDate('tb_pagamentos.Data', '>=', Carbon::createFromDate($value));
-            })
-            ->when($request->data_final, function ($query, $value) {
-                $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
-            })
-            ->where('tb_pagamentos.estado', 0)
-            ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
-            ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
-            ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')
-            ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-            ->join('tb_tipo_candidatura', 'tb_preinscricao.codigo_tipo_candidatura', '=', 'tb_tipo_candidatura.id')
-            ->select(
-                'tb_preinscricao.Nome_Completo',
-                'tb_pagamentos.codigo_factura',
-                'tb_pagamentos.Codigo',
-                'tb_pagamentos.DataBanco',
-                'tb_pagamentos.Data',
-                'tb_pagamentos.estado',
-                'tb_pagamentos.forma_pagamento',
-                'mes_temp.designacao AS prestacao',
-                'tb_pagamentos.valor_depositado',
-                'tb_tipo_candidatura.designacao AS grau_academico',
-                'tb_tipo_servicos.Descricao AS servico',
-            )
-            ->paginate(5)
-            ->withQueryString();
+        
+        ->when($request->prestacao, function ($query, $value) {
+            $query->where('mes_temp.id', $value);
+        })
+        ->when($request->forma_pagamento, function ($query, $value) {
+            $query->where('tb_pagamentos.forma_pagamento', $value);
+        })
+        ->when($request->tipo_servico, function ($query, $value) {
+            $query->where('factura_items.CodigoProduto', $value);
+        })
+        ->when($request->grau_academico, function ($query, $value) {
+            $query->where('tb_tipo_candidatura.id', ($value));
+        })
+        ->when($request->data_inicio, function ($query, $value) {
+            $query->whereDate('tb_pagamentos.Data', '>=', Carbon::createFromDate($value));
+        })
+        ->when($request->data_final, function ($query, $value) {
+            $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
+        })
+        ->where('tb_pagamentos.estado', 0)
+        ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
+        ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
+        // ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')
+        ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
+        ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+        ->join('tb_matriculas', 'tb_admissao.Codigo', '=', 'tb_matriculas.Codigo_Aluno')
+        ->join('tb_tipo_candidatura', 'tb_preinscricao.codigo_tipo_candidatura', '=', 'tb_tipo_candidatura.id')
+        ->select(
+            'tb_matriculas.Codigo AS matricula',
+            'tb_preinscricao.Nome_Completo',
+            'tb_pagamentos.codigo_factura',
+            'tb_pagamentos.Codigo',
+            'tb_pagamentos.DataBanco',
+            'tb_pagamentos.Data',
+            'tb_pagamentos.estado',
+            'tb_pagamentos.forma_pagamento',
+            // 'mes_temp.designacao AS prestacao',
+            'tb_pagamentos.valor_depositado',
+            'tb_tipo_candidatura.designacao AS grau_academico',
+            'tb_tipo_servicos.Descricao AS servico',
+        )
+        ->paginate(5)
+        ->withQueryString();
+        
 
 
         $data['motivos'] = MotivoRejeicao::get();
-        $data['servicos'] = TipoServico::where('TipoServico', '!=', NULL)->get();
-        $data['prestacoes'] = MesTemp::where('ano_lectivo', $ano->Codigo)->get();
+        $data['servicos'] = TipoServico::where('codigo_ano_lectivo', $request->ano_lectivo)->where('TipoServico', '!=', NULL)->get();
+        $data['anos_lectivos'] = AnoLectivo::get();
+        $data['prestacoes'] = MesTemp::where('ano_lectivo', $request->ano_lectivo)->get();
+        
         $data['formaPagamentos'] = FormaPagamento::orderBy('descricao')->get();
         $data["filtros"] = $request->all("prestacao", "forma_pagamento", "data_inicio", "data_final","grau_academico",);
 
@@ -479,7 +485,17 @@ class PagamentoCorrentesController extends Controller
         $pagamento = Pagamento::findOrFail($id);
         $pagamento->estado = 1;
         $pagamento->update();
-
+        
+        $factura = Factura::where('Codigo', $pagamento->codigo_factura)->first();
+        
+        $total_pagamentos_factura = Pagamento::where('codigo_factura', $factura->Codigo)->sum('valor_depositado');
+        
+        if(number_format($total_pagamentos_factura, 2, '.', '') >= number_format($factura->ValorAPagar, 2, '.', '')){
+            $fact = Factura::findOrFail($factura->Codigo);
+            $fact->estado = 1;
+            $fact->ValorEntregue = $total_pagamentos_factura;
+            $fact->update();
+        }
 
         return redirect()->back();
     }

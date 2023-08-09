@@ -249,6 +249,7 @@ export default{
     "bolsas",
     "semestres",
     "graus",
+    "ano_lectivo_activo",
   ],
   components() {
     Link,
@@ -256,7 +257,7 @@ export default{
   },
   data() {
     return {
-      ano_lectivo: 18,
+      ano_lectivo: this.ano_lectivo_activo.Codigo,
 
       params: {},
       grau: "",
@@ -332,7 +333,6 @@ export default{
         }
       });
     },
-
 
     imprimirPDF () {
       window.open("/estudante/propina-pagar/pdf-imprimir?searchAnoLectivo="+this.searchAnoLectivo+"&searchInstituicao="+this.searchInstituicao+"&searchFaculdade="+this.searchFaculdade+"&searchCurso="+this.searchCurso+"&searchTurno="+this.searchTurno, "_blank");

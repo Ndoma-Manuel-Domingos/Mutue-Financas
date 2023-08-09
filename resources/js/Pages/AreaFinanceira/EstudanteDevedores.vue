@@ -104,19 +104,7 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-body">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-light">
-                                <!-- <h5>TOTAL REGISTROS: {{ facturas.total }}</h5> -->
-                            </div>
+                           
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover text-nowrap">
@@ -124,10 +112,10 @@
                                             <tr>
                                                 <th>Nº Matricula</th>
                                                 <th>Nome</th>
-                                                <th>Faculdade</th>
+                                                <!-- <th>Faculdade</th> -->
                                                 <th>Curso</th>
                                                 <th>Turno</th>
-                                                <th>Mês/Parcela</th>
+                                                <!-- <th>Mês/Parcela</th> -->
                                                 <th width="100px">Ver Perfil</th>
                                             </tr>
                                         </thead>
@@ -135,10 +123,10 @@
                                             <tr v-for="factura in facturas.data" :key="factura.matricula">
                                                 <td>{{ factura.matricula}}</td>
                                                 <td>{{ factura.nome}}</td>
-                                                <td>{{ factura.faculdade }}</td>
+                                                <!-- <td>{{ factura.faculdade }}</td> -->
                                                 <td>{{ factura.curso}}</td>
                                                 <td>{{ factura.turno}}</td>
-                                                <td>{{ factura.parcela}}</td>
+                                                <!-- <td>{{ factura.parcela}}</td> -->
                                                 <td>
                                                     <a :href="route('mf.estudante-visualizar-perfil',factura.matricula)"
                                                         class="btn-sm btn-primary">
@@ -155,8 +143,11 @@
                                 <Link href="" class="text-secondary">
                                     TOTAL REGISTROS: {{ facturas.total }}
                                 </Link>
-                                <!-- <Paginacao :links="facturas.links" :prev="facturas.prev_page_url"
-                                    :next="facturas.next_page_url"/> -->
+                                <Paginacao
+                                  :links="facturas.links"
+                                  :prev="facturas.prev_page_url"
+                                  :next="facturas.next_page_url"
+                                />
                             </div>
                         </div>
                     </div>
@@ -181,6 +172,7 @@
             "faculdades",
             "facturas",
             "cursos",
+            "ano_lectivo_activo",
         ],
         components: {
             Link,
@@ -188,7 +180,7 @@
         },
         data(){
             return {
-                 searchAnoLectivo: "18",
+                searchAnoLectivo:  this.ano_lectivo_activo.Codigo,
                 searchMes: "",
                 searchFaculdade: "",
                 searchCurso: "",

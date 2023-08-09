@@ -203,11 +203,11 @@
   import Paginacao from '../../Shared/Paginacao.vue';
 
   export default{
-    props: [ "facturas", "anolectivos", "turnos", "faculdades", "mesTemps", "cursos", "pagamentos", "valor_total_pagamentos", "requests"],
+    props: [ "facturas", "anolectivos", "turnos", "faculdades", "mesTemps", "cursos", "pagamentos", "valor_total_pagamentos", "requests", "ano_lectivo_activo"],
     components: { Link, Paginacao },
     data() {
       return {
-        searchAnoLectivo: 18,
+        searchAnoLectivo: this.ano_lectivo_activo.Codigo,
         searchMes: "",
         searchFaculdade: "",
         searchCurso: "",

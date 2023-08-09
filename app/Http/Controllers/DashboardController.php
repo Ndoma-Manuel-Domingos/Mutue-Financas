@@ -13,6 +13,7 @@ use App\Models\TipoServico;
 use App\Models\Turno;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -140,37 +141,46 @@ class DashboardController extends Controller
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
         if($request->ano_lectivo == null){
-            $request->ano_lectivo = $ano->Codigo;
-        }
-
-        $grade_curriculares = GradeCurricularAluno::when($request->ano_lectivo, function ($query, $value) {
-            $query->where('codigo_ano_lectivo', '=', $value);
-            $query->whereIn('Codigo_Status_Grade_Curricular', [1,2,3]);
-        })
-        ->distinct('codigo_matricula')
-        ->pluck('codigo_matricula');
-        
-        $estudante_propinas_devedores = Pagamento::when($request->ano_lectivo, function ($query, $value) {
-            $query->where('tb_pagamentos.AnoLectivo', '=', $value);
-        });
-        
-        if ($request->ano_lectivo >= 2 AND $request->ano_lectivo <= 15){
-            $estudante_propinas_devedores->when($request->mes_temp_id, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_id', '=', $value);
-            });
+            $anoSelecionado = $ano->Codigo;
         }else{
-            $estudante_propinas_devedores->when($request->mes_temp_id, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_temp_id', '=', $value);
-            });
+            $anoSelecionado = $request->ano_lectivo;
         }
-     
-        $estudante_propinas_devedores->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
-        ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-        ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        ->where('tb_pagamentos.estado', 1)
-        ->where('tb_pagamentos.corrente', 1)
-        ->whereNotIn('tb_matriculas.Codigo', $grade_curriculares);
+        
+        if($request->mes_temp_id){
+            $mes = $request->mes_temp_id;
+        }else{
+            $mes = "";
+        }
+        
+        $estudante_propinas_devedores = DB::table('tb_matriculas as tm_p')
+        ->select('tm_p.Codigo as matricula', 'tp_p.Nome_Completo as nome', 'tc2.Designacao as curso', 'tp2.Designacao as turno')
+        ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_p.Codigo_Aluno')
+        ->join('tb_preinscricao as tp_p', 'tp_p.Codigo', '=', 'ta_p.pre_incricao')
+        ->join('tb_cursos as tc2', 'tc2.Codigo', '=', 'tm_p.Codigo_Curso')
+        ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tp_p.Codigo_Turno')
+        ->whereRaw('tm_p.Codigo IN (SELECT tgca.codigo_matricula FROM tb_grade_curricular_aluno tgca WHERE tgca.codigo_ano_lectivo = ? AND tgca.Codigo_Status_Grade_Curricular IN (2, 3))', [$anoSelecionado])
+        ->whereNotIn('tm_p.Codigo', function ($query) use($mes) {
+            $query->select('tm_pp.Codigo')
+                ->from('tb_matriculas as tm_pp')
+                ->join('tb_admissao as ta_p', 'ta_p.codigo', '=', 'tm_pp.Codigo_Aluno')
+                ->join('tb_preinscricao as tp_p', 'tp_p.Codigo', '=', 'ta_p.pre_incricao')
+                ->join('tb_cursos as tc2', 'tc2.Codigo', '=', 'tm_pp.Codigo_Curso')
+                ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tp_p.Codigo_Turno')
+                ->join('factura as f', 'f.CodigoMatricula', '=', 'tm_pp.Codigo')
+                ->leftJoin('factura_items as fi', 'fi.CodigoFactura', '=', 'f.Codigo')
+                ->where('fi.estado', 1)
+                ->where('fi.mes_temp_id', $mes);
+        })
+        ->where('tc2.tipo_candidatura', 1)
+        ->whereNotIn('tm_p.Codigo', function ($query) use($anoSelecionado) {
+            $query->select('codigo_matricula')
+                ->from('tb_bolseiros')
+                ->where('codigo_anoLectivo', $anoSelecionado)
+                ->where('status', 0)
+                ->whereIn('desconto', [100, 0]);
+        })
+        ->orderBy('tp_p.Nome_Completo', 'ASC')
+        ->get();
 
         $data['total_estudantes_devedores'] = number_format($estudante_propinas_devedores->count() , 2, ',', '.');
 
@@ -249,10 +259,12 @@ class DashboardController extends Controller
             $bolseiros_total = $bolseiros->count();
         }
         
+        // dd($bolseiros_total, $bolseiros_sem_renuncia);
+        
+        
         $data["bolseiros"] = number_format( $bolseiros_total, 2, ',', '.');
         $data["bolseiros_sem_renuncia"] = number_format( $bolseiros_sem_renuncia, 2, ',', '.');
         $data["bolseiros_com_renuncia"] = number_format( $bolseiros_com_renuncia, 2, ',', '.');
-        
    
         return response()->json($data);
     }

@@ -35,9 +35,38 @@
                     </p>
 
                     <p class="text-muted text-center">Situação Actual</p>
-                    <p class="text-muted text-center text-uppercase">
-                      {{ estudante.estadoMatricula }}
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO REGULAR'">
+                      <span style="color: #0CF25D;">{{ estado_estudante.designacao }}</span>
                     </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO SUSPENSO'">
+                      <span style="color: #F2CB05;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO REGULAR'">
+                      <span style="color: #F29F05;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO DEVEDOR AC'">
+                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO DEVEDOR AA'">
+                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'DIPLOMADO'">
+                      <span style="color: #0099DD;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO IRREGULAR'">
+                      <span style="color: #F2CB05;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO FINALISTA'">
+                      <span style="color: #0CF25D;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO'">
+                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
+                    </p>
+                    
+                    <!-- :href="
+                          'https://mutue.ao/storage/documentos/' +
+                          pagamento.nome_documento
+                        " -->
                   </div>
 
                   <div class="col-12 col-md-8">
@@ -375,31 +404,16 @@
                                             anolectivosinscritosactual.Designacao
                                           }}
                                         </td>
+                                        
                                         <td
                                           v-for="mes_temp in prestacoes"
                                           :key="mes_temp.id"
                                           class="text-center py-4 fs-1"
-                                          :class="
-                                            mes_temp.factura_item
-                                              ? mes_temp.factura_item
-                                                  .valor_pago == 0
-                                                ? 'nao_pago'
-                                                : 'pago'
-                                              : mes_temp.suspenso
-                                              ? 'pago'
-                                              : 'nao_pago'
-                                          "
+                                          :class="(mes_temp.bolseiro && (mes_temp.bolseiro.desconto == 100)) ? 'Bolseiro 100%' : (mes_temp.factura_item ? mes_temp.factura_item.valor_pago == 0 ? 'nao_pago' : 'pago' : mes_temp.suspenso ? 'isento' : 'nao_pago')"
                                         >
                                           {{ mes_temp.designacao }} <br />
                                           {{
-                                            mes_temp.factura_item
-                                              ? formatValor(
-                                                  mes_temp.factura_item
-                                                    .valor_pago
-                                                )
-                                              : mes_temp.suspenso
-                                              ? "Pagamento suspenso"
-                                              : "0.00"
+                                            (mes_temp.bolseiro && (mes_temp.bolseiro.desconto == 100)) ? 'pago' : (mes_temp.factura_item ? formatValor( mes_temp.factura_item .valor_pago ) : mes_temp.suspenso ? "Suspenso" : "0.00")
                                           }}
                                         </td>
                                       </tr>
@@ -411,32 +425,13 @@
                                         </td>
                                         <td
                                           v-for="mes_temp_anterior in prestacoes_anterior"
-                                          :key="mes_temp_anterior.id"
-                                          class="text-center py-4 fs-1"
-                                          :class="
-                                            mes_temp_anterior.factura_item_anterior
-                                              ? mes_temp_anterior
-                                                  .factura_item_anterior
-                                                  .valor_pago == 0
-                                                ? 'nao_pago'
-                                                : 'pago'
-                                              : mes_temp_anterior.suspenso_anterior
-                                              ? 'pago'
-                                              : 'nao_pago'
-                                          "
+                                          :key="mes_temp_anterior.id" class="text-center py-4 fs-1"
+                                          :class="(mes_temp_anterior.bolseiro && (mes_temp_anterior.bolseiro.desconto == 100)) ? 'pago' :  (mes_temp_anterior.factura_item_anterior ? mes_temp_anterior.factura_item_anterior.valor_pago == 0 ? 'nao_pago' : 'pago': mes_temp_anterior.suspenso_anterior? 'isento': 'nao_pago')"
                                         >
                                           {{ mes_temp_anterior.designacao }}
                                           <br />
                                           {{
-                                            mes_temp_anterior.factura_item_anterior
-                                              ? formatValor(
-                                                  mes_temp_anterior
-                                                    .factura_item_anterior
-                                                    .valor_pago
-                                                )
-                                              : mes_temp_anterior.suspenso_anterior
-                                              ? "Pagamento suspenso"
-                                              : "0.00"
+                                            (mes_temp_anterior.bolseiro && (mes_temp_anterior.bolseiro.desconto == 100)) ? 'Bolseiro 100%' :  (mes_temp_anterior.factura_item_anterior ? formatValor( mes_temp_anterior .factura_item_anterior .valor_pago ) : mes_temp_anterior.suspenso_anterior ? "Isento" : "0.00")
                                           }}
                                         </td>
                                       </tr>
@@ -1595,7 +1590,7 @@
                                       >
                                         <option
                                           :value="mes.id"
-                                          v-for="mes in mes_temps_isencao"
+                                          v-for="mes in listar_meses_isencoes"
                                           :key="mes.id"
                                         >
                                           {{ mes.designacao }}
@@ -1744,9 +1739,12 @@
                                         v-model="mes_isencao"
                                         class="form-control"
                                       >
-                                        <template v-for="mes_temp in prestacoes" :key="mes_temp.id">
-                                            <option :value="mes_temp.id" v-if="!mes_temp.factura_item">{{ mes_temp.designacao }}</option>
+                                        <template v-for="mes in listar_meses_isencoes" :key="mes.id">
+                                            <option :value="mes.id">{{ mes.designacao }}</option>
                                         </template>
+                                        <!-- <template v-for="mes_temp in prestacoes" :key="mes_temp.id">
+                                            <option :value="mes_temp.id" v-if="!mes_temp.factura_item">{{ mes_temp.designacao }}</option>
+                                        </template> -->
                                         <!-- <option
                                           :value="mes_temp.id"
                                           v-for="mes_temp in prestacoes"
@@ -2368,7 +2366,7 @@
 </template>
   
   
-  <script>
+<script>
 import { sweetSuccess, sweetError } from "../../components/Alert";
 import Paginacao from "../../Shared/Paginacao.vue";
 import { Link } from "@inertiajs/inertia-vue3";
@@ -2392,13 +2390,11 @@ export default {
     "motivos_eliminar_facturas_pagamentos",
     "prestacoes",
     "prestacoes_anterior",
+    "ano_lectivo_activo",
   ],
   components: {
     Link,
     Paginacao,
-  },
-  mounted() {
-    this.carregar_historicos_actualizacoes();
   },
   data() {
     return {
@@ -2422,12 +2418,13 @@ export default {
       /**
        * facturas listagem
        */
-      ano_factura: 18,
+      ano_factura: this.ano_lectivo_activo.Codigo,
       estado_factura: "",
       /**
        * isencao pagamentos
        */
       mes_temps_isencao: [],
+      listar_meses_isencoes: [],
       servicos_isencao: [],
 
       // movimentos das actualizaçoes
@@ -2440,7 +2437,7 @@ export default {
       isencoes_multas: [],
       isencoes_multas_count: [],
 
-      ano_isencao: 18,
+      ano_isencao: this.ano_lectivo_activo.Codigo,
       servico_isencao: "",
       motivo_isencao: "",
       mes_isencao: "",
@@ -2475,6 +2472,10 @@ export default {
       estado_pagamento: "",
       ano_pagamento: "",
       lista_pagamentos: [],
+      
+      estado_estudante: [],
+      
+      // corDeFundo: this.estado_estudante.cor,
 
       operador_extratos: "",
       tipo_movimentos_extrato: "",
@@ -2486,8 +2487,33 @@ export default {
       messagem: "",
     };
   },
+  mounted(){
+    
+    this.carregar_historicos_actualizacoes();
+  
+    axios.get("/estudantes/carregar-estado/" + this.matricula.Codigo).then((response) => {
+      this.estado_estudante = response.data.data
+    })
+    .catch((errors) => {
+    });
+  },
+  
+  computed: {
+    estiloDinamico() {
+      return {
+        backgroundColor: this.corDeFundo,
+        padding: '10px',
+        color: 'white'
+      };
+    }
+  },
 
   methods: {
+    
+    getStatusEstudante: function(matricula){
+    
+    },
+    
     carregar_lista_isencoes_pagamentos: function () {
       this.$Progress.start();
       axios
@@ -2497,8 +2523,7 @@ export default {
         )
         .then((response) => {
           this.isencoes_pagamentos = response.data.isencoes_pagamentos;
-          this.isencoes_pagamentos_count =
-            response.data.isencoes_pagamentos_count;
+          this.isencoes_pagamentos_count = response.data.isencoes_pagamentos_count;
 
           this.mes_temps_isencao = response.data.meses;
           this.servicos_isencao = response.data.servicos;
@@ -2586,16 +2611,16 @@ export default {
           /**
            * isenção de pagamentos
            */
-          this.mes_temps_isencao = response.data.meses;
+          this.listar_meses_isencoes = response.data.meses;
           this.servicos_isencao = response.data.servicos;
           this.isencoes_pagamentos = response.data.isencoes_pagamentos;
-          this.isencoes_pagamentos_count =
-            response.data.isencoes_pagamentos_count;
+          this.isencoes_pagamentos_count = response.data.isencoes_pagamentos_count;
           /**
            * isencção de multas
            */
           this.isencoes_multas = response.data.isencoes_multas;
           this.isencoes_multas_count = response.data.isencoes_multas_count;
+          
 
           this.$Progress.finish();
         })
@@ -2657,6 +2682,8 @@ export default {
           this.$Progress.fail();
         });
     },
+    
+    
 
     carregar_inscricoes: function () {
       this.$Progress.start();
@@ -2943,7 +2970,7 @@ export default {
 </script>
   
   
-  <style>
+<style>
 .pago {
   background-color: #1de9b6;
 }
@@ -2951,4 +2978,9 @@ export default {
 .nao_pago {
   background-color: #f77f7f;
 }
+
+.isento {
+  background-color: #9e9e9e;
+}
+
 </style>

@@ -201,6 +201,7 @@ Route::group(["middleware" => "auth"], function () {
 
 
     Route::get('/estudantes/visualizar-perfil/{id}', [EstudanteController::class, 'visualizarPerfilEstudante'])->name('mf.estudante-visualizar-perfil');
+    Route::get('/estudantes/carregar-estado/{id}', [EstudanteController::class, 'carregarEstado'])->name('mf.estudante-carregar-estado');
     Route::get('/estudantes/carregar-inscricoes/{id}/{ano?}', [EstudanteController::class, 'carregarInscricoes'])->name('mf.estudante-carregar-inscricao');
     Route::get('/estudantes/carregar-detalhe-facturas/{code}', [EstudanteController::class, 'carregarDetalheFactura'])->name('mf.estudante-detalhe-facturas');
 

@@ -276,13 +276,9 @@ class RelatorioFinanceiroController extends Controller
     public function visualizarDetalhesPagamento($id)
     {
         $pagamento = Pagamento::findOrFail($id);
-
-        $preinscricao = PreInscricao::join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-        ->join('polos','tb_preinscricao.polo_id', '=', 'polos.id')
-        ->select('tb_preinscricao.Nome_Completo', 'polos.designacao', 'tb_preinscricao.Contactos_Telefonicos', 'tb_matriculas.Codigo', 'tb_cursos.Designacao')
-        ->findOrFail($pagamento->Codigo_PreInscricao);
+       
+        $preinscricao = PreInscricao::join('tb_cursos', 'tb_preinscricao.Curso_Candidatura', '=', 'tb_cursos.Codigo')->join('polos','tb_preinscricao.polo_id', '=', 'polos.id')->findOrFail($pagamento->Codigo_PreInscricao);
+      
 
         $data['detalhes'] = [
             'recibo' => $pagamento->Codigo,
