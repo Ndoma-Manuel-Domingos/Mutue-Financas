@@ -21,30 +21,41 @@
             <div class="card-header">Buscas Avançadas</div>
             <div class="card-body">
               <div class="row">
-                <div class="col-12 col-md-2">
+
+                <!-- <div class="col-12 col-md-4">
                   <div class="form-group">
-                    <label>Data Inicio:</label>
-                    <input type="date" v-model="data_inicio" class="form-control"/>
+                    <label for="" class="text-secondary">Operador</label>
+                    <div class="input-group input-group">
+                      <select
+                        v-model="operador"
+                        class="form-control"
+                      >
+                        <option value="">TODOS</option>
+                        <option
+                          :value="utilizador.utilizadores.codigo_importado" v-for="utilizador in utilizadores" :key="utilizador.Codigo"
+                        >
+                          {{ utilizador.utilizadores.nome }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="col-12 col-md-2">
                   <div class="form-group">
-                    <label>Data Final:</label>
-                    <input type="date" class="form-control" v-model="data_final" />
-                  </div>
-                </div>
-
-                <div class="col-12 col-md-2">
-                  <div class="form-group">
-                    <label for="" class="text-secondary">Tipo Serviço</label>
+                    <label for="" class="text-secondary">Tipo Serviços</label>
                     <div class="input-group input-group">
                       <select
                         v-model="codigo_produto"
-                        class="form-control "
+                        class="form-control"
                       >
-                        <option :value="servico.Codigo" v-for="servico in tipoServicos" :key="servico.Codigo">
-                          {{ servico.Codigo }}{{ servico.Descricao }}
+                        <option value="">TODOS</option>
+                        <option
+                          :value="servico.Codigo"
+                          v-for="servico in tipoServicos"
+                          :key="servico.Codigo"
+                        >
+                          {{ servico.Descricao }}
                         </option>
                       </select>
                     </div>
@@ -53,13 +64,34 @@
 
                 <div class="col-12 col-md-2">
                   <div class="form-group">
+                    <label for="" class="text-secondary">Grau</label>
+                    <div class="input-group input-group">
+                      <select
+                        v-model="grau_academico"
+                        class="form-control"
+                      >
+                        <option value="">TODOS</option>
+                        <option
+                          :value="ano.id"
+                          v-for="ano in grausAcademicos"
+                          :key="ano.id"
+                        >
+                          {{ ano.designacao }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-2">
+                  <div class="form-group">
                     <label for="" class="text-secondary">Estado</label>
                     <div class="input-group input-group">
                       <select
                         v-model="estado_pagamento"
-                        class="form-control "
+                        class="form-control"
                       >
                         <option value="">TODOS</option>
+                        <option value="0">Pendente</option>
                         <option value="1">Validado</option>
                         <option value="2">Rejeitado</option>
                       </select>
@@ -69,26 +101,58 @@
 
                 <div class="col-12 col-md-2">
                   <div class="form-group">
-                    <label for="" class="text-secondary">Parcela</label>
+                    <label for="" class="text-secondary"
+                      >Forma de Pagamentos</label
+                    >
                     <div class="input-group input-group">
                       <select
-                        v-model="parcela_mes_temp"
-                        class="form-control "
+                        v-model="forma_pagamento"
+                        class="form-control"
                       >
+                        <option value="">TODAS</option>
                         <option
-                          :value="estado.id"
-                          v-for="estado in mesTemps"
-                          :key="estado.id"
+                          :value="forma.descricao"
+                          v-for="forma in formaPagamentos"
+                          :key="forma.Codigo"
                         >
-                          {{ estado.designacao }}
+                          {{ forma.descricao }}
                         </option>
                       </select>
                     </div>
                   </div>
                 </div>
+
+                <div class="col-12 col-md-2">
+                  <div class="form-group">
+                    <label>Data Inicio Banco:</label>
+                    <input type="date" @keyup.enter="search" v-model="data_inicio_banco" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-2">
+                  <div class="form-group">
+                    <label>Data Final Banco:</label>
+                    <input type="date" @keyup.enter="search" class="form-control" v-model="data_final_banco" />
+                  </div>
+                </div>
+                
+                
+                <div class="col-12 col-md-2">
+                  <div class="form-group">
+                    <label>Data Inicio Validação:</label>
+                    <input type="date" @keyup.enter="search" v-model="data_inicio_validacao" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-2">
+                  <div class="form-group">
+                    <label>Data Final Validação:</label>
+                    <input type="date" @keyup.enter="search" class="form-control" v-model="data_final_validacao" />
+                  </div>
+                </div>
+                
               </div>
             </div>
-            <div class="card-footer"></div>
           </div>
         </form>
 
@@ -96,22 +160,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-light">
-                <h3 class="card-title"></h3>
-                <div class="card-tools">
-                  <div class="input-group input-group-md" style="width: 150px">
-                    <input
-                      type="text"
-                      name="table_search"
-                      class="form-control float-right"
-                      placeholder="Search"
-                    />
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <h3 class="card-title"><strong>Total Arrecadado: {{ formatValor(total) }}</strong></h3>
               </div>
 
               <div class="card-body p-0">
@@ -121,37 +170,34 @@
                       <tr>
                         <th>Operador</th>
                         <th>Validação Data</th>
+                        <th>Data Banco</th>
+                        <th>Data Registro</th>
+                        <th>Serviço</th>
                         <th>Valor:</th>
                         <th>Recibo</th>
                         <th>Forma Pagamento</th>
                         <th>Estado</th>
-                        <th>Ano Lectivo</th>
+                        <th>Grau</th>
                         <th width="100px">Acções</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="pagamento in items.data" :key="pagamento.id">
-                        <td>{{ pagamento.nomeUtilizador }}</td>
-                        <td>{{ pagamento.dataValidacaoPagamento }}</td>
-                        <td>{{ formatValor(pagamento.valorPagamento) }}</td>
-                        <td>{{ pagamento.reciboPagamento }}</td>
-                        <td>{{ pagamento.formaPagamento }}</td>
-                        <td
-                          v-if="pagamento.estadoPagamento == 1"
-                          class="text-success"
-                        >
-                          Valido
-                        </td>
-                        <td
-                          v-if="pagamento.estadoPagamento == 2"
-                          class="text-danger"
-                        >
-                          Rejeitado
-                        </td>
-                        <td>{{ pagamento.AnoLectivoPagamento }}</td>
+                      <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
+                        <td>{{ pagamento.operador ?? "Estudante" }}</td>
+                        <td>{{ formatData(pagamento.updated_at) }}</td>
+                        <td>{{ formatData(pagamento.DataBanco)  }}</td>
+                        <td>{{ formatData(pagamento.DataRegisto) }}</td>
+                        <td>{{ pagamento.Descricao }}</td>
+                        <td>{{ formatValor(pagamento.valor_depositado) }}</td>
+                        <td>{{ pagamento.Codigo }}</td>
+                        <td>{{ pagamento.forma_pagamento }}</td>
+                        <td v-if="pagamento.estado == 1" class="text-success">Validado</td>
+                        <td v-if="pagamento.estado == 0" class="text-info">Pendente</td>
+                        <td v-if="pagamento.estado == 2" class="text-warning">Rejeitado</td>
+                        <td>{{ pagamento.designacao }}</td>
                         <td>
-                          <a href="#" class="btn-sm btn-primary">
-                            Ver Detalhe <i class="fas fa-eye"></i>
+                          <a class="btn-sm btn-success mr-1" @click="visualizar_detalhes(pagamento)">
+                            <i class="fas fa-eye" title="VISUALIZAR DETALHES DO PAGAMENTO"> </i>
                           </a>
                         </td>
                       </tr>
@@ -164,7 +210,6 @@
                 <Link href="" class="text-secondary">
                   TOTAL REGISTROS: {{ items.total }}
                 </Link>
-                
                 <Paginacao 
                   :links="items.links"
                   :prev="items.prev_page_url"
@@ -176,6 +221,8 @@
         </div>
       </div>
     </div>
+    
+    
   </MainLayouts>
 </template>
 
@@ -185,11 +232,15 @@
   
   export default {
     props: [
-        "items",
-        "mesTemps",
-        "formaPagamentos",
-        "estadoPagamento",
-        "tipoServicos",    
+      "items",
+      "anoLectivos",
+      "grausAcademicos",
+      "mesTemps",
+      "formaPagamentos",
+      "estadoPagamento",
+      "tipoServicos",
+      "utilizadores",
+      "total"
     ],
     components: {
       Link,
@@ -198,14 +249,25 @@
     data() {
       return {
         estado_pagamento: "",
+        operador: "",
         codigo_produto: "",
-        parcela_mes_temp: "",
-        data_inicio: new Date().toISOString().substr(0, 10),
-        data_final: new Date().toISOString().substr(0, 10),
+        mes_temp: "",
+        anolectivo: 18,
+        grau_academico: "",
         
+        data_inicio_banco: "",
+        data_final_banco: "",
+        data_inicio_validacao: "",
+        data_final_validacao: "",
+
+        forma_pagamento: "",
         params: {},
+        nomeUtilizador: "",
+        
+        dados_estudante: {},
+        dados_pagamentos: {}
       }
-    },
+    }, 
           
     watch: {
       options: function(val) {
@@ -220,8 +282,16 @@
         }
         this.updateData();
       },
+      anolectivo: function(val) {
+        this.params.anolectivo = val;
+        this.updateData();
+      },
       estado_pagamento: function(val) {
         this.params.estado_pagamento = val;
+        this.updateData();
+      },
+      operador: function(val) {
+        this.params.operador = val;
         this.updateData();
       },
       codigo_produto: function(val) {
@@ -229,23 +299,74 @@
         this.updateData();
       },
       
-      parcela_mes_temp: function(val) {
-        this.params.parcela_mes_temp = val;
+      mes_temp: function(val) {
+        this.params.mes_temp = val;
         this.updateData();
       },
       
-      data_inicio: function(val) {
-        this.params.data_inicio = val;
+      grau_academico: function(val) {
+        this.params.grau_academico = val;
         this.updateData();
       },
       
-      data_final: function(val) {
-        this.params.data_final = val;
+      data_inicio_banco: function(val) {
+        this.params.data_inicio_banco = val;
         this.updateData();
       },
-
+      
+      data_final_banco: function(val) {
+        this.params.data_final_banco = val;
+        this.updateData();
+      },
+      
+            
+      data_inicio_validacao: function(val) {
+        this.params.data_inicio_validacao = val;
+        this.updateData();
+      },
+      
+      data_final_validacao: function(val) {
+        this.params.data_final_validacao = val;
+        this.updateData();
+      },
+      
+      forma_pagamento: function(val) {
+        this.params.forma_pagamento = val;
+        this.updateData();
+      },
     },
     methods: {
+      
+      updateData() {
+        
+        this.$Progress.start();
+        this.$inertia.get("/fecho/caixa-utilizador", this.params, {
+          preserveState: true,
+          preverseScroll: true,
+          onSuccess: () => {
+            this.$Progress.finish(); 
+          }
+        });
+      },
+      
+      visualizar_detalhes(item){
+        this.$Progress.start();
+        $(".table_estudantes").html("");
+        axios
+          .get("/visualizar-detalhes-pagamento/" + item.Codigo)
+          .then((response) => {
+            this.dados_estudante = response.data.dados,
+            this.dados_pagamentos = response.data.detalhes,
+
+            this.$Progress.finish();
+          }).catch(() => {
+            this.$Progress.fail();
+            // sweetError("Estudante Não Encontrado!");
+          });
+        $('#modalDetalhesPagamento').modal('show');
+      },
+      
+      
       formatValor(atual) {
         const valorFormatado = Intl.NumberFormat("pt-br", {
           style: "currency",
@@ -253,6 +374,14 @@
         }).format(atual);
         return valorFormatado;
       },
+      
+      formatData(data_input){
+        let data = new Date(data_input);
+        let dataFormatada = ((data.getDate() )) + "-" + ((data.getMonth() + 1)) + "-" + data.getFullYear(); 
+ 
+        return dataFormatada;
+      },
+      
       
       imprimirPDF() {
         window.open("/fecho/caixa-utilizador/pdf-imprimir?ep="+this.estado_pagamento+"&s="+this.codigo_produto+"&p="+this.parcela_mes_temp+"&di="+this.data_inicio+"&df="+this.data_final, "_blank");

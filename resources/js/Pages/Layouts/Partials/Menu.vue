@@ -449,7 +449,7 @@
             </Link>
           </li>
 
-          <li class="nav-item" title="FECHO DO CAIXA POR MENSALIDADES">
+          <!-- <li class="nav-item" title="FECHO DO CAIXA POR MENSALIDADES">
             <Link
               :href="route('mf.fecho-caixa-mensalidade-geral')"
               class="nav-link"
@@ -462,7 +462,7 @@
               <i class="far fa-circle nav-icon"></i>
               <p>Fecho Caixa Mensalidades</p>
             </Link>
-          </li>
+          </li> -->
 
           <li class="nav-item" title="FECHO DO CAIXA POR UTILIZADOR">
             <Link

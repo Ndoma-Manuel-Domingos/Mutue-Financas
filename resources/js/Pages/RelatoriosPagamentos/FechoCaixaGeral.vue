@@ -6,11 +6,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Fecho de Caixa Serviços</h1>
+            <h1 class="m-0 text-uppercase">Fecho de Caixa Geral</h1>
           </div>
           <div class="col-sm-6">
             <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
-            <a  @click="imprimirEXCEL" class="btn btn-success btn-sm float-sm-right mr-2"><i class="fas fa-file-excel"></i> Excel</a>
+            <a @click="imprimirEXCEL" class="btn btn-success btn-sm float-sm-right mr-2"><i class="fas fa-file-excel"></i> Excel</a>
           </div>
         </div>
       </div>
@@ -198,15 +198,6 @@
                 
               </div>
             </div>
-            <div class="card-footer">
-              <!-- <Link
-                :href="route('mf.fecho-caixa-geral')"
-                class="btn btn-primary float-right"
-              >
-                <i class="fas fa-broom"></i>
-                Limpar os campos
-              </Link> -->
-            </div>
           </div>
         </form>
 
@@ -214,7 +205,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-light">
-                <h3 class="card-title"><strong>Resultado: </strong></h3>
+                <h3 class="card-title"><strong>Total Arrecadado: {{ formatValor(total) }}</strong></h3>
               </div>
 
               <div class="card-body p-0">
@@ -226,54 +217,29 @@
                         <th>Validação Data</th>
                         <th>Data Banco</th>
                         <th>Data Registro</th>
+                        <th>Serviço</th>
                         <th>Valor:</th>
                         <th>Recibo</th>
                         <th>Forma Pagamento</th>
                         <th>Estado</th>
-                        <!-- <th>Prestação</th> -->
                         <th>Grau</th>
-                        <!-- <th>Ano Lectivo</th> -->
-                        <!-- <th>Comprovativo</th> -->
                         <th width="100px">Acções</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="pagamento in items.data" :key="pagamento.id">
-                        <td>wewe</td>
+                      <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
+                        <td>{{ pagamento.operador ?? "Estudante" }}</td>
                         <td>{{ formatData(pagamento.updated_at) }}</td>
                         <td>{{ formatData(pagamento.DataBanco)  }}</td>
                         <td>{{ formatData(pagamento.DataRegisto) }}</td>
-                        <!-- <td>{{ pagamento.dataValidacaoPagamento }}</td> -->
+                        <td>{{ pagamento.Descricao }}</td>
                         <td>{{ formatValor(pagamento.valor_depositado) }}</td>
                         <td>{{ pagamento.Codigo }}</td>
                         <td>{{ pagamento.forma_pagamento }}</td>
-                        <td
-                          v-if="pagamento.estado == 1"
-                          class="text-success"
-                        >
-                          Valido
-                        </td>
-                        <td
-                          v-if="pagamento.estado == 2"
-                          class="text-danger"
-                        >
-                          Rejeitado
-                        </td>
-                        <td
-                          v-if="pagamento.estado == 0"
-                          class="text-info"
-                        >
-                          Pendente
-                        </td>
-                        <!-- <td>  -->
-                          <!-- {{ pagamento.items.mes_temps ? pagamento.items.mes_temps.designacao : '' }} -->
-                          <!-- <span v-for="item in pagamento.factura.items_factura" :key="item">
-                            {{ item.mes_temp.designacao ?? '---' }}
-                          </span> -->
-                        <!-- </td> -->
-                        <td>{{ pagamento.preinscricao.grau_academico.designacao ?? ''}}</td>
-                        <!-- <td>{{ pagamento.anolectivo ? pagamento.anolectivo.Designacao : '' }}</td> -->
-                        <!-- <td><a target="_blink" :href="'https://mutue.ao/storage/documentos/'+pagamento.nome_documento"> {{ pagamento.nome_documento }}</a></td> -->
+                        <td v-if="pagamento.estado == 1" class="text-success">Validado</td>
+                        <td v-if="pagamento.estado == 0" class="text-info">Pendente</td>
+                        <td v-if="pagamento.estado == 2" class="text-warning">Rejeitado</td>
+                        <td>{{ pagamento.designacao }}</td>
                         <td>
                           <a class="btn-sm btn-success mr-1" @click="visualizar_detalhes(pagamento)">
                             <i class="fas fa-eye" title="VISUALIZAR DETALHES DO PAGAMENTO"> </i>
@@ -407,7 +373,6 @@
     </div>
   </div>
     
-
   </MainLayouts>
 </template>
 
@@ -426,6 +391,7 @@
       "estadoPagamento",
       "tipoServicos",
       "utilizadores",
+      "total"
     ],
     components: {
       Link,
@@ -517,7 +483,6 @@
         this.params.data_final_validacao = val;
         this.updateData();
       },
-      
       
       forma_pagamento: function(val) {
         this.params.forma_pagamento = val;
