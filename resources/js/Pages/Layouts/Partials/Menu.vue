@@ -423,6 +423,53 @@
         <a
           href="#"
           class="nav-link"
+          title="FECHO DE CAIXA"
+          :class="{
+            active: $page.component.startsWith('fechodecaixa/'),
+          }"
+        >
+          <i class="nav-icon fas fa-chart-line"></i>
+          <p>
+           Fecho de caixa
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item" title="FECHO DE CAIXA GERAL">
+            <Link
+              :href="route('mf.fecho-caixa-geral')"
+              class="nav-link"
+              :class="{
+                active:
+                  $page.component == 'fechodecaixa/FechoCaixaGeral',
+              }"
+            >
+              <i class="far fa-circle nav-icon"></i>
+              <p>Geral</p>
+            </Link>
+          </li>
+
+          <li class="nav-item" title="FECHO DE CAIXA DIÁRIO">
+            <Link
+              :href="route('mf.fecho-caixa-mensalidade-geral')"
+              class="nav-link"
+              :class="{
+                active:
+                  $page.component ==
+                  'fechodecaixa/diario',
+              }"
+            >
+              <i class="far fa-circle nav-icon"></i>
+              <p>Diário</p>
+            </Link>
+          </li>
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a
+          href="#"
+          class="nav-link"
           title="RELATÓRIOS FINANCEIROS"
           :class="{
             active: $page.component.startsWith('RelatoriosPagamentos/'),
@@ -435,49 +482,6 @@
           </p>
         </a>
         <ul class="nav nav-treeview">
-          <li class="nav-item" title="FECHO DO CAIXA GERAL">
-            <Link
-              :href="route('mf.fecho-caixa-geral')"
-              class="nav-link"
-              :class="{
-                active:
-                  $page.component == 'RelatoriosPagamentos/FechoCaixaGeral',
-              }"
-            >
-              <i class="far fa-circle nav-icon"></i>
-              <p>Fecho Caixa Geral</p>
-            </Link>
-          </li>
-
-          <li class="nav-item" title="FECHO DO CAIXA POR MENSALIDADES">
-            <Link
-              :href="route('mf.fecho-caixa-mensalidade-geral')"
-              class="nav-link"
-              :class="{
-                active:
-                  $page.component ==
-                  'RelatoriosPagamentos/FechoCaixaMensalidade',
-              }"
-            >
-              <i class="far fa-circle nav-icon"></i>
-              <p>Fecho Caixa Mensalidades</p>
-            </Link>
-          </li>
-
-          <li class="nav-item" title="FECHO DO CAIXA POR UTILIZADOR">
-            <Link
-              :href="route('mf.fecho-caixa-utilizador')"
-              class="nav-link"
-              :class="{
-                active:
-                  $page.component ==
-                  'RelatoriosPagamentos/FechoCaixaUtilizador',
-              }"
-            >
-              <i class="far fa-circle nav-icon"></i>
-              <p>Fecho Caixa Utilizador</p>
-            </Link>
-          </li>
 
           <li class="nav-item">
             <Link
