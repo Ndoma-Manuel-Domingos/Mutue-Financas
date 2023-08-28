@@ -53,7 +53,7 @@ class ServicoEmonumentoController extends Controller
         ->where('descricao', 'like', 'Propina %')
         ->with('polo')
         ->orderBy('Codigo', 'desc')
-        ->paginate($request->page_size ?? 5)
+        ->paginate($request->page_size ?? 20)
         ->withQueryString();
 
         $data['totalServico'] = TipoServico::count();
@@ -99,7 +99,7 @@ class ServicoEmonumentoController extends Controller
         ->whereNull('codigo_grade_currilular')
         ->whereNotIn('Codigo', $ids)
         ->orderBy('Codigo', 'desc')
-        ->paginate($porPagina ?? 5)
+        ->paginate($porPagina ?? 20)
         ->withQueryString();
 
         return Inertia::render('ServicoEmonumentos/Servicos', $data);

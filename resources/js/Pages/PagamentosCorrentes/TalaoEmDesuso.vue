@@ -28,7 +28,7 @@
               <div class="col-12 col-md-3">
                 <div class="form-group">
                   <label>Operador</label>
-                  <select name="" id="" v-model="operador" class="form-control" @change="search">
+                  <select name="" id="" v-model="operador" class="form-control form-control-sm " @change="search">
                     <option value="">Todos Operadores</option>
                     <option :value="utilizador.utilizadores.pk_utilizador" v-for="utilizador in utilizadores" :key="utilizador">{{ utilizador.utilizadores.nome }} </option>
                   </select>
@@ -39,14 +39,14 @@
               <div class="col-12 col-md-3">
                 <div class="form-group">
                   <label>Data Inicio:</label>
-                  <input v-model="data_inicio" @keyup.enter="search" type="date" class="form-control"/>
+                  <input v-model="data_inicio" @keyup.enter="search" type="date" class="form-control form-control-sm "/>
                 </div>
               </div>
 
               <div class="col-12 col-md-3">
                 <div class="form-group">
                   <label>Data Final:</label>
-                  <input v-model="data_final" @keyup.enter="search" type="date" class="form-control"/>
+                  <input v-model="data_final" @keyup.enter="search" type="date" class="form-control form-control-sm "/>
                 </div>
               </div>
 
@@ -55,7 +55,7 @@
 
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-hover text-nowrap">
+              <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                 <thead>
                   <tr>
                     <th>Estudante</th>

@@ -104,6 +104,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/talao/desuso-pdf/{o?}/{di?}/{df?}', [PagamentoCorrentesController::class, 'pdfImprimirTalaoDesuso'])->name('mf.talao-desuso-pdf');
     Route::get('/talao/desuso-excel/{o?}/{di?}/{df?}', [PagamentoCorrentesController::class, 'excelImprimirTalaoDesuso'])->name('mf.talao-desuso-excel');
 
+
+    Route::get('/fecho-caixa', [RelatorioFinanceiroController::class, 'fechoCaixa'])->name('mf.fecho-caixa');
     // Relatórios de pagamentos
     Route::get('/fecho/caixa-geral', [RelatorioFinanceiroController::class, 'fechoCaixaGeral'])->name('mf.fecho-caixa-geral');
     Route::get('/fecho/caixa-geral/pdf-imprimir', [RelatorioFinanceiroController::class, 'pdfImprimirGeral'])->name('mf.fecho-caixa-geral-pdf');
@@ -174,8 +176,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::put('/update-desconto/{item?}', [GestaodeBolsaeDescontoController::class, 'updateDesconto'])->name('mf.update-desconto');
     Route::get('/visualizar-desconto/{item}', [GestaodeBolsaeDescontoController::class, 'visualizarDesconto'])->name('mf.visualizar-desconto');
 
-    Route::get('/listagem/bolserios/pdf-imprimir/{AnoLectivo?}/{Curso?}/{Instituicao?}/{TipoBolsa?}{Estado?}/{Desconto?}/{Semestre?}',[GestaodeBolsaeDescontoController::class, 'pdfimprimirbolseiros'])->name('mf.imprimir-bolseiros');
-    Route::get('/listagem/bolserios/pdf-imprimir/{AnoLectivo?}/{Curso?}/{Instituicao?}/{TipoBolsa?}{Estado?}/{Desconto?}/{Semestre?}',[GestaodeBolsaeDescontoController::class, 'excelimprimirbolseiros'])->name('mf.imprimir-bolseiros');
+    Route::get('/listagem/bolserios/pdf-imprimir',[GestaodeBolsaeDescontoController::class, 'pdfimprimirbolseiros'])->name('mf.imprimir-bolseiros');
+    Route::get('/listagem/bolserios/excel-imprimir',[GestaodeBolsaeDescontoController::class, 'excelimprimirbolseiros'])->name('mf.imprimir-bolseiros');
 
     Route::get('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseiros'])->name('mf.pagamentoBolseiros');
     Route::post('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseirosCreate'])->name('mf.pagamentoBolseirosCreate');
@@ -262,5 +264,13 @@ Route::group(["middleware" => "auth"], function () {
      // Ajuda System
      Route::get('/ajuda-sistema', [AjudaSistemaController::class, 'Index'])->name('mf.Ajuda-sistema');
      Route::get('/baixar-manual', [AjudaSistemaController::class, 'baixarManualUtilizador']);
+     
+     Route::get('/estudante/pegar-descricao-bolseiro', [EstudanteController::class, 'getDescricaoTiposAlunos']);
+     Route::get('/estudante/pega-bolseiro/{id_user}', [EstudanteController::class, 'descontoBolsa']);
+     Route::get('/estudante/pega-finalista/{id_user}', [EstudanteController::class, 'finalista']);
+     Route::get('/estudante/pega-preoco-propina/{polo}/{curso}', [EstudanteController::class, 'getPrecoPropina']);
+     
+     
+     Route::get('/carregar/meses-anolectivo', [AjudaSistemaController::class, 'getMeses']);
 
 });

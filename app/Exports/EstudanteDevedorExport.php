@@ -3,13 +3,18 @@
 namespace App\Exports;
 
 use App\Http\Controllers\TraitHelpers;
-use App\Models\GradeCurricularAluno;
-use App\Models\Pagamento;
-use App\Models\TipoServico;
+use App\Models\AnoLectivo;
+use App\Models\Curso;
+use App\Models\Matricula;
+use App\Models\Turno;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Cell;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -17,26 +22,29 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\DefaultValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell as CellCell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class EstudanteDevedorExport implements FromCollection,
-    WithHeadings,
-    ShouldAutoSize,
-    WithMapping,
-    WithEvents,
-    WithDrawings,
-    WithCustomStartCell
+class EstudanteDevedorExport extends DefaultValueBinder implements FromCollection, WithMapping, WithTitle, WithHeadings, WithDrawings, WithStyles, WithCustomStartCell, WithCustomValueBinder, ShouldAutoSize
 {
-    use TraitHelpers;
+    use TraitHelpers, Exportable;
 
-    public $a , $searchMes , $searchFaculdade , $searchCurso , $searchTurno;
+    public $searchAnoLectivo, $searchMes, $searchFaculdade, $searchCurso, $searchTurno, $titulo;
 
-    public function __construct($a , $request)
+    public function __construct($request)
     {
-        $this->a = $a;
+        $this->searchAnoLectivo = $request->searchAnoLectivo;
         $this->searchMes = $request->searchMes;
         $this->searchFaculdade = $request->searchFaculdade;
         $this->searchCurso = $request->searchCurso;
         $this->searchTurno = $request->searchTurno;
+        
+        
+        $this->titulo = "LISTA DE ESTUDANTES DEVEDORES";
     }
 
     public function headings():array
@@ -44,24 +52,20 @@ class EstudanteDevedorExport implements FromCollection,
         return[
             'Nº Matricula',
             'Nome',
-            'Faculdade',
             'Curso',
             'Turno',
-            'Mês/Parcela',
-            // 'Ano Lectivo',
+            'Valor Unitário',
         ];
     }
 
     public function map($caixa):array
     {
         return[
-            $caixa->matricula,
-            $caixa->aluno,
-            $caixa->faculdade,
-            $caixa->curso,
-            $caixa->turno,
-            $caixa->servico,
-            // $caixa->AnoLectivoPagamento,
+            $caixa->Codigo,
+            $caixa->admissao->preinscricao->Nome_Completo ?? '',
+            $caixa->admissao->preinscricao->curso->Designacao ?? '',
+            $caixa->admissao->preinscricao->turno->Designacao ?? '',
+            number_format(0, 2, ',', '.') ,
         ];
     }
 
@@ -70,86 +74,60 @@ class EstudanteDevedorExport implements FromCollection,
     */
     public function collection()
     {
-        // recuperar os servicos deste ano lectivo primeiramente mais somente servicos de propinas
-        $servicos = TipoServico::where('Descricao', 'like', 'Propina %')->pluck('Codigo');
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
 
-        $grade_curriculares = GradeCurricularAluno::when($this->a, function ($query, $value) {
-            $query->where('codigo_ano_lectivo', '=', $value);
-            $query->whereIn('Codigo_Status_Grade_Curricular', [2,3]);
-        })->distinct('codigo_matricula')->pluck('codigo_matricula');
+        $anoSelecionado = $this->searchAnoLectivo;
 
-
-
-        $query = Pagamento::when($this->a, function ($query, $value) {
-            $query->where('tb_pagamentos.AnoLectivo', '=', $value);
-        });
-
-        if ($this->a >= 2 AND $this->a <= 15){
-            $query->when($this->searchMes, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_id', '=', $value);
-            });
-        }else{
-            $query->when($this->searchMes, function ($query, $value) {
-                $query->where('tb_pagamentosi.mes_temp_id', '=', $value);
-            });
+        if (!$anoSelecionado) {
+            $anoSelecionado = $ano->Codigo;
         }
-
-        $query->when($this->searchFaculdade, function ($query, $value) {
-            $query->where('tb_cursos.faculdade_id', '=', $value);
+        
+        $searchFaculdade = $this->searchFaculdade ?? "";
+        $searchCurso = $this->searchCurso ?? "";
+        $searchTurno = $this->searchTurno ?? ""; 
+        $searchMes = $this->searchMes ?? "";
+            
+        $data['items'] = Matricula::with(['admissao.preinscricao.polo', 'admissao.preinscricao.curso', 'admissao.preinscricao.grau_academico', 'admissao.preinscricao.turno'])
+        ->whereRaw('tb_matriculas.Codigo IN (SELECT tgca.codigo_matricula FROM tb_grade_curricular_aluno tgca WHERE tgca.codigo_ano_lectivo = ? AND tgca.Codigo_Status_Grade_Curricular IN (2, 3))', [$anoSelecionado])
+        ->whereNotIn('tb_matriculas.Codigo', function ($query) use($searchMes) {
+            $query->select('tm_pp.Codigo')
+                ->from('tb_matriculas as tm_pp')
+                ->join('tb_admissao as tb_admissao', 'tb_admissao.codigo', '=', 'tm_pp.Codigo_Aluno')
+                ->join('tb_preinscricao as tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+                ->join('tb_cursos as tb_cursos', 'tb_cursos.Codigo', '=', 'tm_pp.Codigo_Curso')
+                ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
+                ->join('factura as f', 'f.CodigoMatricula', '=', 'tm_pp.Codigo')
+                ->leftJoin('factura_items as fi', 'fi.CodigoFactura', '=', 'f.Codigo')
+                ->where('fi.estado', 1)
+                ->where('fi.mes_temp_id', $searchMes);
         })
-        ->when($this->searchCurso, function ($query, $value) {
-            $query->where('tb_cursos.Codigo', '=', $value);
+        ->whereNotIn('Codigo', function ($query) use($anoSelecionado) {
+            $query->select('codigo_matricula')
+                ->from('tb_bolseiros')
+                ->where('codigo_anoLectivo', $anoSelecionado)
+                ->where('status', 0)
+                ->whereIn('desconto', [100, 0]);
         })
-        ->when($this->searchTurno, function ($query, $value) {
-            $query->where('tb_periodos.Codigo', '=', $value);
+        ->whereHas('admissao.preinscricao', function($query){
+            $query->orderBy('Nome_Completo', 'asc');
         })
-        ->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
-        ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
-        ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-        ->join('tb_faculdade', 'tb_cursos.faculdade_id', '=', 'tb_faculdade.codigo')
-        ->join('tb_ano_lectivo', 'tb_pagamentos.AnoLectivo', '=', 'tb_ano_lectivo.Codigo')
-        ->join('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
-        ->where('tb_pagamentos.estado', 1)
-        // ->whereIn('tb_matriculas.Codigo', $grade_curriculares)
-        ->whereIn('tb_pagamentosi.Codigo_Servico', $servicos);
+        ->whereHas('admissao.preinscricao.curso', function($query) use($searchCurso){
+            $query->when($searchCurso, function($query) use($searchCurso){
+                $query->where('Codigo', $searchCurso);
+            });
+            $query->where('tipo_candidatura', 1);
+        })
+        ->whereHas('admissao.preinscricao.turno', function($query) use($searchTurno){
+            $query->when($searchTurno, function($query) use($searchTurno){
+                $query->where('Codigo', $searchTurno);
+            });
+        })
+        ->get();
 
-        if ($this->a >= 2 AND $this->a <= 15){
-            $query->join('meses', 'tb_pagamentosi.mes_id', '=', 'meses.codigo');
-            $query->select(
-                'meses.mes AS servico',
-                'meses.codigo AS IdServico',
-                'tb_matriculas.Codigo AS matricula',
-                'tb_preinscricao.Nome_Completo AS aluno',
-                'tb_cursos.Designacao AS curso',
-                'tb_periodos.Designacao AS turno',
-                'tb_faculdade.designacao AS faculdade',
-                'tb_pagamentos.Totalgeral AS valores',
-                'tb_ano_lectivo.Designacao AS anolectivo',
-                'tb_pagamentos.Codigo AS CodigoPagamento',
-                'tb_pagamentosi.Valor_Pago AS valorPago',
-            );
-        }else{
-            $query->join('mes_temp', 'tb_pagamentosi.mes_temp_id', '=', 'mes_temp.id');
-            $query->select(
-                'mes_temp.designacao AS servico',
-                'mes_temp.id AS IdServico',
-                'tb_matriculas.Codigo AS matricula',
-                'tb_preinscricao.Nome_Completo AS aluno',
-                'tb_cursos.Designacao AS curso',
-                'tb_periodos.Designacao AS turno',
-                'tb_faculdade.designacao AS faculdade',
-                'tb_pagamentos.Totalgeral AS valores',
-                'tb_pagamentos.Codigo AS CodigoPagamento',
-                'tb_pagamentosi.Valor_Pago AS valorPago',
-            );
-
-        }
-
-        return  $query->get();
+        return $data['items'];
 
     }
+
 
     /**
      * @return array
@@ -174,16 +152,11 @@ class EstudanteDevedorExport implements FromCollection,
         ];
     }
 
-    public function startCell(): String
-    {
-        return "A6";
-    }
-
     public function drawings()
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');
-        $drawing->setDescription('FECHO DO CAIXA');
+        $drawing->setDescription('LISTA DE EXTRATOS DE DEPOSITOS');
         $drawing->setPath(public_path('/images/logotipo.png'));
         $drawing->setHeight(90);
         $drawing->setCoordinates('A1');
@@ -191,5 +164,74 @@ class EstudanteDevedorExport implements FromCollection,
         return $drawing;
     }
 
+    /**
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->titulo;
+    }
+
+    public function startCell(): string
+    {
+        return 'A10';
+    }
+    
+    
+    public function styles(Worksheet $sheet)
+    {
+        $sheet->setCellValue('A7', strtoupper($this->titulo));
+        $sheet->setCellValue('D6', 'ANOS LECTIVOS: ');
+        $sheet->setCellValue('E6', AnoLectivo::find($this->searchAnoLectivo) ? AnoLectivo::find($this->searchAnoLectivo)->Designacao : 'TODAS');
+        $sheet->setCellValue('D7', 'CURSO: ');
+        $sheet->setCellValue('E7',  Curso::find($this->searchCurso) ? Curso::find($this->searchCurso)->Designacao : 'TODAS');
+        $sheet->setCellValue('D8', 'TURNO: ');
+        $sheet->setCellValue('E8', Turno::find($this->searchTurno) ? Turno::find($this->searchTurno)->Designacao :'TODAS');
+        $coordenadas = $sheet->getCoordinates();
+
+        return [
+            // Style the first row as bold text.
+            10    => [
+                'font' => ['bold' => false, 'color' => ['rgb' => 'FCFCFD']],
+                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'color' => ['rgb' => '2b5876']]
+
+            ],
+
+            'D6:E9'    => [
+                'font' => ['bold' => false, 'color' => ['rgb' => 'FCFCFD']],
+                'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'color' => ['rgb' => '2b5876']]
+
+            ],
+
+            // Styling a specific cell by coordinate.
+            'A7' => ['font' => ['bold' => true, 'color' => ['rgb' => '00008B']]],
+            'F7' => ['font' => ['bold' => true, 'color' => ['rgb' => '00008B']]],
+            // 'G6' => ['font' => ['bold' => true, 'color' => ['rgb' => '00008B']]],
+
+            'A11:' . end($coordenadas) => ['borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ]],
+
+
+            // Styling an entire column.
+            //'C'  => ['font' => ['size' => 16]],
+        ];
+        //$sheet->getStyle('A7')->getFont()->setBold(true);
+    }
+
+    public function bindValue(CellCell $cell, $value)
+    {
+
+        if (is_string($value)) {
+            $cell->setValueExplicit(strval($value), DataType::TYPE_STRING);
+            return true;
+        }
+
+        // else return default behavior
+        return parent::bindValue($cell, strval($value));
+    }
 
 }

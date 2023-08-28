@@ -29,8 +29,8 @@ class InstituicaoController extends Controller
         ->when($request->instituicao_tipo, function ($query, $value) {
             $query->orWhere("tipo_instituicao", $value);
         })
-        ->orderBy('codigo', 'desc')
-        ->paginate(5)
+        ->orderBy('Instituicao', 'asc')
+        ->paginate(20)
         ->withQueryString();
 
         $data['tipo_instituicao'] = Instituicacao::get();

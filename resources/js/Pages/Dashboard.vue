@@ -183,7 +183,7 @@
 
                       <select
                         type="text"
-                        class="form-control col-12 col-md-6"
+                        class="form-control form-control-sm  col-12 col-md-6"
                         v-model="ano_lectivo_selecionado"
                         @change="search"
                       >
@@ -197,7 +197,7 @@
                       </select>
                     </div>
                   </div>
-
+                  
                   <div class="col-12 col-md-3">
                     <div class="row">
                       <label
@@ -208,7 +208,7 @@
                       </label>
                       <select
                         type="text"
-                        class="form-control col-12 col-md-6"
+                        class="form-control form-control-sm  col-12 col-md-6"
                         v-model="mes_temp_id"
                         @change="search_meses"
                       >
@@ -217,6 +217,7 @@
                       </select>
                     </div>
                   </div>
+                  
                   
                   <!-- <div class="col-12 col-md-3">
                     <div class="row">
@@ -228,7 +229,7 @@
                       </label>
                       <select
                         type="text"
-                        class="form-control col-12 col-md-6"
+                        class="form-control form-control-sm  col-12 col-md-6"
                         v-model="estado_pagamentos"
                         @change="search"
                       >
@@ -333,6 +334,17 @@ export default {
       charts_meses: [],
 
       ano_lectivo: "",
+      
+      selected: null,
+      options: [
+        { value: null, text: 'Please select some item' },
+        { value: 'a', text: 'This is option a' },
+        { value: 'b', text: 'Default Selected Option b' },
+        { value: 'c', text: 'This is option c' },
+        { value: 'd', text: 'This one is disabled', disabled: true },
+        { value: 'e', text: 'This is option e' },
+        { value: 'e', text: 'This is option f' }
+      ]
     };
   },
 
@@ -499,7 +511,7 @@ export default {
           this.$Progress.finish();
         })
         .catch((errors) => {
-          console.log("Erro ao carregar o graficos estudantes com propinas pagas");
+          console.log("Erro ao carregar o graficos estudantes com mensalidade pagas");
           this.$Progress.fail();
         });
     },

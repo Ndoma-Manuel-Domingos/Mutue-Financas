@@ -27,7 +27,7 @@
 
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table">
+                  <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
                         <th>Codigo</th>
@@ -105,7 +105,7 @@
                 >
                 <input
                   type="text"
-                  class="form-control mb-1"
+                  class="form-control form-control-sm  mb-1"
                   id=""
                   v-model="form.name"
                   placeholder="Informe O nome da Instituição"
@@ -119,7 +119,7 @@
                 >
                 <select
                   name="tipo"
-                  class="form-control mb-1"
+                  class="form-control form-control-sm  mb-1"
                   v-model="form.role_id"
                 >
                   <option :value="item.id" v-for="item in roles" :key="item.id">

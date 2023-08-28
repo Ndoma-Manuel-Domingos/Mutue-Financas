@@ -4,7 +4,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-uppercase">PERCENTAGEM DE APROVEITAMENTO</h1>
+              <h4 class="m-0 text-uppercase">PERCENTAGEM DE APROVEITAMENTO</h4>
             </div>
             <div class="col-sm-6">
               <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
@@ -20,9 +20,6 @@
           <div class="row">
             <div class="col-12 col-md-12">
               <div class="card">
-                <div class="card-header bg-light">
-                  <h5>Buscas Avançadas</h5>
-                </div>
                 <div class="card-body">
                   <div class="row">
 
@@ -32,7 +29,7 @@
                         <div class="input-group">
                           <select
                             v-model="ano_lectivo"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option :value="ano.Codigo" v-for="ano in anos_lectivos" :key="ano.Codigo">{{ ano.Designacao }}</option>
                           </select>
@@ -46,7 +43,7 @@
                         <div class="input-group">
                           <select
                             v-model="grau"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option :value="grau.dodigo" v-for="grau in graus" :key="grau.dodigo">{{ grau.designacao }}</option>
@@ -61,7 +58,7 @@
                         <div class="input-group">
                           <select
                             v-model="curso"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option :value="curso.Codigo" v-for="curso in cursos" :key="curso.Codigo">{{ curso.Designacao }}</option>
@@ -76,7 +73,7 @@
                         <div class="input-group">
                           <select
                             v-model="instituicao"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option :value="mes.codigo" v-for="mes in instituicoes" :key="mes.codigo">{{ mes.Instituicao }}</option>
@@ -91,7 +88,7 @@
                         <div class="input-group">
                           <select
                             v-model="tipo_bolsa"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODAS</option>
                             <option :value="bolsa.codigo" v-for="bolsa in bolsas" :key="bolsa.codigo"> {{ bolsa.designacao }}</option>
@@ -106,7 +103,7 @@
                         <div class="input-group">
                           <select
                             v-model="semestre"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option :value="semestre.Codigo" v-for="semestre in semestres" :key="semestre.Codigo">{{ semestre.Designacao }}</option>
@@ -121,7 +118,7 @@
                         <div class="input-group">
                           <select
                             v-model="percentagem"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option value="5">5%</option>
@@ -153,7 +150,7 @@
                         <div class="input-group">
                           <select
                             v-model="estado"
-                            class="form-control"
+                            class="form-control form-control-sm "
                           >
                             <option value="">TODOS</option>
                             <option :value="turno.Codigo" v-for="turno in turnos" :key="turno.Codigo">{{ turno.Designacao }}</option>
@@ -164,11 +161,6 @@
 
 
                   </div>
-                </div>
-                <div class="card-footer">
-                  <!-- <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-search"></i>  Listar a busca
-                  </button> -->
                 </div>
               </div>
             </div>
@@ -183,7 +175,7 @@
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-hover text-nowrap">
+                    <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                       <thead>
                         <tr>
                           <th>Nº Matricula</th>

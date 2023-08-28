@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Estudantes Inactivos</h1>
+                        <h4 class="m-0 text-uppercase">Estudantes Inactivos</h4>
                     </div>
                     <div class="col-sm-6">
                         <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i
@@ -21,7 +21,6 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
 
@@ -29,7 +28,7 @@
                                         <div class="form-group">
                                             <label>Ano De Ingresso Início</label>
                                             <div class="input-group">
-                                                <select class="form-control" v-model="ano_inicio">
+                                                <select class="form-control form-control-sm " v-model="ano_inicio">
                                                     <option :value="ano.Codigo" v-for="ano in anolectivos" :key="ano.Codigo">{{ ano.Designacao }}</option>
                                                 </select>
                                             </div>
@@ -40,7 +39,7 @@
                                         <div class="form-group">
                                             <label>Ano De Ingresso Fim</label>
                                             <div class="input-group">
-                                                <select class="form-control" v-model="ano_final">
+                                                <select class="form-control form-control-sm " v-model="ano_final">
                                                     <option :value="ano.Codigo" v-for="ano in anolectivos" :key="ano.Codigo">{{ ano.Designacao }}</option>
                                                 </select>
                                             </div>
@@ -51,7 +50,7 @@
                                         <div class="form-group">
                                             <label>Grau Académico</label>
                                             <div class="input-group">
-                                                <select class="form-control" v-model="grau">
+                                                <select class="form-control form-control-sm " v-model="grau">
                                                     <option value="">TODOS</option>
                                                     <option :value="grau.id" v-for="grau in graus" :key="grau.id">{{ grau.designacao }}</option>
                                                 </select>
@@ -63,7 +62,7 @@
                                         <div class="form-group">
                                             <label>Faculdade</label>
                                             <div class="input-group">
-                                                <select class="form-control" v-model="faculdade">
+                                                <select class="form-control form-control-sm " v-model="faculdade">
                                                     <option value="">TODAS</option>
                                                     <option :value="faculdade.codigo" v-for="faculdade in faculdades" :key="faculdade.codigo">{{ faculdade.designacao }}</option>
                                                 </select>
@@ -75,7 +74,7 @@
                                         <div class="form-group">
                                             <label>Cursos</label>
                                             <div class="input-group">
-                                                <select class="form-control" v-model="curso">
+                                                <select class="form-control form-control-sm " v-model="curso">
                                                     <option value="">TODOS</option>
                                                     <option :value="curso.Codigo" v-for="curso in cursos" :key="curso.Codigo">{{ curso.Designacao }}</option>
                                                 </select>
@@ -85,8 +84,6 @@
 
                                 </div>
                             </div>
-                            <div class="card-footer">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,38 +92,36 @@
                     <div class="col-12 col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title text-info">TOTAL REGISTROS: {{ estudantes_total }}</h5>
+                                <h6 class="card-title text-info">TOTAL REGISTROS: {{ estudantes_total }}</h6>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Nº Matricula</th>
-                                                <th>Ano De Ingresso</th>
-                                                <th>Nome</th>
-                                                <th>Bilheite</th>
-                                                <th>Curso</th>
-                                                <th>E-mail</th>
-                                                <th>Telefone</th>
-                                                <th>Divida(AOA)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in estudantes.data" :key="item.matricula">
-                                                <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.matricula }}</a></td>
-                                                <td>{{ item.anoLectivo ?? 'Nenhum' }}</td>
-                                                <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.nome ?? 'Nenhum' }}</a></td>
-                                                <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.bilhete ?? 'Nenhum' }}</a></td>
-                                                <td>{{ item.curso ?? 'Nenhum' }}</td>
-                                                <td>{{ item.email ?? 'Nenhum' }}</td>
-                                                <td>{{ item.telefone ?? 'Nenhum' }}</td>
-                                                <td> (0,00 KZ)</td>
-                                                <!-- <td> {{ `https://mutue.ao/api/negociacao-divida/${item.codigo}` }}</td> -->
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº Matricula</th>
+                                            <th>Ano De Ingresso</th>
+                                            <th>Nome</th>
+                                            <th>Bilheite</th>
+                                            <th>Curso</th>
+                                            <th>E-mail</th>
+                                            <th>Telefone</th>
+                                            <th>Divida(AOA)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in estudantes.data" :key="item.matricula">
+                                            <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.matricula }}</a></td>
+                                            <td>{{ item.anoLectivo ?? 'Nenhum' }}</td>
+                                            <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.nome ?? 'Nenhum' }}</a></td>
+                                            <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.bilhete ?? 'Nenhum' }}</a></td>
+                                            <td>{{ item.curso ?? 'Nenhum' }}</td>
+                                            <td>{{ item.email ?? 'Nenhum' }}</td>
+                                            <td>{{ item.telefone ?? 'Nenhum' }}</td>
+                                            <td> (0,00 KZ)</td>
+                                            <!-- <td> {{ `https://mutue.ao/api/negociacao-divida/${item.codigo}` }}</td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="card-footer">
@@ -168,8 +163,8 @@
         },
         data() {
             return {
-                ano_inicio: "18",
-                ano_final: "18",
+                ano_inicio: 21,
+                ano_final: 21,
                 
                 grau: "",
                 faculdade: "",

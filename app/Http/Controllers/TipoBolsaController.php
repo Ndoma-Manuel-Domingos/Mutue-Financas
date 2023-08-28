@@ -29,8 +29,8 @@ class TipoBolsaController extends Controller
         ->when($request->search, function ($query, $value) {
             $query->where('designacao', 'LIKE', '%' . $value . '%');
         })
-        ->orderBy('codigo', 'desc')
-        ->paginate(5)
+        ->orderBy('designacao', 'asc')
+        ->paginate(20)
         ->withQueryString();
         
         $data['totalTipoBolsa'] = TipoBolsa::count();

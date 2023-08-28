@@ -28,19 +28,19 @@
           <form @submit.prevent="submiter" id="formTipoServico">
             <div class="form-group mb-3">
               <label for="" class="text-secondary">Descrição</label>
-              <input v-model="form.descricao" type="text" class="form-control mb-1" :class="{'is-invalid': errorDescricao }" id="">
+              <input v-model="form.descricao" type="text" class="form-control form-control-sm  mb-1" :class="{'is-invalid': errorDescricao }" id="">
               <span class="text-danger d-block" v-if="errorDescricao">{{ errorDescricao }}</span>
             </div>
 
             <div class="form-group mb-3">
               <label for="" class="text-secondary">Preço</label>
-              <input v-model="form.preco" type="text" class="form-control" :class="{'is-invalid': errorPreco }" id="">
+              <input v-model="form.preco" type="text" class="form-control form-control-sm " :class="{'is-invalid': errorPreco }" id="">
               <span class="text-danger d-block" v-if="errorPreco">{{ errorPreco }}</span>
             </div>
 
             <div class="form-group mb-3">
               <label for="" class="text-secondary">Periodicidade</label>
-              <select v-model="form.tipoServico" name="" id="" :class="{'is-invalid': errorTipoServico }" class="form-control">
+              <select v-model="form.tipoServico" name="" id="" :class="{'is-invalid': errorTipoServico }" class="form-control form-control-sm ">
                 <option value="Normal">Normal</option>
                 <option value="Semestral">Semestral</option>
                 <option value="Anual">Anual</option>

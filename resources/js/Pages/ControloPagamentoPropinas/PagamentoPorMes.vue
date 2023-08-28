@@ -24,7 +24,7 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
                         <th>Mês/Parcela</th>

@@ -56,7 +56,7 @@ class PagamentoCorrentesController extends Controller
             ->with('canal')
             ->where('estado', 0)
             ->limit(1)
-            ->paginate(5)
+            ->paginate(20)
             ->withQueryString();
 
         $data['filtros'] = $request->all('numero_comprovativo');
@@ -78,6 +78,7 @@ class PagamentoCorrentesController extends Controller
             ->limit(1)
             ->paginate(5)
             ->withQueryString();
+            
 
         return response()->json($data, 200);
     }
@@ -142,10 +143,8 @@ class PagamentoCorrentesController extends Controller
             'tb_Instituicao.Instituicao',
             'tb_semestres.Designacao AS semestre',
             'tb_grau_academico.Designacao AS grau'
-            // ,
-            // DB::select("SELECT COUNT(*) FROM tb_grade_curricular_aluno AS total WHERE Codigo_Status_Grade_Curricular IN ('2', '3')")
         )
-        ->paginate($request->page_size ?? 7)
+        ->paginate($request->page_size ?? 20)
         ->withQueryString();
 
         $data['semestres'] = Simestre::get();
@@ -198,15 +197,16 @@ class PagamentoCorrentesController extends Controller
             'tb_actualizacao_saldo_aluno.obs',
             'tb_actualizacao_saldo_aluno.id',
         )
-        ->paginate($request->page_size ?? 5)
+        ->paginate(20)
         ->withQueryString();
 
         // grupos permitido em acessar o sistema
         $admins = Grupo::where('designacao', 'Administrador')->select('pk_grupo')->first();
         $finans = Grupo::where('designacao', 'Area Financeira')->select('pk_grupo')->first();
         $tesous = Grupo::where('designacao', 'Tesouraria')->select('pk_grupo')->first();
+        $valida = Grupo::where('designacao', 'Validação de Pagamentos')->select('pk_grupo')->first();
 
-        $data['utilizadores'] = GrupoUtilizador::whereIn('fk_grupo', [$admins->pk_grupo, $finans->pk_grupo, $tesous->pk_grupo])->with('utilizadores')->get();
+        $data['utilizadores'] = GrupoUtilizador::whereIn('fk_grupo', [$valida->pk_grupo, $finans->pk_grupo, $tesous->pk_grupo])->with('utilizadores')->get();
         $data['filtros'] = $request->all("data_inicio", "data_final", "operador");
 
         return Inertia::render('AreaFinanceira/ControleActualizacaoSaldo', $data);
@@ -347,6 +347,10 @@ class PagamentoCorrentesController extends Controller
 
     public function pagamentoPorValidar(Request $request)
     {
+    
+        // dd($request->all());
+
+        //filtro_estudante
 
         if ($request->page_size == -1) {
             $request->page_size = 15;
@@ -360,12 +364,6 @@ class PagamentoCorrentesController extends Controller
         }else{
             $request->ano_lectivo = $ano->Codigo;
         }
-        
-        // if($request->data_inicio) {
-        //     $request->data_inicio =  $request->data_inicio;
-        // }else{
-        //     // $request->data_inicio = date('Y-m-d');
-        // }
 
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
@@ -379,6 +377,11 @@ class PagamentoCorrentesController extends Controller
         })
         ->when($request->tipo_servico, function ($query, $value) {
             $query->where('tb_pagamentosi.Codigo_Servico', $value);
+        })
+        ->when($request->filtro_estudante, function ($query, $value) {
+            $query->where('tb_pagamentos.Codigo_PreInscricao', $value)
+                ->orWhere('tb_preinscricao.Bilhete_Identidade', $value)
+                ->orWhere('tb_preinscricao.Nome_Completo', 'like', "%{$value}%");
         })
         ->when($request->grau_academico, function ($query, $value) {
             $query->where('tb_tipo_candidatura.id', ($value));
@@ -410,7 +413,7 @@ class PagamentoCorrentesController extends Controller
             'tb_tipo_candidatura.designacao AS grau_academico',
             'tb_tipo_servicos.Descricao AS servico',
         )
-        ->paginate(5)
+        ->paginate(20)
         ->withQueryString();
 
 
@@ -429,28 +432,51 @@ class PagamentoCorrentesController extends Controller
     public function pdfImprimirPagamentoPorValidar(Request $request)
     {
         $ano = AnoLectivo::where('estado', 'Activo')->first();
+        $data['grau'] = GrauAcademico::get();
+        
+        if($request->ano_lectivo){
+            $request->ano_lectivo = $request->ano_lectivo;
+        }else{
+            $request->ano_lectivo = $ano->Codigo;
+        }
 
-        $data['items'] = Pagamento::when($request->p, function ($query, $value) {
+        $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
+            $query->orderBy($value, request('order_by', 'asc'));
+        })
+        
+        ->when($request->prestacao, function ($query, $value) {
             $query->where('mes_temp.id', $value);
         })
-        ->when($request->s, function ($query, $value) {
-            $query->where('factura_items.CodigoProduto', $value);
-        })
-        ->when($request->f, function ($query, $value) {
+        ->when($request->forma_pagamento, function ($query, $value) {
             $query->where('tb_pagamentos.forma_pagamento', $value);
         })
-        ->when($request->di, function ($query, $value) {
-            $query->whereDate('tb_pagamentos.Data', '>=', Carbon::createFromDate($value));
+        ->when($request->tipo_servico, function ($query, $value) {
+            $query->where('tb_pagamentosi.Codigo_Servico', $value);
         })
-        ->when($request->df, function ($query, $value) {
-            $query->whereDate('tb_pagamentos.Data', '<=', Carbon::createFromDate($value));
+        ->when($request->filtro_estudante, function ($query, $value) {
+            $query->where('tb_pagamentos.Codigo_PreInscricao', $value)
+                ->orWhere('tb_preinscricao.Bilhete_Identidade', $value)
+                ->orWhere('tb_preinscricao.Nome_Completo', 'like', "%{$value}%");
+        })
+        ->when($request->grau_academico, function ($query, $value) {
+            $query->where('tb_tipo_candidatura.id', ($value));
+        })
+        ->when($request->data_inicio, function ($query, $value) {
+            $query->whereDate('tb_pagamentos.created_at', '>=', Carbon::createFromDate($value));
+        })
+        ->when($request->data_final, function ($query, $value) {
+            $query->whereDate('tb_pagamentos.created_at', '<=', Carbon::createFromDate($value));
         })
         ->where('tb_pagamentos.estado', 0)
-        ->join('factura_items', 'tb_pagamentos.codigo_factura', '=', 'factura_items.CodigoFactura')
-        ->join('tb_tipo_servicos', 'factura_items.CodigoProduto', '=', 'tb_tipo_servicos.Codigo')
-        ->join('mes_temp', 'factura_items.mes_temp_id', '=', 'mes_temp.id')
+        ->where('tb_pagamentos.AnoLectivo', $request->ano_lectivo)
+        ->join('tb_pagamentosi', 'tb_pagamentos.Codigo', '=', 'tb_pagamentosi.Codigo_Pagamento')
+        ->join('tb_tipo_servicos', 'tb_pagamentosi.Codigo_Servico', '=', 'tb_tipo_servicos.Codigo')
         ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
+        ->leftjoin('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
+        ->leftjoin('tb_matriculas', 'tb_admissao.Codigo', '=', 'tb_matriculas.Codigo_Aluno')
+        ->join('tb_tipo_candidatura', 'tb_preinscricao.codigo_tipo_candidatura', '=', 'tb_tipo_candidatura.id')
         ->select(
+            'tb_matriculas.Codigo AS matricula',
             'tb_preinscricao.Nome_Completo',
             'tb_pagamentos.codigo_factura',
             'tb_pagamentos.Codigo',
@@ -458,13 +484,13 @@ class PagamentoCorrentesController extends Controller
             'tb_pagamentos.Data',
             'tb_pagamentos.estado',
             'tb_pagamentos.forma_pagamento',
-            'mes_temp.designacao AS prestacao',
             'tb_pagamentos.valor_depositado',
+            'tb_tipo_candidatura.designacao AS grau_academico',
             'tb_tipo_servicos.Descricao AS servico',
         )
         ->get();
 
-        $data['requests'] =  $request->all('p', 's', 'f', 'di', 'df');
+        $data['requests'] =  $request->all('prestacao', 'forma_pagamento', 'tipo_servico', 'filtro_estudante', 'grau_academico', 'data_inicio', 'data_final');
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('pdf.estudantes.pagamento-por-validar', $data);
@@ -485,7 +511,7 @@ class PagamentoCorrentesController extends Controller
      
         $pagamento = Pagamento::findOrFail($id);   
         
-        $response = Http::get("http://10.10.6.158:8080/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
+        $response = Http::get("http://10.10.6.13:8080/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
         $data = $response->json();
 
         return response()->json($data);
@@ -495,6 +521,7 @@ class PagamentoCorrentesController extends Controller
     public function rejeitarPagamentoStore($id, $motivos = null)
     {
         $pagamento = Pagamento::findOrFail($id);
+        
         $pagamento->estado = 3;
         $pagamento->update();
 
@@ -557,9 +584,10 @@ class PagamentoCorrentesController extends Controller
         $admins = Grupo::where('designacao', 'Administrador')->select('pk_grupo')->first();
         $finans = Grupo::where('designacao', 'Area Financeira')->select('pk_grupo')->first();
         $tesous = Grupo::where('designacao', 'Tesouraria')->select('pk_grupo')->first();
+        $validacao = Grupo::where('designacao', 'Validação de Pagamentos')->select('pk_grupo')->first();
 
         $data['filtros'] = $request->all("data_inicio", "data_final", "operador");
-        $data['utilizadores'] = GrupoUtilizador::whereIn('fk_grupo', [$admins->pk_grupo, $finans->pk_grupo, $tesous->pk_grupo])->with('utilizadores')->get();
+        $data['utilizadores'] = GrupoUtilizador::whereIn('fk_grupo', [$validacao->pk_grupo, $finans->pk_grupo, $tesous->pk_grupo])->with('utilizadores')->get();
 
         return Inertia::render('AreaFinanceira/TalaoEmDesuso', $data);
     }

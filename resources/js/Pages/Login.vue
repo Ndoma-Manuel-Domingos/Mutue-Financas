@@ -25,7 +25,7 @@
                             <h6 class="text-center text-danger pb-3" v-if="form.errors.acesso">Acesso Registro</h6>
                             <div class="col-12 mb-3">
                                 <div class="input-group">
-                                    <input type="text" v-model="form.email" :class="{'is-invalid' : form.errors.email}" class="form-control" placeholder="Email" />
+                                    <input type="text" v-model="form.email" :class="{'is-invalid' : form.errors.email}" class="form-control form-control-sm " placeholder="Email" />
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-envelope"></span>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-12 mb-3">
                                 <div class="input-group">
-                                    <input type="password" v-model="form.password" :class="{'is-invalid' : form.errors.password}"  class="form-control" placeholder="Password" />
+                                    <input type="password" v-model="form.password" :class="{'is-invalid' : form.errors.password}"  class="form-control form-control-sm " placeholder="Password" />
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-lock"></span>
@@ -53,9 +53,6 @@
                                             Entrar
                                         </button>
                                     </div>
-                                    <!-- <div class="col-8">
-                                    </div>
-                         -->
                                 </div>
                             </div>
                         </form>

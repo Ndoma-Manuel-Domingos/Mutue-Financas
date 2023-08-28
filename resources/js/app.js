@@ -18,6 +18,8 @@ import "v3-infinite-loading/lib/style.css";
 // import Select2Component
 import Select2 from 'vue3-select2-component';
 
+import Multiselect from 'vue-multiselect';
+
 Chartkick.options = {
   colors: ["#b00", "#666"]
 }
@@ -70,6 +72,7 @@ createInertiaApp({
       .use(VueChartkick, { adapter: Highcharts })
       .component("infinite-loading", InfiniteLoading)
       .component('Select2', Select2)
+      .component('Multiselect', Multiselect)
       .mount(el)
   },
 })

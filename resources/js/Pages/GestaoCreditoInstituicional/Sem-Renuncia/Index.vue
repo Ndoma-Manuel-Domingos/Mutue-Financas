@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Instituções Sem Renúncias</h1>
+                        <h4 class="m-0 text-uppercase">Instituções Sem Renúncias</h4>
                     </div>
 
                     <div class="col-sm-6">
@@ -27,14 +27,14 @@
                                 
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 300px">
-                                        <input type="text" v-model="search" class="form-control float-right" placeholder="Search" />
+                                        <input type="text" v-model="search" class="form-control form-control-sm  float-right" placeholder="Search" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Codigo</th>
@@ -125,23 +125,23 @@
                         <form id="salvarInstuicao" class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Instituição <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.instituicao" placeholder="Informe a instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.instituicao" placeholder="Informe a instituição">
                                 <span class="text-danger d-block">{{ form.errors.instituicao }}</span>
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">NIF <span class="text-danger">*</span></label>
-                                <input  type="text" class="form-control mb-1" maxlength="15" max="15" v-model="form.nif" placeholder="Informe o Número de Identificação Fiscal">
+                                <input  type="text" class="form-control form-control-sm  mb-1" maxlength="15" max="15" v-model="form.nif" placeholder="Informe o Número de Identificação Fiscal">
                                 <span class="text-danger d-block">{{ form.errors.nif }}</span>
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Sigla</label>
-                                <input type="text" class="form-control mb-1" v-model="form.sigla" placeholder="Informe a Sigla">
+                                <input type="text" class="form-control form-control-sm  mb-1" v-model="form.sigla" placeholder="Informe a Sigla">
                                 <span class="text-danger d-block">{{ form.errors.sigla }}</span>
                             </div>
                             
                             <div class="form-group col-12 col-md-6">
                                 <label for="tipo_institicoes" class="col-form-label">Tipo de Instituição</label>
-                                <select name="tipo" id="tipo_institicoes" class="form-control mb-1" v-model="form.tipo">
+                                <select name="tipo" id="tipo_institicoes" class="form-control form-control-sm  mb-1" v-model="form.tipo">
                                     <option :value="item.codigo" v-for="item in tipo_instituicao" :key="item.codigo">{{ item.designacao }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.tipo }}</span>
@@ -149,19 +149,19 @@
                             
                             <div class="form-group col-12 col-md-3">
                                 <label for="recipient-name" class="col-form-label">Contacto</label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.contacto" placeholder="Informe o contacto da Instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.contacto" placeholder="Informe o contacto da Instituição">
                                 <span class="text-danger d-block">{{ form.errors.contacto }}</span>
                             </div>
                             
                             <div class="form-group col-12 col-md-3">
                                 <label for="recipient-name" class="col-form-label">Endereço</label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.endereco" placeholder="Informe o Endereço da Instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.endereco" placeholder="Informe o Endereço da Instituição">
                                 <span class="text-danger d-block">{{ form.errors.endereco }}</span>
                             </div>
                             
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient" class="col-form-label">Tipo de Bolsas <span class="text-danger">*</span></label>
-                                <select class="form-control" id="recipient" ref="mySelect" v-model="form.tipos_bolsas" multiple="multiple">
+                                <select class="form-control form-control-sm " id="recipient" ref="mySelect" v-model="form.tipos_bolsas" multiple="multiple">
                                     <option v-for="bolsa in tipo_bolsa" :value="bolsa.codigo" :key="bolsa.codigo">{{ bolsa.designacao }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.tipos_bolsas }}</span>
@@ -193,7 +193,7 @@
                         <form id="artribuirbolsaInst">
                             <div class="col-12 col-md-12">
                                 <div class="input-group input-group">
-                                    <select class="form-control form-control" v-model="form_atribuir.tipo_bolsa">
+                                    <select class="form-control form-control-sm  form-control" v-model="form_atribuir.tipo_bolsa">
                                         <option v-for="bolsa in tipo_bolsa" :value="bolsa.codigo" :key="bolsa.codigo">{{ bolsa.designacao }}</option>
                                     </select>
                                 </div>
@@ -220,28 +220,26 @@
                     </div>
 
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Designação</th>
-                                        <th width="150px">Acções</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="item in bolsaAssociadas" :key="item">
-                                        <td>{{ item.bolsa.codigo }}</td>
-                                        <td>{{ item.bolsa.designacao }}</td>
-                                        <td class="text-center">
-                                            <a class="btn-sm btn-danger mr-1" @click="elimanar_bolsa_instituica(item.codigo)">
-                                                <i class="fas fa-trash" title="VISUALIZAR BOLSAS"> </i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Designação</th>
+                                    <th width="150px">Acções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in bolsaAssociadas" :key="item">
+                                    <td>{{ item.bolsa.codigo }}</td>
+                                    <td>{{ item.bolsa.designacao }}</td>
+                                    <td class="text-center">
+                                        <a class="btn-sm btn-danger mr-1" @click="elimanar_bolsa_instituica(item.codigo)">
+                                            <i class="fas fa-trash" title="VISUALIZAR BOLSAS"> </i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
                     </div>

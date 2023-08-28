@@ -12,7 +12,7 @@
 
         <div class="mx-auto">
           <div class="input-group">
-              <input class="form-control" type="search" @keyup.enter="search_estudante" v-model="search" placeholder="Pesquisar estudante por: Nº de Matricula,Nome,Telefone,BI" style="width: 450px;"/>
+              <input class="form-control form-control-sm " type="search" @keyup.enter="search_estudante" v-model="search" placeholder="Pesquisar estudante por: Nº de Matricula,Nome,Telefone,BI" style="width: 450px;"/>
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button" @click="search_estudante" style="cursor: pointer;" >
                   <i class="fas fa-search"></i>

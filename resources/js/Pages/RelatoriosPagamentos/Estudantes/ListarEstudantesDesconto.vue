@@ -4,7 +4,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-uppercase">Listar Estudantes Com Desconto</h1>
+              <h4 class="m-0 text-uppercase">Listar Estudantes Com Desconto</h4>
             </div>
             <div class="col-sm-6">
               <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
@@ -21,7 +21,6 @@
                 <div class="col-12">
                     <form action="">
                       <div class="card card-light">
-                        <div class="card-header">Buscas Avançadas</div>
                         <div class="card-body">
                           <div class="row">
 
@@ -31,7 +30,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="tipo_instituicao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="">TODOS</option>
                                         <option :value="item.codigo" v-for="item in tipo_instituicoes"  :key="item.codigo">{{ item.designacao }}</option>
@@ -45,7 +44,7 @@
                                     <label>Instituições</label>
                                     <div class="input-group input-group">
                                         <select v-model="instituicao"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option value="">TODAS</option>
                                             <option :value="item.codigo"  v-for="item in instituicoes"  :key="item.codigo">
                                                 {{ item.Instituicao }}
@@ -60,7 +59,7 @@
                                     <label>Tipo Desconto</label>
                                     <div class="input-group input-group">
                                         <select v-model="tipo_desconto"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option value="">TODAS</option>
                                             <option :value="item.Codigo"  v-for="item in tipo_descontos"  :key="item.Codigo">
                                                 {{ item.designacao }}
@@ -73,7 +72,6 @@
 
                           </div>
                         </div>
-                        <div class="card-footer"></div>
                       </div>
                     </form>
                 </div>
@@ -86,14 +84,10 @@
                   <h3 class="card-title">
                     <strong>LISTAGEM</strong>
                   </h3>
-                  <div class="card-tools">
-
-                  </div>
                 </div>
 
-                <div class="card-body p-0">
-                  <div class="table-responsive">
-                    <table class="table table-hover text-nowrap">
+                <div class="card-body">
+                    <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                       <thead>
                         <tr>
                           <th>Matricula</th>
@@ -115,7 +109,6 @@
                       </tr>
                       </tbody>
                     </table>
-                  </div>
                 </div>
 
                 <div class="card-footer">

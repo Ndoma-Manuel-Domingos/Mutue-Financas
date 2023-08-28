@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Controle Actualização de Saldo</h1>
+            <h4 class="m-0 text-uppercase">Controle Actualização de Saldo</h4>
           </div>
           <div class="col-sm-6">
             <a
@@ -24,102 +24,111 @@
 
     <div class="content">
       <div class="container-fluid">
-        <div class="card">
-          <div class="card-header"></div>
-          <div class="card-body bg-light">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <div class="form-group">
-                  <label>Operador</label>
-                  <div
-                    class="input-group date"
-                    id="reservationdate"
-                    data-target-input="nearest"
-                  >
-                    <select
-                      v-model="operador"
-                      class="form-control"
-                    >
-                      <option value="">Todos Operadores</option>
-                      <option
-                        :value="utilizador.utilizadores.pk_utilizador"
-                        v-for="utilizador in utilizadores"
-                        :key="utilizador"
+        <div class="row">
+          <div class="col-12 col-md">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12 col-md-3">
+                    <div class="form-group">
+                      <label>Operador</label>
+                      <div
+                        class="input-group date"
+                        id="reservationdate"
+                        data-target-input="nearest"
                       >
-                        {{ utilizador.utilizadores.nome }}
-                      </option>
-                    </select>
+                        <select
+                          v-model="operador"
+                          class="form-control form-control-sm"
+                        >
+                          <option value="">Todos Operadores</option>
+                          <option
+                            :value="utilizador.utilizadores.pk_utilizador"
+                            v-for="utilizador in utilizadores"
+                            :key="utilizador"
+                          >
+                            {{ utilizador.utilizadores.nome }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="col-12 col-md-3">
+                    <div class="form-group">
+                      <label>Data Inicio:</label>
+                      <input
+                        type="date"
+                        v-model="data_inicio"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
+                  </div>
+    
+                  <div class="col-12 col-md-3">
+                    <div class="form-group">
+                      <label>Data Final:</label>
+                      <input
+                        type="date"
+                        v-model="data_final"
+                        class="form-control form-control-sm"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div class="col-12 col-md-4">
-                <div class="form-group">
-                  <label>Data Inicio:</label>
-                  <input
-                    type="date"
-                    v-model="data_inicio"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-
-              <div class="col-12 col-md-4">
-                <div class="form-group">
-                  <label>Data Final:</label>
-                  <input
-                    type="date"
-                    v-model="data_final"
-                    class="form-control"
-                  />
-                </div>
-              </div>
             </div>
           </div>
-
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-hover text-nowrap">
-                <thead>
-                  <tr>
-                    <th>Estudante</th>
-                    <th>Data Actualização</th>
-                    <th>Saldo Anterior</th>
-                    <th>Saldo Actual</th>
-                    <th>Criado Por</th>
-                    <th>Ver Mais</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="saldo in saldos.data" :key="saldo.id">
-                    <td>{{ saldo.aluno }}</td>
-                    <td>{{ formatData(saldo.data_actualizacao) }}</td>
-                    <td>{{ formatValor(saldo.saldo_anterior) }}</td>
-                    <td>{{ formatValor(saldo.saldo_actual) }}</td>
-                    <td>{{ nome(saldo.nome) }}</td>
-                    <td>
-                      <button
-                        @click="mostrar_detalhe(saldo.id)"
-                        class="btn-sm btn-primary"
-                      >
-                        Ver Mais
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        </div>
+        
+        <div class="row">
+          <div class="col-12 col-md-12">
+            <div class="card">
+    
+              <div class="card-body">
+                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                  <thead>
+                    <tr>
+                      <th>Estudante</th>
+                      <th>Data Actualização</th>
+                      <th>Saldo Anterior</th>
+                      <th>Saldo Actual</th>
+                      <th>Criado Por</th>
+                      <th>Ver Mais</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="saldo in saldos.data" :key="saldo.id">
+                      <td>{{ saldo.aluno }}</td>
+                      <td>{{ formatData(saldo.data_actualizacao) }}</td>
+                      <td>{{ formatValor(saldo.saldo_anterior) }}</td>
+                      <td>{{ formatValor(saldo.saldo_actual) }}</td>
+                      <td>{{ nome(saldo.nome) }}</td>
+                      <td>
+                        <a
+                          @click="mostrar_detalhe(saldo.id)"
+                          class="btn-sm btn-primary"
+                        >
+                          Ver Mais
+                      </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
+              <div class="card-footer">
+                <Link href="" class="text-secondary">
+                  TOTAL REGISTROS: {{ saldos.total }}
+                </Link>
+                <Paginacao
+                  :links="saldos.links"
+                  :prev="saldos.prev_page_url"
+                  :next="saldos.next_page_url"
+                />
+              </div>
             </div>
-          </div>
-
-          <div class="card-footer">
-            <Link href="" class="text-secondary">
-              TOTAL REGISTROS: {{ saldos.total }}
-            </Link>
-            <Paginacao
-              :links="saldos.links"
-              :prev="saldos.prev_page_url"
-              :next="saldos.next_page_url"
-            />
+          
           </div>
         </div>
       </div>
@@ -141,7 +150,7 @@
           </div>
           <div class="modal-body">
             <div class="table-responsive">
-              <table class="table">
+              <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                 <tbody>
                   <tr>
                     <th colspan="6" class="bg-light">Dados</th>
@@ -154,7 +163,9 @@
                   </tr>
                   <tr>
                     <td colspan="1" class="text-left">Anexo:</td>
-                    <td colspan="5"><strong>{{ detalhe.url_anexo ?? 'sem anexo' }}</strong></td>
+                    <td colspan="5">
+                      <strong>{{ detalhe.url_anexo ?? "sem anexo" }}</strong>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -181,7 +192,7 @@ export default {
   props: ["saldos", "utilizadores"],
   components: {
     Link,
-    Paginacao
+    Paginacao,
   },
   data() {
     return {
@@ -191,14 +202,13 @@ export default {
 
       params: {},
       detalhe: [],
-    }
+    };
   },
-  mounted()
-  {
-    this.params.data_inicio = new Date().toISOString().substr(0, 10)
+  mounted() {
+    this.params.data_inicio = new Date().toISOString().substr(0, 10);
     this.updateData();
   },
-        
+
   watch: {
     options: function (val) {
       this.params.page = val.page;
@@ -240,23 +250,18 @@ export default {
     },
 
     mostrar_detalhe(value) {
-    
       this.$Progress.start();
       axios
-        .get(
-          "/consultar/actualizacao-saldo/detalhes/" +
-          value
-        )
+        .get("/consultar/actualizacao-saldo/detalhes/" + value)
         .then((response) => {
           this.detalhe = response.data;
-          $("#modal-xl").modal('show');
+          $("#modal-xl").modal("show");
           this.$Progress.finish();
         })
         .catch((errors) => {
           sweetError("Sem registros encontrado!");
           this.$Progress.fail();
-      });
-
+        });
     },
 
     formatData(data_input) {

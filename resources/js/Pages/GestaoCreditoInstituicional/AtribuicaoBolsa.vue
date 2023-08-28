@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Atribuir crédito educacional </h1>
+                        <h4 class="m-0 text-uppercase">Atribuir crédito educacional </h4>
                     </div>
                     <div class="col-sm-6"></div>
                 </div>
@@ -21,7 +21,7 @@
                                 <div class="form-group text-center">
                                     <label for="" class="text-secondary">Pesquisar Estudante</label>
                                     <div class="input-group input-group">
-                                        <input v-model="form.estudante" class="form-control form-control"
+                                        <input v-model="form.estudante" class="form-control form-control-sm  form-control"
                                             :class="{ 'is-invalid': form.errors.estudante }" type="text" id="estudante"/>
 
                                             <button class="btn btn-primary" type="button" @click="search"
@@ -40,7 +40,7 @@
                                         <label for="" class="text-secondary">Ano Lectivo</label>
                                         <div class="input-group input-group">
                                             <select v-model="form.anolectivo" disabled
-                                                :class="{ 'is-invalid': form.errors.anolectivo }" class="form-control"
+                                                :class="{ 'is-invalid': form.errors.anolectivo }" class="form-control form-control-sm "
                                                 id="anolectivo">
                                                 <option :value="ano.Codigo" v-for="ano in anoLectivos"
                                                     :key="ano.Codigo"> {{ ano.Designacao }}
@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Tipo Instituição</label>
                                         <div class="input-group input-group">
-                                            <select disabled v-model="tipo_instituicao" class="form-control" id="tipo_instituicao">
+                                            <select disabled v-model="tipo_instituicao" class="form-control form-control-sm " id="tipo_instituicao">
                                                 <option :value="tipo_isntitituicao.codigo" v-for="tipo_isntitituicao in tipo_instituicoes" :key="tipo_isntitituicao.codigo">
                                                     {{ tipo_isntitituicao.designacao }}
                                                 </option>
@@ -75,7 +75,7 @@
                                         <div class="input-group input-group">
                                             <select @change="carregar_instituicoes" disabled
                                                 :class="{ 'is-invalid': form.errors.instituicao }"
-                                                v-model="form.instituicao" class="form-control" id="instituicao">
+                                                v-model="form.instituicao" class="form-control form-control-sm " id="instituicao">
                                                 <option :value="instituicao.codigo" v-for="instituicao in instituicoes"
                                                     :key="instituicao.codigo">
                                                     {{ instituicao.Instituicao }}
@@ -92,7 +92,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Tipo de Bolsa</label>
                                         <div class="input-group input-group">
-                                            <select disabled v-model="form.tipo_bolsa" class="form-control"
+                                            <select disabled v-model="form.tipo_bolsa" class="form-control form-control-sm "
                                                 id="tipoBolsa" :class="{ 'is-invalid': form.errors.tipo_bolsa }">
                                                 <option value=""></option>
                                                 <option :value="tipoBolsa.codigo" v-for="tipoBolsa in bolsas"
@@ -111,7 +111,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Afectação</label>
                                         <div class="input-group input-group">
-                                            <select disabled v-model="form.afectacao" class="form-control"
+                                            <select disabled v-model="form.afectacao" class="form-control form-control-sm "
                                                 id="afectacao" :class="{ 'is-invalid': form.errors.afectacao }">
                                                 <option value=""></option>
                                                 <option value="Pagamento de Propina">
@@ -133,7 +133,7 @@
                                         <label for="" class="text-secondary">Desconto</label>
                                         <div class="input-group input-group">
                                             <select v-model="form.desconto"
-                                                    class="form-control">
+                                                    class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option value="0">0%</option>
                                                      <option value="5">5%</option>
@@ -168,7 +168,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Período</label>
                                         <div class="input-group input-group">
-                                            <select v-model="form.semestre" disabled class="form-control form-control"
+                                            <select v-model="form.semestre" disabled class="form-control form-control-sm  form-control"
                                                 placeholder="Type your keywords here" id="semestre"
                                                 :class="{ 'is-invalid': form.errors.semestre }">
                                                 <option value=""></option>
@@ -201,13 +201,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Resultado da Pesquisa</h4>
-                        <button type="button" class="close" @click="fecharModal">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-
-                        <table class="table">
+     
+                        <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                             <tr>
                                 <td width="150px">Nome Completo:</td>
                                 <td><strong>{{ item.nome }}</strong></td>
@@ -224,13 +224,15 @@
                                 <td width="150px">Periodo:</td>
                                 <td><strong>{{ item.periodo }}</strong></td>
                             </tr>
+                            <tr v-if="bolseiro">
+                                <td width="150px">Bolseiro:</td>
+                                <td><strong class="text-danger">Este estudante já é um bolseiro</strong></td>
+                            </tr>
                         </table>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" @click="fecharModal">
-                            Cancelar
-                        </button>
-                        <button type="button" class="btn btn-primary" @click="confirmar_estudante">Confirmar
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" v-if="!bolseiro" @click="confirmar_estudante">Confirmar
                             Estudante</button>
                     </div>
                 </div>
@@ -262,6 +264,7 @@ export default {
             options: {},
             params: {},
             item: {},
+            bolseiro: {},
 
             aplicar_desconto: false,
 
@@ -333,11 +336,11 @@ export default {
 
         search() {
             axios.get("/consultar/estudante/" + this.form.estudante, {}).then((response) => {
-
-
+                this.bolseiro = null;
                 $('#modal-lg').modal('show')
                 sweetSuccess("Estudante Encontrado!");
                 if (response.data.errors) {
+                                    
                     $("#anolectivo").prop("disabled", true);
                     $("#tipoBolsa").prop("disabled", true);
                     $("#desconto").prop("disabled", true);
@@ -345,24 +348,47 @@ export default {
                     $("#semestre").prop("disabled", true);
                     $("#instituicao").prop("disabled", true);
 
+                    this.item = null;
+
                     sweetError("Número da Matricula não existe!");
                 } else {
-                    $("#anolectivo").prop("disabled", false);
-                    $("#tipoBolsa").prop("disabled", false);
-                    $("#desconto").prop("disabled", false);
-                    $("#afectacao").prop("disabled", false);
-                    $("#semestre").prop("disabled", false);
-                    $("#instituicao").prop("disabled", false);
-
-                    $('#modal-lg').modal('show')
-                    sweetSuccess("Estudante Encontrado!");
-                    this.item = response.data.estudante;
+                    
+                    if(response.data.bolseiro){
+                    
+                        $("#anolectivo").prop("disabled", true);
+                        $("#tipoBolsa").prop("disabled", true);
+                        $("#desconto").prop("disabled", true);
+                        $("#afectacao").prop("disabled", true);
+                        $("#semestre").prop("disabled", true);
+                        $("#instituicao").prop("disabled", true);
+                                
+                        $('#modal-lg').modal('show')
+                        sweetSuccess("Estudante Encontrado!");
+                        this.item = response.data.estudante;
+                        this.bolseiro = response.data.bolseiro;
+                    
+                    }else{
+                    
+                        $("#anolectivo").prop("disabled", false);
+                        $("#tipoBolsa").prop("disabled", false);
+                        $("#desconto").prop("disabled", false);
+                        $("#afectacao").prop("disabled", false);
+                        $("#semestre").prop("disabled", false);
+                        $("#instituicao").prop("disabled", false);
+    
+                        $('#modal-lg').modal('show')
+                        sweetSuccess("Estudante Encontrado!");
+                        this.item = response.data.estudante;
+                        // this.bolseiro = response.data.bolseiro;
+                    }
+                    
                 }
             })
-                .catch((error) => {
-                    console.log(error)
-                    sweetError("Ocorreu um erro ao tentar realizar a busca do estudante!");
-                });
+            .catch((error) => {
+                console.log(error)
+                this.bolseiro = null;
+                sweetError("Ocorreu um erro ao tentar realizar a busca do estudante!");
+            });
         },
 
         atribuirBolsa() {

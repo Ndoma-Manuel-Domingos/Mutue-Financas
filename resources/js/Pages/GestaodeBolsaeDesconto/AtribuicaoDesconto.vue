@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Atribuição de Desconto</h1>
+                        <h4 class="m-0 text-uppercase">Atribuição de Desconto</h4>
                     </div>
                     <div class="col-sm-6"></div>
                 </div>
@@ -22,7 +22,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Pesquisar Estudante</label>
                                         <div class="input-group input-group">
-                                            <input v-model="form.estudante" class="form-control" :class="{ 'is-invalid': form.errors.estudante }" type="text" id="estudante" placeholder="Pesquisar Estudante" />
+                                            <input v-model="form.estudante" class="form-control form-control-sm " :class="{ 'is-invalid': form.errors.estudante }" type="text" id="estudante" placeholder="Pesquisar Estudante" />
                                             <button class="btn btn-primary" type="button" @click="search"
                                                     style="cursor: pointer;">
                                                     <i class="fas fa-search"></i>
@@ -44,7 +44,7 @@
                                             <label for="" class="text-secondary">Ano Lectivo</label>
                                             <div class="input-group input-group">
                                                 <select v-model="form.anolectivo" disabled
-                                                    :class="{ 'is-invalid': form.errors.anolectivo }" class="form-control" id="anolectivo">
+                                                    :class="{ 'is-invalid': form.errors.anolectivo }" class="form-control form-control-sm " id="anolectivo">
                                                     <option value="">TODOS</option>
                                                     <option :value="ano.Codigo" v-for="ano in anoLectivos"
                                                         :key="ano.Codigo">
@@ -63,7 +63,7 @@
                                             <label for="" class="text-secondary">Instituição</label>
                                             <div class="input-group input-group">
                                                 <select @change="carregar_instituicoes" disabled
-                                                    :class="{ 'is-invalid': form.errors.instituicao }" v-model="form.instituicao_id" class="form-control" id="instituicao">
+                                                    :class="{ 'is-invalid': form.errors.instituicao }" v-model="form.instituicao_id" class="form-control form-control-sm " id="instituicao">
                                                     <option value="">TODOS</option>
                                                     <option :value="instituicao.codigo"
                                                         v-for="instituicao in instituicoes" :key="instituicao.codigo">
@@ -81,7 +81,7 @@
                                         <div class="form-group">
                                             <label for="" class="text-secondary">Tipo de Desconto</label>
                                             <div class="input-group input-group">
-                                                <select v-model="form.tipoDesconto" disabled class="form-control" id="tipo_Desconto"
+                                                <select v-model="form.tipoDesconto" disabled class="form-control form-control-sm " id="tipo_Desconto"
                                                     :class="{ 'is-invalid': form.errors.semestre }">
                                                     <option value="">TODOS</option>
                                                     <option :value="tipoDesconto.Codigo" v-for="tipoDesconto in tipoDesconto"
@@ -100,7 +100,7 @@
                                         <div class="form-group">
                                             <label for="" class="text-secondary">Afectação</label>
                                             <div class="input-group input-group">
-                                                <select disabled v-model="form.afectacao" class="form-control" id="afectacao" :class="{ 'is-invalid': form.errors.afectacao }">
+                                                <select disabled v-model="form.afectacao" class="form-control form-control-sm " id="afectacao" :class="{ 'is-invalid': form.errors.afectacao }">
                                                     <!-- <option value="">TODOS</option> -->
                                                     <option value="Pagamento de Propina" selected>
                                                         Pagamento de Propina
@@ -116,25 +116,11 @@
                                         </div>
                                     </div>
 
-                                    <!-- <div class="col-12 col-md-2">
-                                        <div class="form-group">
-                                            <label for="" class="text-secondary">Desconto</label>
-                                            <div class="input-group input-group">
-                                                <input v-model="form.desconto" disabled class="form-control"
-                                                    type="number" name="limite" max="90" placeholder="" id="desconto"
-                                                    :class="{ 'is-invalid': form.errors.desconto }" />
-                                            </div>
-                                            <div v-if="form.errors.desconto" class="text-danger">
-                                                {{ form.errors.desconto }}
-                                            </div>
-                                        </div>
-                                    </div> -->
-
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label for="" class="text-secondary">Período</label>
                                             <div class="input-group input-group">
-                                                <select v-model="form.semestre" disabled class="form-control" id="semestre"
+                                                <select v-model="form.semestre" disabled class="form-control form-control-sm " id="semestre"
                                                     :class="{ 'is-invalid': form.errors.semestre }">
                                                     <option value="">TODOS</option>
                                                     <option :value="semestre.Codigo" v-for="semestre in semestres"
@@ -165,9 +151,8 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header"></div>
-                            <div class="table-responsive">
-                                <table class="table table-hover text-nowrap">
+                            <div class="card-body">
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
 
                                     <thead>
                                         <tr>
@@ -247,7 +232,7 @@
                     </div>
                     <div class="modal-body">
 
-                        <table class="table">
+                        <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                             <tr>
                                 <td width="150px">Nome Completo:</td>
                                 <td><strong>{{ nome }}</strong></td>
@@ -314,7 +299,7 @@
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Ano Lectivo</label>
-                                <select v-model="form_editar.anolectivo" class="form-control">
+                                <select v-model="form_editar.anolectivo" class="form-control form-control-sm ">
                                     <option :value="ano.Codigo" v-for="ano in anoLectivos" :key="ano.Codigo">
                                         {{ ano.Designacao }}
                                     </option>
@@ -323,7 +308,7 @@
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Estados</label>
-                                <select v-model="form_editar.status" class="form-control">
+                                <select v-model="form_editar.status" class="form-control form-control-sm ">
                                     <option :value="item.Codigo" v-for="item in status" :key="item.Codigo">
                                         {{ item.Designacao }}
                                     </option>
@@ -335,7 +320,7 @@
                                     <label>Instituições</label>
                                     <div class="input-group input-group">
                                         <select v-model="form_editar.instituicao"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option :value="item.codigo"  v-for="item in instituicoes"  :key="item.codigo">
                                                 {{ item.Instituicao }}
                                             </option>
@@ -348,7 +333,7 @@
                                 <div class="form-group">
                                     <label for="" class="text-secondary">Tipo de Desconto</label>
                                     <div class="input-group input-group">
-                                        <select v-model="form_editar.desconto" @change="recuperar_valor_desconto" class="form-control" :class="{ 'is-invalid': form_editar.errors.semestre }">
+                                        <select v-model="form_editar.desconto" @change="recuperar_valor_desconto" class="form-control form-control-sm " :class="{ 'is-invalid': form_editar.errors.semestre }">
                                             <option value="">TODOS</option>
                                             <option :value="tipoDesconto.Codigo" v-for="tipoDesconto in tipoDesconto" :key="tipoDesconto.Codigo">
                                                 {{ tipoDesconto.designacao}}
@@ -367,7 +352,7 @@
                                     <label>Semestre</label>
                                     <div class="input-group input-group">
                                         <select v-model="form_editar.semestre"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option :value="item.Codigo"  v-for="item in semestres"  :key="item.Codigo">
                                                 {{ item.Designacao }}
                                             </option>
@@ -380,7 +365,7 @@
                                 <div class="form-group">
                                     <label for="" class="text-secondary">Afectação</label>
                                     <div class="input-group input-group">
-                                        <select v-model="form_editar.afectacao" class="form-control" id="afectacao" :class="{ 'is-invalid': form_editar.errors.afectacao }">
+                                        <select v-model="form_editar.afectacao" class="form-control form-control-sm " id="afectacao" :class="{ 'is-invalid': form_editar.errors.afectacao }">
                                             <option value=""></option>
                                             <option value="Pagamento de Propina" selected>
                                                 Pagamento de Propina

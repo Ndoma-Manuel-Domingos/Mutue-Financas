@@ -4,7 +4,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0 text-uppercase">Listar Estudantes</h1>
+              <h4 class="m-0 text-uppercase">Listar Estudantes</h4>
             </div>
             <div class="col-sm-6">
               <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
@@ -21,7 +21,6 @@
                 <div class="col-12">
                     <form action="">
                       <div class="card card-light">
-                        <div class="card-header">Buscas Avançadas</div>
                         <div class="card-body">
                           <div class="row">
             
@@ -31,7 +30,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="anolectivo"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option :value="ano.Codigo" v-for="ano in anoLectivos" :key="ano.Codigo">
                                           {{ ano.Designacao }}
@@ -47,7 +46,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="faculdade"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="" selected>TODAS</option>
                                         <option :value="faculdade.codigo" v-for="faculdade in faculdades" :key="faculdade.codigo">{{ faculdade.designacao }}</option>
@@ -62,7 +61,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="curso"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="" selected>TODOS</option>
                                         <option :value="curso.Codigo" v-for="curso in cursos" :key="curso.Codigo">{{ curso.Designacao }}</option>
@@ -77,7 +76,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="turno"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="" selected>TODOS</option>
                                         <option :value="turno.Codigo" v-for="turno in turnos" :key="turno.Codigo">{{ turno.Designacao }}</option>
@@ -92,7 +91,7 @@
                                 <div class="input-group input-group">
                                     <select
                                         v-model="estado_matricula"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="" selected>TODOS</option>
                                         <option value="activo">Activos</option>
@@ -105,7 +104,6 @@
             
                           </div>
                         </div>
-                        <div class="card-footer"></div>
                       </div>
                     </form>
                 </div>
@@ -120,14 +118,13 @@
                   </h5>
                     <div class="card-tools">
                         <div class="input-group input-group-md" style="width: 300px">
-                            <input type="text" v-model="input_search" class="form-control float-right" placeholder="Search" />
+                            <input type="text" v-model="input_search" class="form-control form-control-sm  float-right" placeholder="Search" />
                         </div>
                     </div>
                 </div>
   
-                <div class="card-body p-0">
-                  <div class="table-responsive">
-                    <table class="table table-hover text-nowrap">
+                <div class="card-body">
+                    <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                       <thead>
                         <tr>
                           <th>Nº Matricula</th>
@@ -151,7 +148,6 @@
                         </tr>
                       </tbody>
                     </table>
-                  </div>
                 </div>
   
                 <div class="card-footer">

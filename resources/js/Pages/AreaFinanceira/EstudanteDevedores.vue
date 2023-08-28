@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Estudantes Devedores</h1>
+                        <h4 class="m-0 text-uppercase">Estudantes Devedores</h4>
                     </div>
                     <div class="col-sm-6">
                         <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i
@@ -21,7 +21,6 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
 
@@ -29,7 +28,7 @@
                                         <div class="form-group">
                                             <label>Ano Lectivo</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchAnoLectivo" class="form-control">
+                                                <select @change="search" v-model="searchAnoLectivo" class="form-control form-control-sm ">
 
                                                     <option :value="ano.Codigo" v-for="ano in anolectivos"
                                                         :key="ano.Codigo">{{ ano.Designacao }}</option>
@@ -42,7 +41,7 @@
                                         <div class="form-group">
                                             <label>Mês/Parcela</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchMes" class="form-control">
+                                                <select @change="search" v-model="searchMes" class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="mes.id" v-for="mes in mesTemps" :key="mes.id">{{
                                                         mes.designacao }}</option>
@@ -55,7 +54,7 @@
                                         <div class="form-group">
                                             <label>Faculdade</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchFaculdade" class="form-control">
+                                                <select @change="search" v-model="searchFaculdade" class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="faculdade.codigo" v-for="faculdade in faculdades"
                                                         :key="faculdade.codigo">{{ faculdade.designacao }}</option>
@@ -68,7 +67,7 @@
                                         <div class="form-group">
                                             <label>Curso</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchCurso" class="form-control">
+                                                <select @change="search" v-model="searchCurso" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
                                                     <option :value="curso.Codigo" v-for="curso in cursos"
                                                         :key="curso.Codigo">{{ curso.Designacao }}</option>
@@ -81,7 +80,7 @@
                                         <div class="form-group">
                                             <label>Turno</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchTurno" class="form-control">
+                                                <select @change="search" v-model="searchTurno" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
                                                     <option :value="turno.Codigo" v-for="turno in turnos"
                                                         :key="turno.Codigo">{{ turno.Designacao }}</option>
@@ -92,11 +91,6 @@
 
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <!-- <button type="submit" class="btn btn-primary">
-                  <i class="fa fa-search"></i>  Listar a busca
-                </button> -->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,37 +100,33 @@
                         <div class="card">
                            
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Nº Matricula</th>
-                                                <th>Nome</th>
-                                                <!-- <th>Faculdade</th> -->
-                                                <th>Curso</th>
-                                                <th>Turno</th>
-                                                <!-- <th>Mês/Parcela</th> -->
-                                                <th width="100px">Ver Perfil</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="factura in facturas.data" :key="factura.matricula">
-                                                <td>{{ factura.matricula}}</td>
-                                                <td>{{ factura.nome}}</td>
-                                                <!-- <td>{{ factura.faculdade }}</td> -->
-                                                <td>{{ factura.curso}}</td>
-                                                <td>{{ factura.turno}}</td>
-                                                <!-- <td>{{ factura.parcela}}</td> -->
-                                                <td>
-                                                    <a :href="route('mf.estudante-visualizar-perfil',factura.matricula)"
-                                                        class="btn-sm btn-primary">
-                                                        <i class="fas fa-user-graduate"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº Matricula</th>
+                                            <th>Nome</th>
+                                            <th>Curso</th>
+                                            <th>Turno</th>
+                                            <th>Preço</th>
+                                            <th width="100px">Ver Perfil</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(factura, index) in facturas.data" :key="factura.Codigo">
+                                            <td><a :href="route('mf.estudante-visualizar-perfil',factura.Codigo)">{{ factura.Codigo }}</a></td>
+                                            <td>{{ factura.admissao.preinscricao.Nome_Completo ?? '' }}</td>
+                                            <td>{{ factura.admissao.preinscricao.curso.Designacao ?? '' }}</td>
+                                            <td>{{ factura.admissao.preinscricao.turno.Designacao ?? '' }}</td>
+                                            <td>{{ formatValor(index + 1 + '000') }}</td>
+                                            <td>
+                                                <a :href="route('mf.estudante-visualizar-perfil',factura.Codigo)"
+                                                    class="btn-sm btn-primary">
+                                                    <i class="fas fa-user-graduate"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="card-footer">
@@ -235,6 +225,21 @@
                     this.$Progress.finish();
                   }
                 });
+            },
+            
+            formatValor: function(atual){
+                const valorFormatado = Intl.NumberFormat("pt-br", {
+                    style: "currency",
+                    currency: "AOA",
+                }).format(atual);
+        
+                return valorFormatado;
+            },
+            
+            getPrecoPropina: function (polo, curso) {
+            axios
+                .get(`/estudante/pega-preoco-propina/${polo}/${curso}`)
+                .then((response) => { return 0 });
             },
 
             imprimirPDF () {

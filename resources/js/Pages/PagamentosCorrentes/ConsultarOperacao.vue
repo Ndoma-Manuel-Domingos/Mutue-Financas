@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Consultar Nº Operação</h1>
+            <h4 class="m-0 text-uppercase">Consultar Nº Operação</h4>
           </div>
           <div class="col-sm-6"></div>
         </div>
@@ -16,7 +16,6 @@
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card">
-              <div class="card-header bg-light"></div>
               <div class="card-body">
                 <div class="row">
                   <div class="col-12 col-md-12">
@@ -29,7 +28,7 @@
                       >
                         <input
                           type="text"
-                          class="form-control"
+                          class="form-control form-control-sm "
                           @keyup.enter="buscar_comprovotivo"
                           placeholder="Pesquisar Número do comprovativo, introduz o número do compravativo aqui"
                           v-model="numero_comprovativo"
@@ -44,8 +43,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer">
-              </div>
             </div>
           </div>
         </div>
@@ -53,11 +50,9 @@
         <div class="row" v-if="pagamentos.data">
           <div class="col-12 col-md-12">
             <div class="card">
-              <div class="card-header">
-              </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
                         <th>Estudante</th>
@@ -87,9 +82,6 @@
                   </table>
                 </div>
               </div>
-
-              <div class="card-footer">
-              </div>
             </div>
           </div>
         </div>
@@ -108,7 +100,7 @@
           </div>
           <div class="modal-body">
             
-            <table class="table">
+            <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
               <tbody>
                 <tr>
                   <th colspan="6" class="bg-light">Dados do Estudante</th>

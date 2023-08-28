@@ -21,14 +21,14 @@
                             <div class="card-header bg-light">
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 300px">
-                                        <input type="text" v-model="search" class="form-control float-right" placeholder="Search" />
+                                        <input type="text" v-model="search" class="form-control form-control-sm  float-right" placeholder="Search" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>#</th>

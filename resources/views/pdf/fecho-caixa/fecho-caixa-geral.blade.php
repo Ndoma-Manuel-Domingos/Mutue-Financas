@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><!DOCTYPE html>
-        <title>PROPINAS (PREÇARIOS)</title>
+        <title>FECHO DE CAIXA GERAL</title>
     
         <style type="text/css">
             *{
@@ -94,7 +94,7 @@
 
     <table style="background-color: rgb(234, 234, 234);margin-top: -20px">
         <tr>
-            <td colspan="2" style="text-align: center;padding: 0px">FECHO DE CAIXA</td>
+            <td colspan="2" style="text-align: center;padding: 0px">{{ $ttulo ?? "" }}</td>
         </tr>
         <tr>
             <td style="text-align: left;padding: 0px">Total de Registro:</td>
@@ -105,13 +105,37 @@
     <table class="table table-stripeds" style="">
         <thead>
             <tr style="background-color: #3F51B5;color: #ffffff">
-                <th style="text-align: center;padding: 4px 0" width="150px">Operador</th>
-                <th style="text-align: center;padding: 4px 0">Data Validação</th>
-                <th style="text-align: center;padding: 4px 0">Valor</th>
-                <th style="text-align: center;padding: 4px 0">Recibo</th>
-                <th style="text-align: center;padding: 4px 0">Forma de Pagamento</th>
-                <th style="text-align: center;padding: 4px 0">Estado</th>
-                <th style="text-align: center;padding: 4px 0">Ano Lectivo</th>
+                <th colspan="3" style="text-align: left;padding: 4px 2px">Operador:</th>
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">{{ $operador ? $operador->nome : "TODAS" }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th colspan="3" style="text-align: left;padding: 4px 2px">Data Inicio:</th>
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">{{ $requests['data_inicio'] ?? date("Y-m-d") }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">Data Final:</th>
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">{{ $requests['data_final'] ?? date("Y-m-d") }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">Forma Pagamento:</th>
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">{{ $requests['forma_pagamento'] ?? "TODAS" }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">Tipo Serviço:</th>
+                <th colspan="3"  style="text-align: left;padding: 4px 2px">{{ $servico ? $servico->Descricao : "TODAS" }}</th>
+            </tr>
+        
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" width="150px">Operador</th>
+                <th style="text-align: left;padding: 4px 2px">Data</th>
+                <th style="text-align: left;padding: 4px 2px">Valor</th>
+                <th style="text-align: left;padding: 4px 2px">Recibo</th>
+                <th style="text-align: left;padding: 4px 2px">Forma Pagamento</th>
+                <th style="text-align: left;padding: 4px 2px">Estado</th>
             </tr>
         </thead>
         @php
@@ -123,19 +147,18 @@
                     $contador++;
                 @endphp
                 <tr>
-                    <td style="padding: 5px;text-align: center">{{  $item->nomeUtilizador }}</td>
-                    <td style="text-align: center">{{ date("Y-m-d", strtotime($item->dataValidacaoPagamento)) }}</td>
-                    <td style="text-align: center">{{ number_format($item->valorPagamento, 2, ',', '.') }} KZ</td>
-                    <td style="text-align: center">{{ $item->reciboPagamento }}</td>
-                    <td style="text-align: center">{{ $item->formaPagamento }}</td>
-                    @if ( $item->estadoPagamento == 1 ) 
-                        <td style="text-align: center">Valido</td>
+                    <td style="padding: 5px;text-align: left">{{  $item->operador_novos ? $item->operador_novos->nome : "Estudante" }}</td>
+                    <td style="text-align: left">{{ date("Y-m-d", strtotime($item->DataRegisto)) }}</td>
+                    <td style="text-align: left">{{ number_format($item->valor_depositado, 2, ',', '.') }} KZ</td>
+                    <td style="text-align: left">{{ $item->Codigo }}</td>
+                    <td style="text-align: left">{{ $item->forma_pagamento ?? 'CUSH' }}</td>
+                    @if ( $item->estado == 1 ) 
+                        <td style="text-align: left">Valido</td>
                     @else 
-                        @if($item->estadoPagamento == 2)
-                        <td style="text-align: center">Rejeitado</td>
+                        @if($item->estado == 2)
+                        <td style="text-align: left">Rejeitado</td>
                         @endif
                     @endif
-                    <td style="text-align: center">{{ $item->AnoLectivoPagamento }} </td>
                 </tr>     
             @endforeach
         </tbody>

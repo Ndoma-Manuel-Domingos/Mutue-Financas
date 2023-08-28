@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MesTemp;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,5 +29,13 @@ class AjudaSistemaController extends Controller
         $file = public_path('manualUtilizador');
 
         return response()->download($file, 'manualUtilizador.pdf');
+    }    
+    
+    public function getMeses(Request $request)
+    {
+       $meses = MesTemp::when($request->ano_isencao, function($q, $v){
+            $q->where('ano_lectivo', $v);
+       })->where('activo', '1')->get();
+ 
     }
 }

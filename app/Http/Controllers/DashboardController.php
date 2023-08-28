@@ -69,6 +69,7 @@ class DashboardController extends Controller
             ->join('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
             ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
             ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
+            ->where('tb_pagamentos.estado', 1)
             ->when($request->estado, function($query, $value){
                 $query->where('tb_pagamentos.estado', $value);
             })
@@ -109,7 +110,8 @@ class DashboardController extends Controller
             ->join('tb_preinscricao', 'tb_pagamentos.Codigo_PreInscricao', '=', 'tb_preinscricao.Codigo')
             ->join('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
             ->join('tb_matriculas', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-            ->where('tb_pagamentos.AnoLectivo', $request->ano_lectivo);
+            ->where('tb_pagamentos.AnoLectivo', $request->ano_lectivo)
+            ->where('tb_pagamentos.estado', 1);
             
             if($request->ano_lectivo >=  2 AND $request->ano_lectivo <= 15){
                 $query->where('tb_pagamentosi.mes_id', $meses->id);

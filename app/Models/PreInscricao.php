@@ -104,6 +104,10 @@ class PreInscricao extends Model
         return $this->belongsTo(Curso::class, 'Curso_Candidatura', 'Codigo');
     }
     
+    public function turno()
+    {
+        return $this->belongsTo(Turno::class, 'Codigo_Turno', 'Codigo');
+    }
 
     public function grau_academico()
     {

@@ -27,7 +27,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Ano Lectivo</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="AnoLectivo" class="form-control ">
+                                            <select @change="search" v-model="AnoLectivo" class="form-control form-control-sm  ">
                                                 <option value=""> TODOS</option>
                                                 <option :value="ano.Codigo" v-for="ano in props.anolectivos"
                                                     :key="ano.Codigo">
@@ -42,7 +42,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Instituição</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="Instituicao" class="form-control" >
+                                            <select @change="search" v-model="Instituicao" class="form-control form-control-sm " >
                                                 <option value=""> TODAS</option>
                                                 <option :value="instituicao.codigo"
                                                     v-for="instituicao in props.instituicao" :key="instituicao.codigo">
@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Tipo de Bolsa</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="TipoBolsa" class="form-control">
+                                            <select @change="search" v-model="TipoBolsa" class="form-control form-control-sm ">
                                                 <option>TODAS</option>
                                                 <option :value="tipoBolsa.codigo" v-for="tipoBolsa in props.bolsa" :key="tipoBolsa.codigo">
                                                     {{ tipoBolsa.designacao }}
@@ -71,7 +71,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Serviço</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="Servico" class="form-control">
+                                            <select @change="search" v-model="Servico" class="form-control form-control-sm ">
                                                 <option value=""> TODAS</option>
                                                 <option :value="tipoServico.Codigo" v-for="tipoServico in props.tipoServico"
                                                     :key="tipoServico.Codigo">
@@ -86,7 +86,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Motivo</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="Motivo" class="form-control">
+                                            <select @change="search" v-model="Motivo" class="form-control form-control-sm ">
                                                 <option value=""> TODAS</option>
                                                 <option :value="motivoIsencao.Codigo" v-for="motivoIsencao in props.motivoIsencao"
                                                     :key="motivoIsencao.Codigo">
@@ -111,14 +111,14 @@
                                 <h3 class="card-title"></h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 150px">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search" />
+                                        <input type="text" name="table_search" class="form-control form-control-sm  float-right" placeholder="Search" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Referencia</th>

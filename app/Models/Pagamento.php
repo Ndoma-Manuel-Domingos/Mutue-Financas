@@ -54,6 +54,11 @@ class Pagamento extends Model
     {
         return $this->hasOne(PagamentoItems::class, 'Codigo_Pagamento', 'Codigo');
     }
+    
+    public function detalhes()
+    {
+        return $this->hasMany(PagamentoItems::class, 'Codigo_Pagamento', 'Codigo');
+    }
 
     public function preinscricao()
     {

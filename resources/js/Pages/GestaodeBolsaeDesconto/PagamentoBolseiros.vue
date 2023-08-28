@@ -24,7 +24,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Ano Lectivo</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="form.anoLectivoBusca" class="form-control" :class="{ 'is-invalid': erroranoLectivoBusca }">
+                                            <select @change="search" v-model="form.anoLectivoBusca" class="form-control form-control-sm " :class="{ 'is-invalid': erroranoLectivoBusca }">
                                                 <option value="">TODOS</option>
                                                 <option :value="ano.Codigo" v-for="ano in props.anolectivos" :key="ano.Codigo">{{ ano.Designacao }}</option>
                                             </select>
@@ -37,7 +37,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Instituição</label>
                                         <div class="input-group input-group">
-                                            <select @change="search" v-model="form.instituicaoBusca" class="form-control" :class="{ 'is-invalid': errorinstituicaoBusca }">
+                                            <select @change="search" v-model="form.instituicaoBusca" class="form-control form-control-sm " :class="{ 'is-invalid': errorinstituicaoBusca }">
                                                 <option value="">TODAS</option>
                                                 <option :value="instituicao.codigo" v-for="instituicao in props.instituicoes" :key="instituicao.codigo">{{ instituicao.Instituicao }}</option>
                                             </select>
@@ -50,7 +50,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Forma de Pagamento</label>
                                         <div class="input-group input-group">
-                                            <select v-model="form.forma_pagamento" class="form-control" :class="{ 'is-invalid': errorforma_pagamento }">
+                                            <select v-model="form.forma_pagamento" class="form-control form-control-sm " :class="{ 'is-invalid': errorforma_pagamento }">
                                                 <option value="">TODAS</option>
                                                 <option :value="ano.Codigo" v-for="ano in props.forma_pagamentos" :key="ano.Codigo">{{ ano.descricao }}</option>
                                             </select>
@@ -63,7 +63,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Banco</label>
                                         <div class="input-group input-group">
-                                            <select v-model="form.banco" class="form-control" :class="{ 'is-invalid': errorbanco }">
+                                            <select v-model="form.banco" class="form-control form-control-sm " :class="{ 'is-invalid': errorbanco }">
                                                 <option value="">TODOS</option>
                                                 <option :value="banco.pk_banco" v-for="banco in props.bancos" :key="banco.pk_banco">{{ banco.descricao }}</option>
                                             </select>
@@ -76,7 +76,7 @@
                                     <div class="form-group">
                                         <label for="" class="text-secondary">Selecione os meses a pagar</label>
                                         <div class="input-group input-group">
-                                            <select v-model="form.mes" class="form-control" :class="{ 'is-invalid': errormes }">
+                                            <select v-model="form.mes" class="form-control form-control-sm " :class="{ 'is-invalid': errormes }">
                                                 <option value="">TODOS</option>
                                                 <option :value="mes.id" v-for="mes in props.mesTemps" :key="mes.id">{{ mes.designacao }}</option>
                                             </select>
@@ -88,7 +88,7 @@
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label>Data do Banco</label>
-                                        <input type="date" v-model="form.data_banco" class="form-control" :class="{ 'is-invalid': errordata_banco }"/>
+                                        <input type="date" v-model="form.data_banco" class="form-control form-control-sm " :class="{ 'is-invalid': errordata_banco }"/>
                                         <span class="text-danger d-block" v-if="errordata_banco">{{ errordata_banco }}</span>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                                 </h3>
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 150px">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search" />
+                                        <input type="text" name="table_search" class="form-control form-control-sm  float-right" placeholder="Search" />
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default">
                                                 <i class="fas fa-search"></i>
@@ -123,7 +123,7 @@
 
                             <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Marcar</th>

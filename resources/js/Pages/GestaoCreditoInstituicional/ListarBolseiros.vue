@@ -7,12 +7,11 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Listar Bolseiros</h1>
+                        <h4 class="m-0 text-uppercase">Listar Bolseiros</h4>
                     </div>
                     <div class="col-sm-6">
-                        <a @click="imprimirExcel" href="" class="btn btn-success btn-sm float-sm-right"><i class="fas fa-file-excel"></i>
-                            Excel</a>
-                            <a @click="imprimirPDF" href="" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
+                        <a @click="imprimirExcel" href="" class="btn btn-success btn-sm float-sm-right"><i class="fas fa-file-excel"></i> Excel</a>
+                        <a @click="imprimirPDF" href="" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
                     </div>
                 </div>
             </div>
@@ -23,7 +22,6 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-3">
@@ -31,7 +29,7 @@
                                             <label>Ano Lectivo</label>
                                             <div class="input-group input-group">
                                                 <select v-model="AnoLectivo"
-                                                    class="form-control form-control select2">
+                                                    class="form-control form-control-sm  form-control select2">
                                                     <option value=""> TODAS</option>
                                                     <option :value="ano.Codigo" v-for="ano in anolectivos"
                                                         :key="ano.Codigo">
@@ -47,7 +45,7 @@
                                             <label>Curso</label>
                                             <div class="input-group input-group">
                                                 <select v-model="Curso"
-                                                    class="form-control form-control select2"
+                                                    class="form-control form-control-sm  form-control select2"
                                                     placeholder="Type your keywords here">
                                                     <option value="">TODOS</option>
                                                     <option :value="curso.Codigo" v-for="curso in cursos" :key="curso.Codigo"> {{ curso.Designacao }}
@@ -62,7 +60,7 @@
                                             <label>Instituições</label>
                                             <div class="input-group input-group">
                                                 <select v-model="Instituicao"
-                                                    class="form-control form-control select2"
+                                                    class="form-control form-control-sm  form-control select2"
                                                     placeholder="Type your keywords here">
                                                     <option value="">TODAS</option>
                                                     <option :value="instituicao.codigo"  v-for="instituicao in instituicao"  :key="instituicao.codigo">
@@ -78,7 +76,7 @@
                                             <label>Tipo de Bolsa</label>
                                             <div class="input-group input-group">
                                                 <select v-model="TipoBolsa"
-                                                    class="form-control">
+                                                    class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="bolsa.codigo" v-for="bolsa in bolsa"
                                                         :key="bolsa.codigo">
@@ -94,7 +92,7 @@
                                             <label>Percetagem</label>
                                             <div class="input-group input-group">
                                                 <select v-model="Desconto"
-                                                    class="form-control">
+                                                    class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option value="0">0%</option>
                                                     <option value="5">5%</option>
@@ -125,7 +123,7 @@
                                         <div class="form-group">
                                             <label>Estado</label>
                                             <div class="input-group input-group">
-                                                <select v-model="Estado" class="form-control" >
+                                                <select v-model="Estado" class="form-control form-control-sm " >
                                                     <option value="">TODOS</option>
                                                     <option value="0">ACTIVO</option>
                                                     <option value="1">INACTIVO</option>
@@ -138,7 +136,7 @@
                                         <div class="form-group">
                                             <label>Período</label>
                                             <div class="input-group input-group">
-                                                <select v-model="Semestre" class="form-control">
+                                                <select v-model="Semestre" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
                                                     <option :value="semestre.Codigo" v-for="semestre in semestres" :key="semestre.Codigo">{{ semestre.Designacao }}</option>
                                                 </select>
@@ -156,9 +154,8 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header"></div>
-                            <div class="table-responsive">
-                                <table class="table table-hover text-nowrap">
+                            <div class="card-body">
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
 
                                     <thead>
                                         <tr>
@@ -177,25 +174,25 @@
                                         <tr>
                                             <td></td>
                                             <td class="text-center">
-                                                <input type="text" v-model="busca_matricula" class="form-control" placeholder="Informe a matricula">
+                                                <input type="text" v-model="busca_matricula" class="form-control form-control-sm " placeholder="Informe a matricula">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_nome" name="" class="form-control" placeholder="Informe o Nome">
+                                                <input type="text" v-model="busca_nome" name="" class="form-control form-control-sm " placeholder="Informe o Nome">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_curso" name="" class="form-control" placeholder="Informe o curso">
+                                                <input type="text" v-model="busca_curso" name="" class="form-control form-control-sm " placeholder="Informe o curso">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_tipo_bolsa" name="" class="form-control" placeholder="Informe o tipo de bolsa">
+                                                <input type="text" v-model="busca_tipo_bolsa" name="" class="form-control form-control-sm " placeholder="Informe o tipo de bolsa">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_desconto" name="" class="form-control" placeholder="Informe o desconto">
+                                                <input type="text" v-model="busca_desconto" name="" class="form-control form-control-sm " placeholder="Informe o desconto">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_estado" name="" class="form-control" placeholder="Informe o estado">
+                                                <input type="text" v-model="busca_estado" name="" class="form-control form-control-sm " placeholder="Informe o estado">
                                             </td>
                                             <td>
-                                                <input type="text" v-model="busca_semestre" name="" class="form-control" placeholder="Informe o semestre">
+                                                <input type="text" v-model="busca_semestre" name="" class="form-control form-control-sm " placeholder="Informe o semestre">
                                             </td>
                                             <td></td>
                                         </tr>
@@ -216,11 +213,19 @@
                                             <td class="text-center">{{ item.semestreItem }}</td>
                                             <td>
                                                 <div class="flex">
-                                                    <a @click="editItem(item)" class="btn-sm btn-success mx-1"><i class="fas fa-edit"></i></a>
-                                                    <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
-
-                                                    <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
-                                                    <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
+                                                    <template v-if='user.type_user == "Validação de Pagamentos" '>
+                                                        <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
+                                                        <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
+                                                        <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
+                                                    </template>
+                                                    
+                                                    <template>
+                                                        <a @click="editItem(item)" class="btn-sm btn-success mx-1"><i class="fas fa-edit"></i></a>
+                                                        <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
+                                                        <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
+                                                        <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
+                                                    </template>
+                                                
                                                 </div>
                                             </td>
                                         </tr>
@@ -310,11 +315,6 @@
                             <td colspan="2">Atribuida Por: <strong>{{ bolsa.nome }}</strong></td>
                         </tr>
 
-                        <!-- <tr>
-                            <td colspan="2"></td>
-                            <td colspan="2">Data de Atribuição:: <strong></strong></td>
-                        </tr> -->
-
                         <tr>
                             <td colspan="4">DADOS DA INSTITUIÇÃO</td>
                         </tr>
@@ -371,7 +371,7 @@
 
                             <div class="form-group col-12 col-md-12">
                                 <label for="recipient-name" class="col-form-label">Ano Lectivo</label>
-                                <select v-model="form.anolectivo" class="form-control">
+                                <select v-model="form.anolectivo" class="form-control form-control-sm ">
                                     <option :value="ano.Codigo" v-for="ano in anolectivos" :key="ano.Codigo">
                                         {{ ano.Designacao }}
                                     </option>
@@ -383,7 +383,7 @@
                                     <label>Instituições</label>
                                     <div class="input-group input-group">
                                         <select v-model="form.instituicao"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option :value="item.codigo"  v-for="item in instituicao"  :key="item.codigo">
                                                 {{ item.Instituicao }}
                                             </option>
@@ -397,7 +397,7 @@
                                     <label>Tipo de Bolsa</label>
                                     <div class="input-group input-group">
                                         <select v-model="form.tipo_bolsa"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option :value="item.codigo"  v-for="item in bolsa"  :key="item.codigo">
                                                 {{ item.designacao }}
                                             </option>
@@ -411,7 +411,7 @@
                                     <label>Período</label>
                                     <div class="input-group input-group">
                                         <select v-model="form.semestre"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option :value="item.Codigo"  v-for="item in semestres"  :key="item.Codigo">
                                                 {{ item.Designacao }}
                                             </option>
@@ -424,7 +424,7 @@
                                 <div class="form-group">
                                     <label for="" class="text-secondary">Afectação</label>
                                     <div class="input-group input-group">
-                                        <select v-model="form.afectacao" class="form-control" id="afectacao" :class="{ 'is-invalid': form.errors.afectacao }">
+                                        <select v-model="form.afectacao" class="form-control form-control-sm " id="afectacao" :class="{ 'is-invalid': form.errors.afectacao }">
                                             <option value=""></option>
                                             <option value="Pagamento de Propina">
                                                 Pagamento de Propina
@@ -445,7 +445,7 @@
                                     <label>Percetagem</label>
                                     <div class="input-group input-group">
                                         <select v-model="form.desconto"
-                                            class="form-control">
+                                            class="form-control form-control-sm ">
                                             <option value="">TODAS</option>
                                             <option value="5">5%</option>
                                             <option value="10">10%</option>
@@ -475,6 +475,14 @@
     </MainLayouts>
 
 </template>
+
+<script setup>
+  import { computed } from "vue";
+  import { usePage } from "@inertiajs/inertia-vue3";
+  const user = computed(() => {
+    return usePage().props.value.auth.user;
+  });
+</script>
 
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
@@ -704,7 +712,7 @@ export default {
 
 
     imprimirExcel() {
-      window.open("/listagem/bolserios/pdf-imprimir?AnoLectivo="+this.AnoLectivo+"&Curso="+this.Curso+"&Instituicao="+this.Instituicao+"&Desconto="+this.Desconto+"&Estado="+this.Estado+"&Semestre="+this.Semestre, "_blank");
+      window.open("/listagem/bolserios/excel-imprimir?AnoLectivo="+this.AnoLectivo+"&Curso="+this.Curso+"&Instituicao="+this.Instituicao+"&Desconto="+this.Desconto+"&Estado="+this.Estado+"&Semestre="+this.Semestre, "_blank");
     },
  }
 }

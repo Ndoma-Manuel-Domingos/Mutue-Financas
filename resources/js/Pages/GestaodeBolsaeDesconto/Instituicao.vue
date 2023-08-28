@@ -29,14 +29,14 @@
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 300px">
                                         <input type="text" v-model="instituicao_busca" @keyup.enter="search"
-                                            class="form-control float-right" placeholder="Search" />
+                                            class="form-control form-control-sm  float-right" placeholder="Search" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Codigo</th>
@@ -101,12 +101,12 @@
                                     <div class="form-group ">
 
                                         <label for="recipient-name" class="col-form-label">Instituição</label>
-                                        <input v-model="form.Instituicao" type="text" class="form-control mb-1" :class="{ 'is-invalid': errorInstituicao }" id="">
+                                        <input v-model="form.Instituicao" type="text" class="form-control form-control-sm  mb-1" :class="{ 'is-invalid': errorInstituicao }" id="">
                                         <span class="text-danger d-block" v-if="errorInstituicao">{{ errorInstituicao }}</span>
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Sigla</label>
-                                        <input v-model="form.sigla" type="text" class="form-control mb-1"
+                                        <input v-model="form.sigla" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorsigla }" id="">
                                         <span class="text-danger d-block" v-if="errorsigla">{{
                                             errorsigla
@@ -114,7 +114,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">NIF</label>
-                                        <input v-model="form.nif" type="text" class="form-control mb-1"
+                                        <input v-model="form.nif" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errornif }" id="">
                                         <span class="text-danger d-block" v-if="errornif">{{
                                             errornif
@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Contacto</label>
-                                        <input v-model="form.contacto" type="text" class="form-control mb-1"
+                                        <input v-model="form.contacto" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorcontacto }" id="">
                                         <span class="text-danger d-block" v-if="errorcontacto">{{
                                             errorcontacto
@@ -130,7 +130,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Endereço</label>
-                                        <input v-model="form.Endereco" type="text" class="form-control mb-1"
+                                        <input v-model="form.Endereco" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorEndereco }" id="">
                                         <span class="text-danger d-block" v-if="errorEndereco">{{
                                             errorEndereco
@@ -165,7 +165,7 @@
                                     <div class="form-group ">
 
                                         <label for="recipient-name" class="col-form-label">Instituição</label>
-                                        <input v-model="formEdit.Instituicao" type="text" class="form-control mb-1"
+                                        <input v-model="formEdit.Instituicao" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorInstituicao }" id="">
                                         <span class="text-danger d-block" v-if="errorInstituicao">{{
                                             errorInstituicao
@@ -173,7 +173,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Sigla</label>
-                                        <input v-model="formEdit.sigla" type="text" class="form-control mb-1"
+                                        <input v-model="formEdit.sigla" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorsigla }" id="">
                                         <span class="text-danger d-block" v-if="errorsigla">{{
                                             errorsigla
@@ -181,7 +181,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">NIF</label>
-                                        <input v-model="formEdit.nif" type="text" class="form-control mb-1"
+                                        <input v-model="formEdit.nif" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errornif }" id="">
                                         <span class="text-danger d-block" v-if="errornif">{{
                                             errornif
@@ -189,7 +189,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Contacto</label>
-                                        <input v-model="formEdit.contacto" type="text" class="form-control mb-1"
+                                        <input v-model="formEdit.contacto" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorcontacto }" id="">
                                         <span class="text-danger d-block" v-if="errorcontacto">{{
                                             errorcontacto
@@ -197,7 +197,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Endereço</label>
-                                        <input v-model="formEdit.Endereco" type="text" class="form-control mb-1"
+                                        <input v-model="formEdit.Endereco" type="text" class="form-control form-control-sm  mb-1"
                                             :class="{ 'is-invalid': errorEndereco }" id="">
                                         <span class="text-danger d-block" v-if="errorEndereco">{{
                                             errorEndereco
@@ -234,7 +234,7 @@
                                     <div class="col-12 col-md-12">
                                         <div class="input-group input-group">
 
-                                            <select class="form-control form-control" v-model="valorSelecionado">
+                                            <select class="form-control form-control-sm  form-control" v-model="valorSelecionado">
                                                 <option v-for="TipoBolsa in TipoBolsa" :value="TipoBolsa">{{
                                                     TipoBolsa.designacao }}</option>
                                             </select>

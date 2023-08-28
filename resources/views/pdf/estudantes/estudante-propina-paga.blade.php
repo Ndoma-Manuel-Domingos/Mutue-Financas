@@ -13,7 +13,7 @@ ini_set('max_execution_time', 1200);
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><!DOCTYPE html>
 
-        <title>LISTA ESTUDANTES COM PROPINAS PAGAS</title>
+        <title>LISTA ESTUDANTES COM MENSALIDADES PAGAS</title>
 
         <style type="text/css">
             *{

@@ -33,7 +33,7 @@
                   <select
                     v-model="operador"
                     @change="search"
-                    class="form-control"
+                    class="form-control form-control-sm "
                     >
                     <option value="">Todos Operadores</option>
                     <option :value="utilizador.utilizadores.pk_utilizador" v-for="utilizador in props.utilizadores" :key="utilizador">{{ utilizador.utilizadores.nome }} </option>
@@ -45,14 +45,14 @@
               <div class="col-12 col-md-4">
                 <div class="form-group">
                   <label>Data Inicio:</label>
-                  <input type="date"    @change="search"  v-model="data_inicio" class="form-control"/>
+                  <input type="date"    @change="search"  v-model="data_inicio" class="form-control form-control-sm "/>
                 </div>
               </div>
 
               <div class="col-12 col-md-4">
                 <div class="form-group">
                   <label>Data Final:</label>
-                  <input type="date"    @change="search"  v-model="data_final" class="form-control" />
+                  <input type="date"    @change="search"  v-model="data_final" class="form-control form-control-sm " />
                 </div>
               </div>
 
@@ -61,7 +61,7 @@
 
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-hover text-nowrap">
+              <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                 <thead>
                   <tr>
                     <th>Estudante</th>
@@ -112,7 +112,7 @@
           </div>
           <div class="modal-body">
             <div class="table-responsive">
-              <table class="table">
+              <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                 <tbody>
                   <tr>
                     <th colspan="6" class="bg-light">Dados</th>
