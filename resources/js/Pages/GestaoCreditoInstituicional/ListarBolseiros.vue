@@ -167,7 +167,7 @@
                                             <th>Desconto</th>
                                             <th>Estado</th>
                                             <th>Semestre</th>
-                                            <th>Acções</th>
+                                            <th style="width: 150px">Acções</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,14 +213,14 @@
                                             <td class="text-center">{{ item.semestreItem }}</td>
                                             <td>
                                                 <div class="flex">
-                                                    <template v-if='user.type_user == "Validação de Pagamentos" '>
+                                                    <template v-if='user.type_user == "Administrador"'>
+                                                        <a @click="editItem(item)" class="btn-sm btn-success mx-1"><i class="fas fa-edit"></i></a>
                                                         <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
                                                     </template>
                                                     
                                                     <template>
-                                                        <a @click="editItem(item)" class="btn-sm btn-success mx-1"><i class="fas fa-edit"></i></a>
                                                         <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>

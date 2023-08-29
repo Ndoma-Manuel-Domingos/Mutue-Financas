@@ -190,6 +190,11 @@
                                 <i class="fas fa-check"></i>
                                 Atribuir
                             </button>
+                            
+                            <a class="btn btn-primary mx-1" @click="cancelar">
+                                <i class="fas fa-ban"></i>
+                                Cancelar
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -326,6 +331,20 @@ export default {
                 },
             });
         },
+        
+        cancelar(){
+        
+            $("#anolectivo").prop("disabled", true);
+            $("#tipoBolsa").prop("disabled", true);
+            $("#desconto").prop("disabled", true);
+            $("#afectacao").prop("disabled", true);
+            $("#semestre").prop("disabled", true);
+            $("#instituicao").prop("disabled", true);
+            $("#tipo_instituicao").prop("disabled", true);
+            
+            $("#estudante").prop("disabled", false);
+        },
+        
         formatValor(atual) {
             const valorFormatado = Intl.NumberFormat("pt-br", {
                 style: "currency",
