@@ -9,6 +9,7 @@ use App\Models\Curso;
 use App\Models\Simestre;
 use App\Models\TipoBolsa;
 use Carbon\Carbon;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Cell;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -31,87 +32,111 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell as CellCell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ListarBolseirosExport extends DefaultValueBinder implements FromCollection, WithMapping, WithTitle, WithHeadings, WithDrawings, WithStyles, WithCustomStartCell, WithCustomValueBinder, ShouldAutoSize
+class ListarBolseirosExport implements FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
+    WithMapping,
+    WithEvents,
+    WithDrawings,
+    WithCustomStartCell
 {
     use TraitHelpers, Exportable;
 
     public $AnoLectivo, $Curso, $Instituicao, $TipoBolsa, $Desconto, $Estado, $Semestre, $titulo;
 
     public function __construct($request)
-    {
-        $this->AnoLectivo = $request->AnoLectivo;
-        $this->Curso = $request->Curso;
-        $this->Instituicao = $request->Instituicao;
-        $this->TipoBolsa = $request->TipoBolsa;
-        $this->Desconto = $request->Desconto;
-        $this->Estado = $request->Estado;
-        $this->Semestre = $request->Semestre;
-        $this->titulo = "LISTAGEM ESTUDANTES BOLSEIROS";
-    }
+{
+    $this->AnoLectivo = $request->AnoLectivo ?? null;
+    $this->Curso = $request->Curso ?? null;
+    $this->Instituicao = $request->Instituicao ?? null;
+    $this->TipoBolsa = $request->TipoBolsa ?? null;
+    $this->Desconto = $request->Desconto ?? null;
+    $this->Estado = $request->Estado ?? null;
+    $this->Semestre = $request->Semestre ?? null;
+    $this->titulo = "LISTAGEM ESTUDANTES BOLSEIROS";
+}
+
+public function headings(): array
+{
+
+    return [
+        'Nome',
+        'Curso',
+        'Tipo de Bolsa',
+        'Tipo de Instituição',
+        'Desconto',
+        'Periodo',
+        'Estado',
+    ];
+}
+
+public function map($item): array
+
+{
+
+    return [
+        $item->nome ?? '',
+        $item->curso ?? '',
+        $item->tipoBolsa ?? '',
+        optional($item->tipo)->designacao ?? '',
+        $item->desconto ?? '',
+        $item->semestre ?? '',
+        $item->status ?? '',
+    ];
 
 
-    public function headings():array
-    {
-        return[
-            'Nome',
-            'Curso',
-            'Tipo de Bolsa',
-            'Tipo de Instituição',
-            'Desconta',
-            'Periodo',
-            'Estado',
-        ];
-    }
+}
 
-    public function map($item):array
-    {
-        return[
-            $item->nome,
-            $item->curso,
-            $item->tipoBolsa,
-            // $item->tipo->designacao,
-            $item->desconto,
-            $item->semestre,
-            $item->status,
-        ];
-    }
 
     /**
-    * @return \Illuminate\Support\Collection
+
     */
     public function collection()
     {
 
-        $data['bolseiros'] = Bolseiro::when($this->AnoLectivo, function ($query, $value) {
+        $item = Bolseiro::when($this->AnoLectivo, function ($query, $value) {
             $query->where('tb_bolseiros.codigo_anoLectivo', $value);
-        })->when($this->Curso, function ($query, $value) {
+        })
+        ->when($this->Curso, function ($query, $value) {
             $query->where('tb_cursos.Codigo', $value);
         })
-            ->when($this->Instituicao, function ($query, $value) {
-                $query->where('tb_bolseiros.codigo_Instituicao', $value);
-            })
-            ->when($this->TipoBolsa, function ($query, $value) {
-                $query->where('tb_bolseiros.codigo_tipo_bolsa', $value);
-            })
-            ->when($this->Desconto, function ($query, $value) {
-                $query->where('tb_bolseiros.desconto', $value);
-            })
-            ->when($this->Estado, function ($query, $value) {
-                $query->where('tb_bolseiros.status', $value);
-            })
-            ->when($this->Semestre, function ($query, $value) {
-                $query->where('tb_bolseiros.semestre', $value);
-            })
-            ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
-            ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
-            ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
-            ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
-            ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+        ->when($this->Instituicao, function ($query, $value) {
+            $query->where('tb_bolseiros.codigo_Instituicao', $value);
+        })
+        ->when($this->TipoBolsa, function ($query, $value) {
+            $query->where('tb_bolseiros.codigo_tipo_bolsa', $value);
+        })
+        ->when($this->Desconto, function ($query, $value) {
+            $query->where('tb_bolseiros.desconto', $value);
+        })
+        ->when($this->Estado, function ($query, $value) {
+            $query->where('tb_bolseiros.status', $value);
+        })
+        ->when($this->Semestre, function ($query, $value) {
+            $query->where('tb_bolseiros.semestre', $value);
+        })
+        ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
+        ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
+        ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
+        ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
+        ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+        ->select(
+            'tb_matriculas.Codigo AS matricula',
+            'tb_cursos.Designacao AS curso',
+            'tb_bolseiros.codigo_matricula',
+            'tb_bolseiros.codigo',
+            'tb_tipo_bolsas.designacao AS tipobolsa',
+            'tb_bolseiros.desconto',
+            'tb_bolseiros.status',
+            'tb_bolseiros.semestre',
+            'tb_preinscricao.Nome_Completo As nome'
+        )
+        ->get();
 
-            ->select('tb_matriculas.Codigo AS matricula', 'tb_cursos.Designacao AS curso', 'tb_bolseiros.codigo_matricula', 'tb_bolseiros.codigo', 'tb_tipo_bolsas.designacao AS tipobolsa', 'tb_bolseiros.desconto', 'tb_bolseiros.status', 'tb_bolseiros.semestre', 'tb_preinscricao.Nome_Completo As nome')
-            ->get();
 
     }
+
+
 
 
     /**
@@ -140,16 +165,16 @@ class ListarBolseirosExport extends DefaultValueBinder implements FromCollection
     {
         return 'A10';
     }
-    
-    
+
+
     public function styles(Worksheet $sheet)
     {
-        
+
         $ano = AnoLectivo::find($this->AnoLectivo);
         $semestre = Simestre::find($this->Semestre);
         $curso = Curso::find($this->Curso);
         $bolsa = TipoBolsa::find($this->TipoBolsa);
-    
+
         $sheet->setCellValue('A7', strtoupper($this->titulo));
         $sheet->setCellValue('D4', 'ANO LECTIVO: ');
         $sheet->setCellValue('E4', $ano->Designacao ?? '');
