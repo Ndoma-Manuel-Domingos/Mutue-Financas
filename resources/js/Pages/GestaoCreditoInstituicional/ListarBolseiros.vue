@@ -219,13 +219,13 @@
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
                                                     </template>
-                                                    
+
                                                     <template>
                                                         <a @click="showItem(item)" class="btn-sm btn-info mx-1"><i class="fas fa-eye"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 0" class="btn-sm btn-danger mx-1"><i class="fas fa-ban"></i></a>
                                                         <a @click="mudarStatusItem(item)" v-if="item.status == 1" class="btn-sm btn-success mx-1"><i class="fas fa-check"></i></a>
                                                     </template>
-                                                
+
                                                 </div>
                                             </td>
                                         </tr>

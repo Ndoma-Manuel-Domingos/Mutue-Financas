@@ -20,9 +20,9 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ListarEstudantesExport implements FromCollection, 
-    WithHeadings, 
-    ShouldAutoSize, 
+class ListarEstudantesExport implements FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
     WithMapping,
     WithEvents,
     WithDrawings,
@@ -76,7 +76,7 @@ class ListarEstudantesExport implements FromCollection,
         if(!$anoSelecionado){
             $anoSelecionado = $ano->Codigo;
         }
-        
+
         $grade_curriculares = GradeCurricularAluno::when($anoSelecionado, function ($query, $value) {
             $query->where('codigo_ano_lectivo', '=', $value);
             $query->whereIn('Codigo_Status_Grade_Curricular', [2,3]);
@@ -97,7 +97,7 @@ class ListarEstudantesExport implements FromCollection,
         ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.Codigo')
         ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
         ->join('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
-        ->select('tb_matriculas.Codigo AS codigo', 
+        ->select('tb_matriculas.Codigo AS codigo',
                 'tb_preinscricao.Nome_Completo AS nome',
                 'tb_preinscricao.Bilhete_Identidade AS bilheite',
                 'tb_faculdade.designacao AS faculdade',

@@ -631,14 +631,14 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function pdfimprimirbolseiros(Request $request)
     {
-    
+
         $ano = AnoLectivo::where('estado', 'Activo')->first();
         if ($request->AnoLectivo) {
             $request->AnoLectivo = $request->AnoLectivo;
         }else{
             $request->AnoLectivo = $ano->Codigo;
         }
-        
+
         $data['bolseiros'] = Bolseiro::when($request->AnoLectivo, function ($query, $value) {
             $query->where('tb_bolseiros.codigo_anoLectivo', $value);
         })->when($request->Curso, function ($query, $value) {
@@ -682,7 +682,8 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function excelImprimirBolseiros(Request $request)
     {
-        return Excel::download(new ListarBolseirosExport($request), 'estudante-com-propinas-pagas.xlsx');
+
+        return Excel::download(new ListarBolseirosExport($request),'estudante-com-propinas-pagas.xlsx');
     }
 
     //** DESCONTOS */

@@ -19,9 +19,9 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ListarEstudantesComDescontoExport implements FromCollection, 
-    WithHeadings, 
-    ShouldAutoSize, 
+class ListarEstudantesComDescontoExport implements FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
     WithMapping,
     WithEvents,
     WithDrawings,
