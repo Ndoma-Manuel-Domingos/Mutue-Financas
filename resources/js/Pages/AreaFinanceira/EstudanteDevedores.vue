@@ -117,7 +117,7 @@
                                             <td>{{ factura.admissao.preinscricao.Nome_Completo ?? '' }}</td>
                                             <td>{{ factura.admissao.preinscricao.curso.Designacao ?? '' }}</td>
                                             <td>{{ factura.admissao.preinscricao.turno.Designacao ?? '' }}</td>
-                                            <td>{{ formatValor(index + 1 + '000') }}</td>
+                                            <td>{{ formatValor(0) }}</td>
                                             <td>
                                                 <a :href="route('mf.estudante-visualizar-perfil',factura.Codigo)"
                                                     class="btn-sm btn-primary">

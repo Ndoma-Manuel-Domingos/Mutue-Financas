@@ -160,7 +160,8 @@
         axios
           .get("/estudantes/pesquisar-matricula/" + this.search)
           .then((response) => {
-            this.estudante.push(response.data.matricula);
+            this.estudante = response.data.matricula;
+            // this.estudante.push(response.data.matricula);
             if (response.data.matricula === null) {
               sweetError("Ocorreu um errro");
             } else {

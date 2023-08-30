@@ -107,7 +107,7 @@ class RelatorioFinanceiroController extends Controller
         
         $data['requests'] = $request->all('data_inicio', 'data_final');
 
-        return Inertia::render('RelatoriosPagamentos//Caixa/FechoCaixa', $data);
+        return Inertia::render('RelatoriosPagamentos/Caixa/FechoCaixa', $data);
     }
 
 

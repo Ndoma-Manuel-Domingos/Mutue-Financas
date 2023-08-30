@@ -321,7 +321,7 @@
                 </Link>
               </li>
     
-              <li class="nav-item" title="PERCENTAGEM DE APROVEITAMENTO">
+              <!-- <li class="nav-item" title="PERCENTAGEM DE APROVEITAMENTO">
                 <Link
                   :href="route('mf.percentagem-aproveitamento')"
                   class="nav-link"
@@ -334,7 +334,7 @@
                   <i class="fas fa-percent nav-icon"></i>
                   <p>Percentagem de Aproveitamento</p>
                 </Link>
-              </li>
+              </li> -->
     
               <li class="nav-item" title="LISTAR BOLSEIROS">
                 <Link

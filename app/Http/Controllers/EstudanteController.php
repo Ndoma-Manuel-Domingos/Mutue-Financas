@@ -240,7 +240,7 @@ class EstudanteController extends Controller
 
     public function carregarEstado($id)
     {
-        $response = Http::get("http://10.10.6.13:8080/mutue/mga/estado_matricula?matricula={$id}");
+        $response = Http::get("https://mutue.co.ao/mutue/mga/estado_matricula?matricula={$id}");
         $data = $response->json();
         
         return response()->json(['data' => $data], 200);
@@ -1011,12 +1011,13 @@ class EstudanteController extends Controller
 
     public function pesquisarNumeroMatricula($matricula = null)
     {
+    
         $data = Matricula::where('tb_matriculas.Codigo', $matricula)
             ->orWhere('tb_preinscricao.Nome_Completo', "like", "%{$matricula}%")
             ->orWhere('tb_preinscricao.Bilhete_Identidade', "{$matricula}")
-            ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
-            ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
-            ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
+            ->leftjoin('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
+            ->leftjoin('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
+            ->leftjoin('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
             ->select(
                 'tb_preinscricao.Codigo AS inscricao',
                 'tb_matriculas.Codigo',
@@ -1025,8 +1026,8 @@ class EstudanteController extends Controller
                 'tb_preinscricao.Bilhete_Identidade',
                 'tb_cursos.Designacao',
             )
-            ->first();
-
+            ->get();
+    
         return response()->json([
             "matricula" => $data
         ], 200);

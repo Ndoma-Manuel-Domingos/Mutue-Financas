@@ -177,7 +177,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('/visualizar-desconto/{item}', [GestaodeBolsaeDescontoController::class, 'visualizarDesconto'])->name('mf.visualizar-desconto');
 
     Route::get('/listagem/bolserios/pdf-imprimir',[GestaodeBolsaeDescontoController::class, 'pdfimprimirbolseiros'])->name('mf.imprimir-bolseiros');
-    Route::get('/listagem/bolserios/excel-imprimir',[GestaodeBolsaeDescontoController::class, 'excelimprimirbolseiros'])->name('mf.imprimir-bolseiros');
+    Route::get('/listagem/bolserios/excel-imprimir',[GestaodeBolsaeDescontoController::class, 'excelimprimirbolseiros'])->name('mf.imprimir-excel-bolseiros');
 
     Route::get('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseiros'])->name('mf.pagamentoBolseiros');
     Route::post('/pagamentoBolseiros', [GestaodeBolsaeDescontoController::class, 'pagamentoBolseirosCreate'])->name('mf.pagamentoBolseirosCreate');
