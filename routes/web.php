@@ -264,6 +264,14 @@ Route::group(["middleware" => "auth"], function () {
      // Ajuda System
      Route::get('/ajuda-sistema', [AjudaSistemaController::class, 'Index'])->name('mf.Ajuda-sistema');
      Route::get('/baixar-manual', [AjudaSistemaController::class, 'baixarManualUtilizador']);
+     
+     Route::get('/estudante/pegar-descricao-bolseiro', [EstudanteController::class, 'getDescricaoTiposAlunos']);
+     Route::get('/estudante/pega-bolseiro/{id_user}', [EstudanteController::class, 'descontoBolsa']);
+     Route::get('/estudante/pega-finalista/{id_user}', [EstudanteController::class, 'finalista']);
+     Route::get('/estudante/pega-preoco-propina/{polo}/{curso}', [EstudanteController::class, 'getPrecoPropina']);
+     
+     
+     Route::get('/carregar/meses-anolectivo', [AjudaSistemaController::class, 'getMeses']);
 
      Route::get('/estudante/pegar-descricao-bolseiro', [EstudanteController::class, 'getDescricaoTiposAlunos']);
      

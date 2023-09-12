@@ -197,7 +197,7 @@
                       </select>
                     </div>
                   </div>
-
+                  
                   <div class="col-12 col-md-3">
                     <div class="row">
                       <label
@@ -334,7 +334,6 @@ export default {
       charts_meses: [],
 
       ano_lectivo: "",
-
       selected: null,
       options: [
         { value: null, text: 'Please select some item' },

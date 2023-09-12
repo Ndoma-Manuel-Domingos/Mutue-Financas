@@ -53,7 +53,6 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Inicio:</label>
@@ -64,7 +63,6 @@
                       />
                     </div>
                   </div>
-
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Final:</label>
@@ -116,7 +114,6 @@
                   </tbody>
                 </table>
               </div>
-
               <div class="card-footer">
                 <Link href="" class="text-secondary">
                   TOTAL REGISTROS: {{ saldos.total }}
@@ -128,7 +125,6 @@
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>

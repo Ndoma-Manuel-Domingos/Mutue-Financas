@@ -165,7 +165,6 @@
             return {
                 ano_inicio: 21,
                 ano_final: 21,
-
                 grau: "",
                 faculdade: "",
                 curso: "",

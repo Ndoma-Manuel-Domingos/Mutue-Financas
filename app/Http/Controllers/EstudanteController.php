@@ -59,6 +59,8 @@ class EstudanteController extends Controller
     public function show($numero)
     {
         session()->forget('confirmar_estudante_bolsa_mutue_finance');
+        
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
 
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
@@ -78,7 +80,7 @@ class EstudanteController extends Controller
                 'tb_cursos.Designacao AS curso',
             )
             ->first();
-
+            
         if ($resultado) {
 
             $bolseiro = Bolseiro::where('codigo_matricula', $resultado->codigo)
@@ -604,7 +606,7 @@ class EstudanteController extends Controller
             ->join('mca_tb_utilizador', DB::raw('json_extract(tb_isencoes.ref_utilizado, "$.pk")'), '=', 'mca_tb_utilizador.pk_utilizador')
             ->select('tb_isencoes.codigo', 'tb_isencoes.estado_isensao', 'tb_isencoes.data_isencao', 'mes_temp.designacao', 'tb_tipo_servicos.Descricao', 'mca_tb_utilizador.nome')
             ->get();
-
+  
 
         $isencoes_multas = IsencaoMulta::join('tb_tipo_servicos', 'tb_isencoe_multa.codigo_servico', '=', 'tb_tipo_servicos.Codigo')
             ->join('mes_temp', 'tb_isencoe_multa.mes_temp_id', '=', 'mes_temp.id')
@@ -612,7 +614,8 @@ class EstudanteController extends Controller
             ->where('codigo_anoLectivo',  $ano->Codigo)
             ->join('mca_tb_utilizador', DB::raw('json_extract(tb_isencoe_multa.ref_utilizado, "$.pk")'), '=', 'mca_tb_utilizador.pk_utilizador')
             ->select('tb_isencoe_multa.codigo', 'tb_isencoe_multa.estado_isensao', 'tb_isencoe_multa.data_isencao', 'mes_temp.designacao', 'tb_tipo_servicos.Descricao', 'mca_tb_utilizador.nome')
-            ->get();
+            ->get();   
+            
 
 
         $isencoes_pagamentos_count = count($isencoes_pagamentos);
@@ -860,7 +863,6 @@ class EstudanteController extends Controller
                     'ref_utilizado' => $arrays,
                 ]);
             }
-
         }
 
         // if ($verificar) {
@@ -942,7 +944,6 @@ class EstudanteController extends Controller
         //         "message" => "Este Pagamento  já esta isentado!"
         //     ], 201);
         // }
-
         // Isencao::create([
         //     'codigo_matricula' => $request->codigo,
         //     'codigo_servico' => $request->servico_isencao,
@@ -957,7 +958,6 @@ class EstudanteController extends Controller
         //     'mes_id' => NULL,
         //     'ref_utilizado' => $arrays,
         // ]);
-
 
 
         $isencoes_pagamentos = Isencao::join('tb_tipo_servicos', 'tb_isencoes.codigo_servico', '=', 'tb_tipo_servicos.Codigo')
@@ -1011,7 +1011,6 @@ class EstudanteController extends Controller
 
     public function pesquisarNumeroMatricula($matricula = null)
     {
-
         $data = Matricula::where('tb_matriculas.Codigo', $matricula)
             ->orWhere('tb_preinscricao.Nome_Completo', "like", "%{$matricula}%")
             ->orWhere('tb_preinscricao.Bilhete_Identidade', "{$matricula}")
@@ -1027,7 +1026,6 @@ class EstudanteController extends Controller
                 'tb_cursos.Designacao',
             )
             ->get();
-
         return response()->json([
             "matricula" => $data
         ], 200);
@@ -1408,7 +1406,6 @@ class EstudanteController extends Controller
         ->when($request->grau, function($query, $value){
             $query->where('tc.tipo_candidatura', $value);
         })
-
         ->paginate(20)
         ->withQueryString();
 
@@ -1681,17 +1678,14 @@ class EstudanteController extends Controller
         return response()->json($data);
     }
 
-
     public function descontoBolsa(Request $request, $codigo_matricula)
     {
         $ano = AnoLectivo::where('estado', 'Activo')->first();
-
         $bolseiro = DB::table('tb_bolseiros')->join('tb_tipo_bolsas','tb_tipo_bolsas.codigo','tb_bolseiros.codigo_tipo_bolsa')
         ->where('tb_bolseiros.codigo_matricula', $codigo_matricula)
         ->where('tb_bolseiros.codigo_anoLectivo', $ano->Codigo)
         ->where('status',  0)
         ->select('*','tb_tipo_bolsas.designacao as tipo_bolsa')->first(); //Abordagem do ano actual
-
         if ($bolseiro) {
             return Response()->json($bolseiro);
         } else {
