@@ -5,7 +5,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h4 class="m-0 text-uppercase">Estudantes Devedores</h4>
-                        {{this.estudante_tipo2.designacao}}
+                       
                     </div>
                     <div class="col-sm-6">
                         <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i
