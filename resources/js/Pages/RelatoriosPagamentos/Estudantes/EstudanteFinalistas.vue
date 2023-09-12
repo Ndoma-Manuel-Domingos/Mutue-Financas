@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Estudantes Finalistas</h1>
+            <h4 class="m-0 text-uppercase">Estudantes Finalistas</h4>
           </div>
           <div class="col-sm-6">
             <a
@@ -34,7 +34,7 @@
                       <label for="" class="text-secondary">Ano Lectivo</label>
 
                       <div class="input-group">
-                        <select v-model="anolectivo" class="form-control">
+                        <select v-model="anolectivo" class="form-control form-control-sm ">
                           <option
                             :value="item.Codigo"
                             v-for="item in anolectivos"
@@ -52,7 +52,7 @@
                       <label for="" class="text-secondary">Curso</label>
 
                       <div class="input-group">
-                        <select v-model="searchCurso" class="form-control">
+                        <select v-model="searchCurso" class="form-control form-control-sm ">
                           <option value="">TODOS</option>
                           <option
                             :value="curso.Codigo"
@@ -70,7 +70,7 @@
                     <div class="form-group">
                       <label>Turno</label>
                       <div class="input-group">
-                        <select v-model="searchTurno" class="form-control">
+                        <select v-model="searchTurno" class="form-control form-control-sm ">
                           <option value="">TODOS</option>
                           <option
                             :value="turno.Codigo"
@@ -85,7 +85,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer"></div>
             </div>
           </div>
         </div>
@@ -99,7 +98,7 @@
 
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
                         <th>Matricula</th>

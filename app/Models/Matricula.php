@@ -34,5 +34,10 @@ class Matricula extends Model
     {
         return $this->belongsTo(Curso::class, 'Codigo_Curso', 'Codigo');
     }
+    
+    public function propina_estudante($matricula)
+    {
+        return "matricula";
+    } 
 
 }

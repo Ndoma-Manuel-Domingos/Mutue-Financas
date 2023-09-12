@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Estudantes Com Mensalidades Pagas</h1>
+            <h4 class="m-0 text-uppercase">Estudantes Com Mensalidades Pagas</h4>
           </div>
           <div class="col-sm-6">
             <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
@@ -30,7 +30,7 @@
                       <div class="input-group">
                         <select
                           v-model="searchAnoLectivo"
-                          class="form-control"
+                          class="form-control form-control-sm select2"
                         >
                           <option value="">TODOS</option>
                           <option :value="ano.Codigo" v-for="ano in anolectivos" :key="ano.Codigo">{{ ano.Designacao }}</option>
@@ -45,7 +45,7 @@
                       <div class="input-group">
                         <select
                           v-model="searchMes"
-                          class="form-control"
+                          class="form-control form-control-sm "
                         >
                           <option value="">TODOS</option>
                           <option :value="mes.id" v-for="mes in mesTemps" :key="mes.id">{{ mes.designacao }}</option>
@@ -60,7 +60,7 @@
                       <div class="input-group">
                         <select
                           v-model="searchFaculdade"
-                          class="form-control"
+                          class="form-control form-control-sm "
                         >
                           <option value="">TODAS</option>
                           <option :value="faculdade.codigo" v-for="faculdade in faculdades" :key="faculdade.codigo"> {{ faculdade.designacao }}</option>
@@ -75,7 +75,7 @@
                       <div class="input-group">
                         <select
                           v-model="searchCurso"
-                          class="form-control"
+                          class="form-control form-control-sm "
                         >
                           <option value="">TODOS</option>
                           <option :value="curso.Codigo" v-for="curso in cursos" :key="curso.Codigo">{{ curso.Designacao }}</option>
@@ -90,7 +90,7 @@
                       <div class="input-group">
                         <select
                           v-model="searchTurno"
-                          class="form-control"
+                          class="form-control form-control-sm "
                         >
                           <option value="">TODOS</option>
                           <option :value="turno.Codigo" v-for="turno in turnos" :key="turno.Codigo">{{ turno.Designacao }}</option>
@@ -100,31 +100,7 @@
                   </div>
                 </div>
               </div>
-              
-              <!-- <div class="card-footer py-4">
-                <div class="col-12 col-md-8">
-                  <div class="card">
-                    <div class="card-body">
-                      Total de Mensalidades pagas: {{estudante_propinas_pagas}}
-                      <pie-chart
-                        :data="charts_meses"
-                        :stacked="true"
-                        prefix=""
-                        suffix=" Kzs"
-                        :round="2"
-                        :zeros="true"
-                        title="Total de pagamento/Parcelas"
-      
-                        thousands="."
-                        decimal=","
-                        :colors="['#2caeae', '#52c7ed']"
-                        :download="true"
-                      ></pie-chart>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-              
+                          
             </div>
           </div>
 
@@ -134,47 +110,69 @@
           <div class="col-12 col-md-12">
             <div class="card mb-4">
               <div class="card-header bg-light">
-                <h5>TOTAL ARRECADADO: {{ formatValor(valor_total_pagamentos) }}</h5>
+                <h6>TOTAL ARRECADADO: {{ formatValor(valor_total_pagamentos) }}</h6>
               </div>
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
-                    <thead>
-                      <tr>
-                        <th title="codigo do pagamentos">Codigo</th>
-                        <th title="número da matricula do estudante">Matricula</th>
-                        <th title="Nome do estudante">Nome</th>
-                        <th title="faculdade que o estudante frequenta">Faculdade</th>
-                        <th title="curso que o estudante frequenta">Curso</th>
-                        <th title="turno que o estudante frequenta">Turno</th>
-                        <th title="serviço que o estudante pagou">Mês/Parcela</th>
-                        <th title="valor pago neste mês">Valor</th>
-                        <th title="Ano Lectivo do pago neste mês">Ano Lectivo</th>
-                        <th width="100px">Ver Perfil</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="factura in facturas.data" :key="factura.matricula">
-                        <td>{{ factura.CodigoPagamento }}</td>
-                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.matricula }}</a></td>
-                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.aluno }}</a></td>
-                        <td>{{ factura.faculdade }}</td>
-                        <td>{{ factura.curso }}</td>
-                        <td>{{ factura.turno }}</td>
-                        <td><a :href="route('mf.estudante-por-mes', factura.IdServico)">{{ factura.servico }}</a></td>
-                        <td>{{ formatValor(factura.valorPago) }}</td>
-                        <td>{{ factura.anolectivo }}</td>
-                        
-                        <td>
-                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary">
-                            <i class="fas fa-user-graduate"></i>
-                          </a>
-                        </td>
-                      </tr>
+                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                  <thead>
+                    <tr>
+                      <th title="codigo do pagamentos">Codigo</th>
+                      <th title="número da matricula do estudante">Matricula</th>
+                      <th title="número da matricula do estudante">Tipo de Estudante</th>
+                      <th title="Nome do estudante">Nome</th>
+                      <th title="faculdade que o estudante frequenta">Faculdade</th>
+                      <th title="curso que o estudante frequenta">Curso</th>
+                      <th title="turno que o estudante frequenta">Turno</th>
+                      <th title="serviço que o estudante pagou">Mês/Parcela</th>
+                      <th title="valor pago neste mês">Valor</th>
+                      <th title="Ano Lectivo do pago neste mês">Ano Lectivo</th>
+                      <th width="100px">Ver Perfil</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="factura in facturas.data" :key="factura.matricula">
+                      <td>{{ factura.CodigoPagamento }}</td>
+                      <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.matricula }}</a></td>
+                      <tb>
+
+                        <div class="col s12 m6" v-if="bolseiro" style="float: right">
+                                                    <template v-if="bolseiro.desconto == 100">
+                                                        <b>{{ estudante_tipo4.descricao }}</b>
+                                                    </template>
+                                                    <template
+                                                        v-else-if="bolseiro.desconto < 100 && bolseiro.codigo_tipo_bolsa != 32">
+                                                        <span>{{ estudante_tipo3.designacao }} {{ estudante_tipo3.descricao
+                                                        }} </span>
+                                                    </template>
+                                                    <template
+                                                        v-else-if="bolseiro.desconto < 100 && bolseiro.codigo_tipo_bolsa == 32">
+                                                        <span style="font-size: 10">{{ estudante_tipo2.designacao }}{{
+                                                            estudante_tipo2.descricao}}</span>
+                                                    </template>
+                                                </div>
+                                                <div class="col s12 m6" v-else style="float: right">
+                                                    <span>{{ estudante_tipo1.designacao }} 
+                                                    </span>
+                                                </div>
+                      </tb>
+                      <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.aluno }}</a></td>
+                     
+                      <td>{{ factura.faculdade }}</td>
+                      <td>{{ factura.curso }}</td>
+                      <td>{{ factura.turno }}</td>
+                      <td><a :href="route('mf.estudante-por-mes', factura.IdServico)">{{ factura.servico }}</a></td>
+                      <td>{{ formatValor(factura.valorPago) }}</td>
+                      <td>{{ factura.anolectivo }}</td>
                       
-                    </tbody>
-                  </table>
-                </div>
+                      <td>
+                        <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary">
+                          <i class="fas fa-user-graduate"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
               </div>
 
               <div class="card-footer">
@@ -213,11 +211,24 @@
         searchCurso: "",
         searchTurno: "",
         valor_total_facturas:"",
+        estudante_tipo1: {},
+            estudante_tipo2: {},
+            estudante_tipo3: {},
+            estudante_tipo4: {},
+            bolseiro:"",
 
         params: {},
 
       }
+
+      
     },
+
+    mounted() {
+
+this.pegarDescricaoBolseiro();
+
+},
 
     watch: {
       options: function(val) {
@@ -255,6 +266,24 @@
     },
 
     methods: {
+
+      
+      pegarDescricaoBolseiro() {
+            axios
+                .get(`/estudante/pegar-descricao-bolseiro`)
+                .then((response) => {
+                    this.estudante_tipo1 = response.data.descricao_tipo1;
+                    this.estudante_tipo2 = response.data.descricao_tipo2;
+                    this.estudante_tipo3 = response.data.descricao_tipo3;
+                    this.estudante_tipo4 = response.data.descricao_tipo4;
+                })
+                .catch((error) => {
+                    console.error("Erro ao buscar dados do bolseiro:", error);
+                })
+                
+
+                },
+
       updateData() {
         this.$Progress.start();
         this.$inertia.get("/estudantes/propina-pagar", this.params, {

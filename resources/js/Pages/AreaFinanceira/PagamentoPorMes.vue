@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Pagamentos do Mês de {{ mes_selecionado }}</h1>
+            <h4 class="m-0 text-uppercase">Pagamentos do Mês de {{ mes_selecionado }}</h4>
           </div>
           <div class="col-sm-6">
             <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i class="fas fa-file-pdf"></i> PDF</a>
@@ -20,33 +20,35 @@
           <div class="col-12 col-md-12">
             <div class="card mb-4">
               <div class="card-header">
-                <h5>Volar Total: {{ valor_total_facturas }} AOA</h5>
+                <h5>Volar Total: AOA {{ valor_total_facturas }}</h5>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
-                        <th>Mês/Parcela</th>
+                        <th>Matricula</th>
                         <th>Nome</th>
                         <th>Faculdade</th>
                         <th>Curso</th>
                         <th>Turno</th>
-                        <th width="100px">Detalhe</th>
+                        <th>Valor</th>
+                        <!-- <th width="10px">Acções</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="factura in props.facturas.data" :key="factura.matricula">
-                        <td>{{ factura.servico }}</td>
+                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" >{{ factura.matricula }}</a></td>
                         <td>{{ factura.aluno }}</td>
                         <td>{{ factura.faculdade }}</td>
                         <td>{{ factura.curso }}</td>
                         <td>{{ factura.turno }}</td>
-                        <td>
-                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary">
-                            <i class="fas fa-info"></i> Detalhes do Pagamento
+                        <td>{{ formatValor(factura.valores) }}</td>
+                        <!-- <td>
+                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary text-center">
+                             <i class="fas fa-info"></i>
                           </a>
-                        </td>
+                        </td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -95,6 +97,17 @@
   })
 
   const internalInstance = getCurrentInstance();
+  
+  
+  const formatValor = function(atual){
+    const valorFormatado = Intl.NumberFormat("pt-br", {
+        style: "currency",
+        currency: "AOA",
+    }).format(atual);
+
+    return valorFormatado;
+  }
+              
 
   const imprimirPDF = () => {
     window.open("/pagamentos/propinas-por-mes/pdf-imprimir/"+props.mes_temp_id, "_blank");

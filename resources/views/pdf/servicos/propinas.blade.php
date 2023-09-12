@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><!DOCTYPE html>
-        <title>PROPINAS (PREÇARIOS)</title>
+        <title>MENSALIDADES (PREÇARIOS)</title>
     
         <style type="text/css">
             *{
@@ -95,7 +95,7 @@
 
     <table style="background-color: rgb(234, 234, 234);margin-top: -20px">
         <tr>
-            <td colspan="2" style="text-align: center;padding: 5px">PROPINAS (PREÇARIOS)</td>
+            <td colspan="2" style="text-align: center;padding: 5px">MENSALIDADES (PREÇARIOS)</td>
         </tr>
         <tr>
             <td style="text-align: center;padding: 5px">Total:</td>

@@ -18,16 +18,16 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class ListarEstudanteIsentoExport implements FromCollection, 
-    WithHeadings, 
-    ShouldAutoSize, 
+class ListarEstudanteIsentoExport implements FromCollection,
+    WithHeadings,
+    ShouldAutoSize,
     WithMapping,
     WithEvents,
     WithDrawings,
     WithCustomStartCell
 {
     use TraitHelpers;
-    
+
     public $a, $f, $c, $t, $s;
 
     public function __construct($a, $f, $c, $t, $s)
@@ -37,7 +37,7 @@ class ListarEstudanteIsentoExport implements FromCollection,
         $this->c = $c;
         $this->t = $t;
         $this->s = $s;
-        
+
     }
 
     public function headings():array
@@ -102,9 +102,9 @@ class ListarEstudanteIsentoExport implements FromCollection,
         ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.Codigo')
         ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
         ->join('tb_periodos', 'tb_preinscricao.Codigo_Turno', '=', 'tb_periodos.Codigo')
-        ->select('tb_isencoes.codigo_matricula AS codigoMatricula', 
-                'tb_ano_lectivo.Designacao', 
-                'mes_temp.designacao AS mesIsencao', 
+        ->select('tb_isencoes.codigo_matricula AS codigoMatricula',
+                'tb_ano_lectivo.Designacao',
+                'mes_temp.designacao AS mesIsencao',
                 'tb_tipo_servicos.Descricao AS servicoIsencao',
                 'tb_preinscricao.Nome_Completo AS nomeEstudante',
                 'tb_periodos.Designacao AS turnoIsencao',

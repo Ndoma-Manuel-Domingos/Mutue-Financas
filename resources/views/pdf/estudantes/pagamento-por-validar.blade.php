@@ -79,32 +79,32 @@
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Tipo De serviço:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['s'] ?? 'Todos os Serviços' }}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['tipo_servico'] ?? 'Todos os Serviços' }}</th>
             </tr>
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Prestação:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['p'] ?? 'Todas' }}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['prestacao'] ?? 'Todas' }}</th>
             </tr>
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Grau:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['g'] ?? 'Todos' }}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['grau_academico'] ?? 'Todos' }}</th>
             </tr>
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Forma de Pagamento:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['f'] ?? 'Todas Formas' }}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['forma_pagamento'] ?? 'Todas Formas' }}</th>
             </tr>
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Data Inicio:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['di'] ?? ''}}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['data_inicio'] ?? 'Todas'}}</th>
             </tr>
             
             <tr style="background-color: #a1a4b9;color: #ffffff;">
                 <th colspan="3" style="padding: 5px;">Data Fim:</th>
-                <th colspan="6" style="padding: 5px;">{{ $requests['df'] ?? '' }}</th>
+                <th colspan="6" style="padding: 5px;">{{ $requests['data_final'] ?? 'Todas' }}</th>
             </tr>
             
             
@@ -112,30 +112,29 @@
                 <th colspan="9" style="padding: 5px;">Total de Registro: {{ count($items) }}</th>
             </tr>
             <tr style="background-color: #3F51B5;color: #ffffff">
-                {{-- <th style="padding: 1px;text-align: center">Matricula</th> --}}
+                <th style="padding: 1px;text-align: center">Matricula</th>
+                <th style="padding: 1px;text-align: center">Estudante</th>
                 <th style="padding: 1px;text-align: center">Factura</th>
                 <th style="padding: 1px;text-align: center">Recibo</th>
-                <th style="padding: 1px;text-align: center">Estudante</th>
                 <th style="padding: 1px;text-align: center">Serviço</th>
                 <th style="padding: 1px;text-align: center">Data Pagamento</th>
                 <th style="padding: 1px;text-align: center">Data Inserção</th>
                 <th style="padding: 1px;text-align: center">Valor Depositado</th>
-                <th style="padding: 1px;text-align: center">Prestação</th>
                 <th style="padding: 1px;text-align: center">Forma Pagamento</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($items as $item)
                 <tr>
-                    <td style="text-align: center;padding: 2px">{{ $item->codigo_factura ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->Codigo ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->Nome_Completo ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->servico ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{date("Y-m-d", strtotime($item->DataBanco)) }}</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->Data ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{ number_format($item->valor_depositado??0, 2, ',', '.') }} Kz</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->prestacao ?? '===' }}</td>
-                    <td style="text-align: center;padding: 2px">{{ $item->forma_pagamento ?? '===' }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->matricula ?? "#####" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->Nome_Completo ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->codigo_factura ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->Codigo ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->servico ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->DataBanco ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->Data ?? "" }}</td>
+                    <td style="text-align: center;padding: 2px">AOA {{ number_format($item->valor_depositado ?? 0, 2, ',', '.') }}</td>
+                    <td style="text-align: center;padding: 2px">{{ $item->forma_pagamento ?? "" }}</td>
                 </tr>     
             @endforeach
         </tbody>

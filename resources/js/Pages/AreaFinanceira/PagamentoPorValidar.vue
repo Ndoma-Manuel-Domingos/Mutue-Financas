@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Pagamento Por validar</h1>
+                        <h4 class="m-0 text-uppercase">Pagamento Por validar</h4>
                     </div>
                     <div class="col-sm-6">
                         <a @click="imprimirPDF" class="btn btn-danger btn-sm float-sm-right mr-2"><i
@@ -21,7 +21,6 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
                                 
@@ -31,7 +30,7 @@
                                             <label for="" class="text-secondary">Ano Lectivo</label>
                                             <div class="input-group input-group">
                                                 <select v-model="ano_lectivo"
-                                                    class="form-control">
+                                                    class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="item.Codigo" v-for="item in anos_lectivos"
                                                         :key="item.Codigo">{{ item.Designacao }}</option>
@@ -45,7 +44,7 @@
                                             <label for="" class="text-secondary">Tipo Serviço</label>
                                             <div class="input-group input-group">
                                                 <select v-model="tipo_servico" @change="search"
-                                                    class="form-control form-control" placeholder="Type your keywords here">
+                                                    class="form-control form-control-sm  form-control" placeholder="Type your keywords here">
                                                     <option value="">TODOS</option>
                                                     <option :value="item.Codigo" v-for="item in servicos"
                                                         :key="item.Codigo">{{ item.Descricao }}</option>
@@ -53,32 +52,14 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-                                    <!-- <div class="col-12 col-md-2">
-                                        <div class="form-group">
-                                            <label for="" class="text-secondary">Prestação</label>
-                                            <div class="input-group input-group">
-                                                <select v-model="prestacao" @change="search"
-                                                    class="form-control form-control" placeholder="Type your keywords here">
-                                                    <option value="">TODAS</option>
-                                                    <option :value="prestacao.id" v-for="prestacao in prestacoes"
-                                                        :key="prestacao.id">{{ prestacao.designacao }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
+                                    
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label for="" class="text-secondary">
                                                 Forma de Pagamentos
                                             </label>
                                             <div class="input-group input-group">
-                                                <select v-model="forma_pagamento" @change="search" class="form-control"
+                                                <select v-model="forma_pagamento" @change="search" class="form-control form-control-sm "
                                                     placeholder="Selecione a Forma de Pagamento">
                                                     <option value="">TODAS</option>
                                                     <option :value="forma.descricao" v-for="forma in formaPagamentos"
@@ -94,7 +75,7 @@
                                                 Grau Acadêmico
                                             </label>
                                             <div class="input-group input-group">
-                                                <select v-model="grau_academico" @change="search" class="form-control">
+                                                <select v-model="grau_academico" @change="search" class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="graus.id" v-for="graus in grau" :key="graus.id">
                                                         {{graus.designacao}}</option>
@@ -108,22 +89,17 @@
                                             <label>Data Inicio:</label>
 
                                             <input type="date" v-model="data_inicio" @change="search"
-                                                class="form-control" />
+                                                class="form-control form-control-sm " />
                                         </div>
                                     </div>
 
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label>Data Final:</label>
-                                            <input type="date" v-model="data_final" @change="search" class="form-control" />
+                                            <input type="date" v-model="data_final" @change="search" class="form-control form-control-sm " />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <!-- <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-search"></i> Listar a busca
-                  </button> -->
                             </div>
                         </div>
                     </div>
@@ -133,52 +109,56 @@
                     <div class="col-12 col-md-12">
                         <div class="card">
                             <div class="card-header">
-                            </div>
-
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Matricula</th>
-                                                <th>Estudante</th>
-                                                <th>Factura</th>
-                                                <th>Recibo</th>
-                                                <th>Serviço</th>
-                                                <th>Data Pagamento</th>
-                                                <th>Data Inserção</th>
-                                                <th>Valor Depositado</th>
-                                                <!-- <th>Prestação</th> -->
-                                                <th>Forma Pagamento</th>
-                                                <th width="100px">Acções</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
-                                                
-                                                <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.matricula }}</a></td>
-                                                <td v-else>#####</td>
-                                                
-                                                <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.Nome_Completo }}</a></td>
-                                                <td v-else>{{ pagamento.Nome_Completo  }}</td>
-                                                
-                                                <td>{{ pagamento.codigo_factura }}</td>
-                                                <td>{{ pagamento.Codigo }}</td>
-                                                <td>{{ pagamento.servico }}</td>
-                                                <td>{{ formatData(pagamento.DataBanco)  }}</td>
-                                                <td>{{ pagamento.Data }}</td>
-                                                <td>{{ formatValor(pagamento.valor_depositado) }}</td>
-                                                <!-- <td>{{ pagamento.prestacao }}</td> -->
-                                                <td>{{ pagamento.forma_pagamento }}</td>
-                                                <td>
-                                                    <a class="btn-sm btn-success mr-1" @click="visualizar_detalhes(pagamento)">
-                                                        <i class="fas fa-eye" title="VISUALIZAR DETALHES DO PAGAMENTO"> </i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-12 col-md-4">
+                                        <input type="search" v-model="filtro_estudante" class="form-control" placeholder="Pesquisar estudante pelo codigo da Pre-inscrição, Nome, Bilheite">
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <button class="btn btn-primary" @click="pesquisar_estudante"><i class="fas fa-search"></i></button>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="card-body">
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                                    <thead>
+                                        <tr>
+                                            <th>Matricula</th>
+                                            <th>Estudante</th>
+                                            <th>Factura</th>
+                                            <th>Recibo</th>
+                                            <th>Serviço</th>
+                                            <th>Data Pagamento</th>
+                                            <th>Data Inserção</th>
+                                            <th>Valor Depositado</th>
+                                            <th>Forma Pagamento</th>
+                                            <th width="100px">Acções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
+                                            
+                                            <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.matricula }}</a></td>
+                                            <td v-else>#####</td>
+                                            
+                                            <td v-if="pagamento.matricula"><a :href="route('mf.estudante-visualizar-perfil', pagamento.matricula)">{{ pagamento.Nome_Completo }}</a></td>
+                                            <td v-else>{{ pagamento.Nome_Completo  }}</td>
+                                            
+                                            <td>{{ pagamento.codigo_factura }}</td>
+                                            <td>{{ pagamento.Codigo }}</td>
+                                            <td>{{ pagamento.servico }}</td>
+                                            <td>{{ formatData(pagamento.DataBanco)  }}</td>
+                                            <td>{{ pagamento.Data }}</td>
+                                            <td>{{ formatValor(pagamento.valor_depositado) }}</td>
+                                            <!-- <td>{{ pagamento.prestacao }}</td> -->
+                                            <td>{{ pagamento.forma_pagamento }}</td>
+                                            <td>
+                                                <a class="btn-sm btn-success mr-1" @click="visualizar_detalhes(pagamento)">
+                                                    <i class="fas fa-eye" title="VISUALIZAR DETALHES DO PAGAMENTO"> </i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="card-footer">
@@ -279,14 +259,12 @@
 
                                                     <tr>
                                                       <th colspan="4" class="bg-info">Comprovativo</th>
-                                                      <!-- <th colspan="2" class="bg-info">Comprovativo 02</th> -->
                                                     </tr>
 
                                                     <tr>
                                                       <td colspan="2"><a target="_blink" :href="'https://mutue.ao/storage/documentos/'+dados_pagamentos.img1">Visualizar Comprovativo</a></td>
-                                                      <!-- <td colspan="2"><a target="_blink" :href="'https://mutue.ao/storage/documentos/'+dados_pagamentos.img2">Visualizar Comprovativo</a></td> -->
                                                     </tr>
-
+                                                    <!-- https://mutue.ao/storage/documentos/3011191692210191.pdf -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -325,7 +303,7 @@
                                                     Motivos
                                                 </label>
                                                 <div class="input-group input-group">
-                                                    <select v-model="movito_rejeicao" class="form-control">
+                                                    <select v-model="movito_rejeicao" class="form-control form-control-sm ">
                                                         <option value="">Selecionar</option>
                                                         <option :value="motivo.id" v-for="motivo in motivos" :key="motivo.id">
                                                             {{motivo.designacao}}</option>
@@ -372,6 +350,8 @@
         
         data() {
             return {
+                filtro_estudante: "",
+                
                 ano_lectivo: "",
                 tipo_servico: "",
                 forma_pagamento: "",
@@ -439,6 +419,11 @@
               this.params.ano_lectivo = val;
               this.updateData();
             },
+            
+            filtro_estudante: function(val) {
+              this.params.filtro_estudante = val;
+              this.updateData();
+            },
 
         },
             
@@ -452,6 +437,13 @@
                       this.$Progress.finish();
                     }
                 })
+            },
+            
+            pesquisar_estudante()
+            {
+                this.params.filtro_estudante
+                
+                updateData();
             },
             
             confirmar_rejeicao_pagamento(codigo)
@@ -499,7 +491,7 @@
 
             visualizar_detalhes(item){
                 this.$Progress.start();
-                $(".table_estudantes").html("");
+                // $(".table_estudantes").html("");
                 axios
                   .get("../visualizar-detalhes-pagamento/" + item.Codigo)
                   .then((response) => {
@@ -589,11 +581,11 @@
             },
 
             imprimirPDF(){
-                window.open(`/pagamento/porvalidar-pdf?p=${this.prestacao}&g=${this.grau_academico}&f=${this.forma_pagamento}&s=${this.tipo_servico}&di=${this.data_inicio}&df=${this.data_final}`, "_blank");
+                window.open(`/pagamento/porvalidar-pdf?prestacao=${this.prestacao}&filtro_estudante=${this.filtro_estudante}&grau_academico=${this.grau_academico}&forma_pagamento=${this.forma_pagamento}&tipo_servico=${this.tipo_servico}&data_inicio=${this.data_inicio}&data_final=${this.data_final}`, "_blank");
             },
 
             imprimirEXCEL(){
-                window.open(`/pagamento/porvalidar-excel?p=${this.prestacao}&g=${this.grau_academico}&f=${this.forma_pagamento}&s=${this.tipo_servico}&di=${this.data_inicio}&df=${this.data_final}`, "_blank");
+                window.open(`/pagamento/porvalidar-excel?prestacao=${this.prestacao}&filtro_estudante=${this.filtro_estudante}&grau_academico=${this.grau_academico}&forma_pagamento=${this.forma_pagamento}&tipo_servico=${this.tipo_servico}&data_inicio=${this.data_inicio}&data_final=${this.data_final}`, "_blank");
             },
 
         }

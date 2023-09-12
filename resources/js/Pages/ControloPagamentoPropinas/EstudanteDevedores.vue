@@ -29,7 +29,7 @@
                                         <div class="form-group">
                                             <label>Ano Lectivo</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchAnoLectivo" class="form-control">
+                                                <select @change="search" v-model="searchAnoLectivo" class="form-control form-control-sm ">
                                                     <option :value="ano.Codigo" v-for="ano in anolectivos"
                                                         :key="ano.Codigo">{{ ano.Designacao }}</option>
                                                 </select>
@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label>Mês/Parcela</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchMes" class="form-control">
+                                                <select @change="search" v-model="searchMes" class="form-control form-control-sm ">
                                                     <option :value="mes.id" v-for="mes in mesTemps" :key="mes.id">{{
                                                         mes.designacao }}</option>
                                                 </select>
@@ -53,7 +53,7 @@
                                         <div class="form-group">
                                             <label>Faculdade</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchFaculdade" class="form-control">
+                                                <select @change="search" v-model="searchFaculdade" class="form-control form-control-sm ">
                                                     <option value="">TODAS</option>
                                                     <option :value="faculdade.codigo" v-for="faculdade in faculdades"
                                                         :key="faculdade.codigo">{{ faculdade.designacao }}</option>
@@ -66,7 +66,7 @@
                                         <div class="form-group">
                                             <label>Curso</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchCurso" class="form-control">
+                                                <select @change="search" v-model="searchCurso" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
                                                     <option :value="curso.Codigo" v-for="curso in cursos"
                                                         :key="curso.Codigo">{{ curso.Designacao }}</option>
@@ -79,7 +79,7 @@
                                         <div class="form-group">
                                             <label>Turno</label>
                                             <div class="input-group">
-                                                <select @change="search" v-model="searchTurno" class="form-control">
+                                                <select @change="search" v-model="searchTurno" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
                                                     <option :value="turno.Codigo" v-for="turno in turnos"
                                                         :key="turno.Codigo">{{ turno.Designacao }}</option>
@@ -106,7 +106,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover text-nowrap">
+                                    <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Nº Matricula</th>

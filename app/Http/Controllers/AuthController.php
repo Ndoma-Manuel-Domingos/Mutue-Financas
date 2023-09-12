@@ -30,7 +30,6 @@ class AuthController extends Controller
             "password.required" => "Campo Obrigatório"
         ]);
 
-
     
         $user = User::where('userName', $request->get('email'))
         ->where('password', md5($request->password))

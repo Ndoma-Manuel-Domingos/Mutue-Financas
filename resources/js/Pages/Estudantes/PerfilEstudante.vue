@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">PERFIL DO ESTUDANTE</h1>
+            <h4 class="m-0 text-uppercase">PERFIL DO ESTUDANTE</h4>
           </div>
           <div class="col-sm-6"></div>
         </div>
@@ -86,7 +86,53 @@
 
                       <li class="list-group-item">
                         <b>Tipo de Estudante:</b>
-                        <a class="float-right"> T1 </a>
+                        <a class="float-right">
+                            
+                          <div class="col s12 m6" v-if="bolseiro" style="float: right">
+                            <template v-if="bolseiro.desconto == 100">
+                              <b
+                                >{{ this.estudante_tipo4.designacao }} ({{
+                                  estudante_tipo4.descricao
+                                }})</b
+                              >
+                            </template>
+                            <template
+                              v-else-if="
+                                bolseiro.desconto < 100 &&
+                                bolseiro.codigo_tipo_bolsa != 32
+                              "
+                            >
+                              <b
+                                >{{ this.estudante_tipo3.designacao }} ({{
+                                  estudante_tipo3.descricao
+                                }}
+                                - {{ bolseiro.desconto }}%)</b
+                              >
+                            </template>
+                            <template
+                              v-else-if="
+                                bolseiro.desconto < 100 &&
+                                bolseiro.codigo_tipo_bolsa == 32
+                              "
+                            >
+                              <b style="font-size: 10"
+                                >{{ this.estudante_tipo2.designacao }} ({{
+                                  estudante_tipo2.descricao
+                                }}
+                                - {{ bolseiro.desconto }}%)</b
+                              >
+                            </template>
+                          </div>
+                          
+                          <div class="col s12 m6" v-else style="float: right">
+                            <b
+                              >{{ estudante_tipo1.designacao }} ({{
+                                estudante_tipo1.descricao
+                              }})</b
+                            >
+                          </div>
+                        
+                        </a>
                       </li>
                     </ul>
 
@@ -299,7 +345,7 @@
                                             <select
                                               name=""
                                               id=""
-                                              class="form-control form-control-sm"
+                                              class="form-control form-control-sm  form-control-sm"
                                             >
                                               <option value="">
                                                 Definir Ciclo
@@ -539,7 +585,7 @@
                                       >
                                       <div class="col-12 col-sm-5">
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="estudante.contacto_principal"
                                         ></div>
                                       </div>
@@ -551,7 +597,7 @@
                                       >
                                       <div class="col-sm-5 col-12">
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.contacto_alternativo
                                           "
@@ -565,7 +611,7 @@
                                       >
                                       <div class="col-sm-5 col-12">
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="estudante.email"
                                         ></div>
                                       </div>
@@ -596,7 +642,7 @@
                                         >
                                         <div
                                           type="text"
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.nome ?? 'sem-registro'
                                           "
@@ -608,7 +654,7 @@
                                           >Data de Nascimento:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Data_Nascimento ??
                                             'sem-registro'
@@ -621,7 +667,7 @@
                                           >Gênero:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Genero ?? 'sem-registro'
                                           "
@@ -633,7 +679,7 @@
                                           >Número BI:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Numero_BI ??
                                             'sem-registro'
@@ -646,7 +692,7 @@
                                           >Data de Emissão:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Data_Emissao ??
                                             'sem-registro'
@@ -658,7 +704,7 @@
                                           >Data de Validade:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Data_Validade ??
                                             'sem-registro'
@@ -671,7 +717,7 @@
                                           >Nacionalidade:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Nacionalidade ??
                                             'sem-registro'
@@ -684,7 +730,7 @@
                                           >Nome do Pai:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Nome_Pai ?? 'sem-registro'
                                           "
@@ -696,7 +742,7 @@
                                           >Nome da Mãe:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Nome_Mae ?? 'sem-registro'
                                           "
@@ -708,7 +754,7 @@
                                           >Profissão:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Profissao ??
                                             'sem-registro'
@@ -721,7 +767,7 @@
                                           >Ocupação:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Ocupacao ?? 'sem-registro'
                                           "
@@ -733,7 +779,7 @@
                                           >Naturalidade:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Naturalidade ??
                                             'sem-registro'
@@ -745,7 +791,7 @@
                                         <label class="col-form-label"
                                           >Província:</label
                                         >
-                                        <div class="form-control"></div>
+                                        <div class="form-control form-control-sm "></div>
                                       </div>
 
                                       <div class="form-group col-12 col-md-2">
@@ -753,7 +799,7 @@
                                           >Município:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.municipio ??
                                             'sem-registro'
@@ -766,7 +812,7 @@
                                           >Morada:</label
                                         >
                                         <div
-                                          class="form-control"
+                                          class="form-control form-control-sm "
                                           v-html="
                                             estudante.Morada ?? 'sem-registro'
                                           "
@@ -816,7 +862,7 @@
                                     <select
                                       v-model="ano"
                                       @change="carregar_inscricoes"
-                                      class="form-control col-12 col-md-5"
+                                      class="form-control form-control-sm  col-12 col-md-5"
                                     >
                                       <option value="">TODOS</option>
                                       <option
@@ -1003,7 +1049,7 @@
                                       <label for="">Operador</label>
                                       <select
                                         v-model="operador_extratos"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                         @change="carregar_tipo_movimentos"
                                       >
                                         <option value="">TODOS</option>
@@ -1024,7 +1070,7 @@
                                       <label for="">Tipo de Movimento</label>
                                       <select
                                         v-model="tipo_movimentos_extrato"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                         @change="carregar_tipo_movimentos"
                                       >
                                         <option value="">TODOS</option>
@@ -1044,7 +1090,7 @@
                                         type="date"
                                         @keyup.enter="carregar_tipo_movimentos"
                                         v-model="data_inicio_extrato"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       />
                                     </div>
 
@@ -1054,7 +1100,7 @@
                                         type="date"
                                         @keyup.enter="carregar_tipo_movimentos"
                                         v-model="data_final_extrato"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       />
                                     </div>
                                   </div>
@@ -1198,7 +1244,7 @@
                                         <div class="col-12 col-md-6">
                                           <input
                                             type="number"
-                                            class="form-control mt-2"
+                                            class="form-control form-control-sm  mt-2"
                                             v-model="
                                               form_actualizar_saldo.saldo_actual
                                             "
@@ -1222,7 +1268,7 @@
                                         <div class="col-12 col-md-6">
                                           <input
                                             type="number"
-                                            class="form-control mt-2"
+                                            class="form-control form-control-sm  mt-2"
                                             v-model="
                                               form_actualizar_saldo.saldo_a_actualizar
                                             "
@@ -1249,7 +1295,7 @@
                                             v-model="
                                               form_actualizar_saldo.saldo_motivo
                                             "
-                                            class="form-control mt-2"
+                                            class="form-control form-control-sm  mt-2"
                                             placeholder="Actualizar para"
                                           ></textarea>
                                         </div>
@@ -1378,7 +1424,7 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_factura"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                         @change="carregar_factura_estudantes"
                                       >
                                         <option
@@ -1395,7 +1441,7 @@
                                       <select
                                         v-model="estado_factura"
                                         @change="carregar_factura_estudantes"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="">Todos</option>
                                         <option value="0">
@@ -1533,9 +1579,7 @@
                                     ISENÇÃO DE MULTAS
                                   </span>
                                   <span class="float-right">
-                                    TOTAL DE ISENSÕES DE MULTA DO ESTUDANTE ({{
-                                      isencoes_multas_count
-                                    }})
+                                    {{ isencoes_multas_count }}
                                   </span>
                                 </div>
                                 <div class="card-body">
@@ -1544,7 +1588,7 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                         @change="isencao_pagamentos_search"
                                       >
                                         <option
@@ -1560,7 +1604,7 @@
                                       <label for="">Serviços</label>
                                       <select
                                         v-model="servico_isencao_multa"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option :value="preco_curso.Codigo">
                                           {{ preco_curso.Descricao }}
@@ -1571,7 +1615,7 @@
                                       <label for="">Motivo</label>
                                       <select
                                         v-model="motivo_isencao_multa"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option
                                           :value="isencao.Codigo"
@@ -1583,10 +1627,13 @@
                                       </select>
                                     </div>
                                     <div class="col-12 col-md-3">
-                                      <label for="">Mês:</label>
+                                      <label for="recipient">Mês:</label>
                                       <select
                                         v-model="mes_isencao_multa"
-                                        class="form-control"
+                                        class="form-control form-control-sm"
+                                        id="recipient"
+                                        multiple="multiple"
+                                        ref="mySelect"
                                       >
                                         <option
                                           :value="mes.id"
@@ -1671,7 +1718,7 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                         @change="isencao_pagamentos_search"
                                       >
                                         <option
@@ -1687,7 +1734,7 @@
                                       <label for="">Serviços</label>
                                       <select
                                         v-model="servico_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option :value="preco_curso.Codigo">
                                           {{ preco_curso.Descricao }}
@@ -1705,7 +1752,7 @@
                                       <label for="">Motivo</label>
                                       <select
                                         v-model="motivo_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option
                                           :value="isencao.Codigo"
@@ -1721,7 +1768,7 @@
                                       <label for="">Mês:</label>
                                       <select
                                         v-model="mes_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option
                                           :value="mes.id"
@@ -1734,10 +1781,13 @@
                                     </div> -->
                                     
                                     <div class="col-12 col-md-3">
-                                      <label for="">Mês:</label>
+                                      <label for="recipient2">Mês:</label>
                                       <select
                                         v-model="mes_isencao"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
+                                        id="recipient2"
+                                        multiple="multiple"
+                                        ref="mySelect2"
                                       >
                                         <template v-for="mes in listar_meses_isencoes" :key="mes.id">
                                             <option :value="mes.id">{{ mes.designacao }}</option>
@@ -1872,7 +1922,7 @@
                                       <select
                                         v-model="ano_pagamento"
                                         @change="carregar_pagamentos"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="">TODOS</option>
                                         <option
@@ -1889,7 +1939,7 @@
                                       <select
                                         v-model="estado_pagamento"
                                         @change="carregar_pagamentos"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="">TODOS</option>
                                         <option value="1">Validado</option>
@@ -2001,7 +2051,7 @@
                                       <select
                                         v-model="ano"
                                         @change="carregar_servicos_pagos"
-                                        class="form-control"
+                                        class="form-control form-control-sm "
                                       >
                                         <option value="">TODOS</option>
                                         <option
@@ -2099,7 +2149,7 @@
                   <input
                     type="email"
                     v-model="assunto"
-                    class="form-control"
+                    class="form-control form-control-sm "
                     id="exampleInputEmail1"
                     placeholder="Assunto:"
                   />
@@ -2109,7 +2159,7 @@
                   <textarea
                     rows="2"
                     v-model="messagem"
-                    class="form-control"
+                    class="form-control form-control-sm "
                     id="exampleInputPassword1"
                     placeholder="Mensagem:"
                   ></textarea>
@@ -2160,7 +2210,7 @@
                     <label for="">Motivo</label>
                     <select
                       v-model="motivo_remover_factura_pagamento"
-                      class="form-control"
+                      class="form-control form-control-sm "
                     >
                       <option
                         :value="motivo.codigo"
@@ -2179,7 +2229,7 @@
                       <textarea
                         rows="2"
                         v-model="message_motivo_remover_factura_pagamento"
-                        class="form-control"
+                        class="form-control form-control-sm "
                         id="message_motivo_remover_factura_pagamento"
                         placeholder="Motivo:"
                       ></textarea>
@@ -2230,7 +2280,7 @@
                   <textarea
                     rows="2"
                     v-model="message_motivo_remover"
-                    class="form-control"
+                    class="form-control form-control-sm "
                     id="message_motivo_remover"
                     placeholder="Motivo:"
                   ></textarea>
@@ -2426,6 +2476,8 @@ export default {
       mes_temps_isencao: [],
       listar_meses_isencoes: [],
       servicos_isencao: [],
+      
+      listagem_meses_ano_lectivo: [],
 
       // movimentos das actualizaçoes
 
@@ -2440,7 +2492,7 @@ export default {
       ano_isencao: this.ano_lectivo_activo.Codigo,
       servico_isencao: "",
       motivo_isencao: "",
-      mes_isencao: "",
+      mes_isencao: [],
 
       message_motivo_remover: "",
       id_motivo_remover: "",
@@ -2454,7 +2506,7 @@ export default {
        */
       servico_isencao_multa: this.preco_curso.Codigo,
       motivo_isencao_multa: "",
-      mes_isencao_multa: "",
+      mes_isencao_multa: [],
 
       inscricoes: [],
       facturas: [],
@@ -2475,6 +2527,15 @@ export default {
       
       estado_estudante: [],
       
+      estudante_tipo1: {},
+      estudante_tipo2: {},
+      estudante_tipo3: {},
+      estudante_tipo4: {},
+      
+      bolseiro: {},
+      
+      params: {},
+      
       // corDeFundo: this.estado_estudante.cor,
 
       operador_extratos: "",
@@ -2489,9 +2550,15 @@ export default {
   },
   mounted(){
     
+    this.pegaBolseiro();
+    this.pegarDescricaoBolseiro();
+    
     this.carregar_historicos_actualizacoes();
   
     axios.get("/estudantes/carregar-estado/" + this.matricula.Codigo).then((response) => {
+      
+      console.log(response)
+    
       this.estado_estudante = response.data.data
     })
     .catch((errors) => {
@@ -2507,8 +2574,38 @@ export default {
       };
     }
   },
+  
+  watch: {
+    options: function(val) {
+        this.params.page = val.page;
+        this.params.page_size = val.itemsPerPage;
+        if (val.sortBy.length != 0) {
+          this.params.sort_by = val.sortBy[0];
+          this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
+        } else {
+          this.params.sort_by = null;
+          this.params.order_by = null;
+        }
+        this.updateData();
+      },
+      ano_isencao: function(val) {
+        this.params.ano_isencao = val;
+        this.getMeses();
+      }
+  },
 
   methods: {
+  
+    getMeses() {
+        this.$Progress.start();
+        this.$inertia.get("/carregar/meses-anolectivo", this.params, {
+            preserveState: true,
+            preverseScroll: true,
+            onSuccess: () => {
+                this.$Progress.finish();
+            }
+      });
+    },
     
     getStatusEstudante: function(matricula){
     
@@ -2610,7 +2707,10 @@ export default {
         .then((response) => {
           /**
            * isenção de pagamentos
-           */
+          */
+          
+          this.listagem_meses_ano_lectivo = response.data.meses;
+          
           this.listar_meses_isencoes = response.data.meses;
           this.servicos_isencao = response.data.servicos;
           this.isencoes_pagamentos = response.data.isencoes_pagamentos;
@@ -2955,6 +3055,50 @@ export default {
       }).format(atual);
 
       return valorFormatado;
+    },
+    
+    pegaBolseiro: function () {
+      this.$Progress.start();
+      axios
+        .get(`/estudante/pega-bolseiro/${this.matricula.Codigo}`)
+        .then((response) => {
+          this.bolseiro = response.data;
+          this.$Progress.finish();
+        })
+        .catch((error) => {
+          this.$Progress.fail();
+        });
+    },
+    
+    
+    pegaFinalista: function () {
+      //alert(this.anoLectivo.Codigo)
+      this.$Progress.start();
+      axios
+        .get(`/estudante/pega-finalista/${this.codigo_matricula}`, {
+          params: { ano_lectivo: this.anoLectivo.Codigo },
+        })
+        .then((response) => {
+          this.cadeiras = response.data;
+          this.$Progress.finish();
+        })
+        .catch((error) => {
+          this.$Progress.fail();
+        });
+    },
+    
+    pegarDescricaoBolseiro: function () {
+      axios
+        .get(`/estudante/pegar-descricao-bolseiro`)
+        .then((response) => {
+          this.estudante_tipo1 = response.data.descricao_tipo1;
+          this.estudante_tipo2 = response.data.descricao_tipo2;
+          this.estudante_tipo3 = response.data.descricao_tipo3;
+          this.estudante_tipo4 = response.data.descricao_tipo4;
+        })
+        .catch((error) => {
+          //console.log(error);
+        });
     },
 
     // ############################EXPORTANDO PDF####################################

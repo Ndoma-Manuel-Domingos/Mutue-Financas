@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Instituções</h1>
+                        <h4 class="m-0 text-uppercase">Instituções</h4>
                     </div>
 
                     <div class="col-sm-6">
@@ -25,7 +25,7 @@
                                     <div class="row">
                                         <div class="from-group col-12 col-md-3">
                                             <label class="form-label">Tipo de Instituição</label>
-                                            <select v-model="instituicao_tipo" class="form-control">
+                                            <select v-model="instituicao_tipo" class="form-control form-control-sm ">
                                                 <option value="">TODOS</option>
                                                 <option :value="item.codigo" v-for="item in tipo_instituicao" :key="item.codigo">{{ item.designacao }}</option>
                                             </select>
@@ -41,41 +41,39 @@
                             <div class="card-header">
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Codigo</th>
-                                                <th>Designação</th>
-                                                <th>Sigla</th>
-                                                <th>NIF</th>
-                                                <th>Tipo</th>
-                                                <th>Contacto</th>
-                                                <th>Endereço</th>
-                                                <th width="150px">Acções</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="item in items.data" :key="item.codigo">
-                                                <td>{{ item.codigo }}</td>
-                                                <td>{{ item.Instituicao }}</td>
-                                                <td>{{ item.sigla ?? '----' }}</td>
-                                                <td>{{ item.nif }}</td>
-                                                <td>{{ item.tipo_instituicao_descricao.designacao }}</td>
-                                                <td>{{ item.contacto }}</td>
-                                                <td>{{ item.Endereco }}</td>
-                                                <td class="text-center">
-                                                    <a class="btn-sm btn-success mr-1" @click="editItem(item)">
-                                                        <i class="fa fa-edit" title="Editar"> </i>
-                                                    </a>
-                                                    <a class="btn-sm btn-info mr-1" @click="visualizarBolsas(item)">
-                                                        <i class="fas fa-folder" title="VISUALIZAR BOLSAS"> </i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Designação</th>
+                                            <th>Sigla</th>
+                                            <th>NIF</th>
+                                            <th>Tipo</th>
+                                            <th>Contacto</th>
+                                            <th>Endereço</th>
+                                            <th width="150px">Acções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in items.data" :key="item.codigo">
+                                            <td>{{ item.codigo }}</td>
+                                            <td>{{ item.Instituicao }}</td>
+                                            <td>{{ item.sigla ?? '----' }}</td>
+                                            <td>{{ item.nif }}</td>
+                                            <td>{{ item.tipo_instituicao_descricao.designacao }}</td>
+                                            <td>{{ item.contacto }}</td>
+                                            <td>{{ item.Endereco }}</td>
+                                            <td class="text-center">
+                                                <a class="btn-sm btn-success mr-1" @click="editItem(item)">
+                                                    <i class="fa fa-edit" title="Editar"> </i>
+                                                </a>
+                                                <a class="btn-sm btn-info mr-1" @click="visualizarBolsas(item)">
+                                                    <i class="fas fa-folder" title="VISUALIZAR BOLSAS"> </i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="card-footer">
@@ -107,25 +105,25 @@
                         <form id="salvarInstuicao" class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Instituição <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.instituicao" placeholder="Informe O nome da Instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.instituicao" placeholder="Informe O nome da Instituição">
                                 <span class="text-danger d-block">{{ form.errors.instituicao }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">NIF <span class="text-danger">*</span></label>
-                                <input  type="text" class="form-control mb-1" id="" v-model="form.nif" maxlength="15" max="15" placeholder="Informe o Número de Identificação Fiscal">
+                                <input  type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.nif" maxlength="15" max="15" placeholder="Informe o Número de Identificação Fiscal">
                                 <span class="text-danger d-block">{{ form.errors.nif }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Sigla</label>
-                                <input type="text" class="form-control mb-1" v-model="form.sigla" placeholder="Informe a Sigla">
+                                <input type="text" class="form-control form-control-sm  mb-1" v-model="form.sigla" placeholder="Informe a Sigla">
                                 <span class="text-danger d-block">{{ form.errors.sigla }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Tipo de Instituição <span class="text-danger">*</span></label>
-                                <select name="tipo" class="form-control mb-1" v-model="form.tipo">
+                                <select name="tipo" class="form-control form-control-sm  mb-1" v-model="form.tipo">
                                     <option :value="item.codigo" v-for="item in tipo_instituicao" :key="item.codigo">{{ item.designacao }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.tipo }}</span>
@@ -133,19 +131,19 @@
 
                             <div class="form-group col-12 col-md-3">
                                 <label for="recipient-name" class="col-form-label">Contacto</label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.contacto" placeholder="Informe o contacto da Instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.contacto" placeholder="Informe o contacto da Instituição">
                                 <span class="text-danger d-block">{{ form.errors.contacto }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-3">
                                 <label for="recipient-name" class="col-form-label">Endereço</label>
-                                <input type="text" class="form-control mb-1" id="" v-model="form.endereco" placeholder="Informe o Endereço da Instituição">
+                                <input type="text" class="form-control form-control-sm  mb-1" id="" v-model="form.endereco" placeholder="Informe o Endereço da Instituição">
                                 <span class="text-danger d-block">{{ form.errors.endereco }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-6">
                                 <label for="recipient-name" class="col-form-label">Tipo de Bolsas<span class="text-danger">*</span></label>
-                                <select class="form-control" ref="mySelect" multiple="multiple">
+                                <select class="form-control form-control-sm " ref="mySelect" multiple="multiple">
                                     <option v-for="bolsa in listae_tipos_bolsas" :value="bolsa.id" :key="bolsa.id">{{ bolsa.text }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.tipos_bolsas }}</span>
@@ -174,7 +172,7 @@
 
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                 <thead>
                                     <tr>
                                         <th>Codigo</th>

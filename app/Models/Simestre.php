@@ -11,6 +11,8 @@ class Simestre extends Model
         
     protected $table = "tb_semestres";
     
+    protected $primaryKey = 'Codigo';
+    
     public $timestamps = false;
 
     protected $fillable = [

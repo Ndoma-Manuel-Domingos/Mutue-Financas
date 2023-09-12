@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Consultar Nº Operação</h1>
+                        <h4 class="m-0 text-uppercase">Consultar Nº Operação</h4>
                     </div>
                     <div class="col-sm-6"></div>
                 </div>
@@ -16,14 +16,13 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header bg-light"></div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 col-md-3">
                                         <div class="form-group">
                                             <label>Pesquisar Nº do Comprovativo:</label>
                                             <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                                <input type="text" class="form-control" @keyup.enter="buscar_comprovotivo"
+                                                <input type="text" class="form-control form-control-sm " @keyup.enter="buscar_comprovotivo"
                                                     placeholder="Pesquisar" v-model="numero_comprovativo" />
                                                 <div class="input-group-append">
                                                     <button class="btn btn-primary" @click="buscar_comprovotivo"
@@ -36,8 +35,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -45,44 +42,37 @@
                 <div class="row" v-if="pagamentos.data">
                     <div class="col-12 col-md-12">
                         <div class="card">
-                            <div class="card-header">
-                            </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Estudante</th>
-                                                <th>Data Pagamento</th>
-                                                <th>Valor Depositado</th>
-                                                <th>Ano Lectivo</th>
-                                                <th>Tipo de Envio</th>
-                                                <th>Comprovativo</th>
-                                                <th width="100px">Mais Detalhes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="pagamento in pagamentos.data" :key="pagamento.Codigo">
-                                                <td>{{ pagamento.preinscricao.Nome_Completo }}</td>
-                                                <td>{{ pagamento.Data }}</td>
-                                                <td>{{ formatValor(pagamento.valor_depositado) }}</td>
-                                                <td>{{ pagamento.anolectivo.Designacao }}</td>
-                                                <td class="text-danger">{{ pagamento.canal.designacao }}</td>
-                                                <td>
-                                                    <a class="btn-sm btn-primary" :href="'https://mutue.ao/storage/documentos/'+pagamento.nome_documento" target="_blank">Visualizar</a>
-                                                </td>
-                                                <td>
-                                                    <a @click="detalhe_pagamento(pagamento.Codigo)"
-                                                        class="btn-sm btn-primary">Mais detalhe <i
-                                                            class="fas fa-eye"></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="card-footer">
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                                    <thead>
+                                        <tr>
+                                            <th>Estudante</th>
+                                            <th>Data Pagamento</th>
+                                            <th>Valor Depositado</th>
+                                            <th>Ano Lectivo</th>
+                                            <th>Tipo de Envio</th>
+                                            <th>Comprovativo</th>
+                                            <th width="100px">Mais Detalhes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="pagamento in pagamentos.data" :key="pagamento.Codigo">
+                                            <td>{{ pagamento.preinscricao.Nome_Completo }}</td>
+                                            <td>{{ pagamento.Data }}</td>
+                                            <td>{{ formatValor(pagamento.valor_depositado) }}</td>
+                                            <td>{{ pagamento.anolectivo.Designacao }}</td>
+                                            <td class="text-danger">{{ pagamento.canal.designacao }}</td>
+                                            <td>
+                                                <a class="btn-sm btn-primary" :href="'https://mutue.ao/storage/documentos/'+pagamento.nome_documento" target="_blank">Visualizar</a>
+                                            </td>
+                                            <td>
+                                                <a @click="detalhe_pagamento(pagamento.Codigo)"
+                                                    class="btn-sm btn-primary" title="Mais detalhe "><i
+                                                        class="fas fa-eye"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -102,7 +92,7 @@
                     </div>
                     <div class="modal-body">
 
-                        <table class="table">
+                        <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                             <tbody>
                                 <tr>
                                     <th colspan="6" class="bg-light">Dados do Estudante</th>

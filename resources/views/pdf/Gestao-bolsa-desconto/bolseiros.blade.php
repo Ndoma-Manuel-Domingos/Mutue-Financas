@@ -94,39 +94,58 @@
 
     <table class="table table-stripeds" style="">
         <thead>
+        
             <tr style="background-color: #3F51B5;color: #ffffff">
-                <th style="text-align: center;padding: 4px 0" width="150px">Codigo</th>
-                <th style="text-align: center;padding: 4px 0">Matricula</th>
-                <th style="text-align: center;padding: 4px 0">Nome</th>
-                <th style="text-align: center;padding: 4px 0">Curso</th>
-                <th style="text-align: center;padding: 4px 0">Tipo Bolsa</th>
-                <th style="text-align: center;padding: 4px 0">Desconto</th>
-                <th style="text-align: center;padding: 4px 0">Estado</th>
-                <th style="text-align: center;padding: 4px 0">Semestre</th>
+                <th style="text-align: center;padding: 4px 2px" colspan="8">LISTAGEM DE ESTUANTES BOLSEIROS</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" colspan="3">TOTAL REGISTROS</th>
+                <th style="text-align: left;padding: 4px 2px" colspan="5">{{ count($bolseiros) }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" colspan="3">ANO LECTIVO</th>
+                <th style="text-align: left;padding: 4px 2px" colspan="5">{{ $ano ? $ano->Designacao : "TODOS"  }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" colspan="3">CURSO</th>
+                <th style="text-align: left;padding: 4px 2px" colspan="5">{{ $curso ? $curso->Designacao : "TODOS"  }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" colspan="3">TIPO BOLSA</th>
+                <th style="text-align: left;padding: 4px 2px" colspan="5">{{ $bolsa ? $bolsa->designacao : "TODOS"  }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" colspan="3">SEMESTRE</th>
+                <th style="text-align: left;padding: 4px 2px" colspan="5">{{ $semestre ? $semestre->Designacao : "TODOS" }}</th>
+            </tr>
+            
+            <tr style="background-color: #3F51B5;color: #ffffff">
+                <th style="text-align: left;padding: 4px 2px" width="150px">Codigo</th>
+                <th style="text-align: left;padding: 4px 2px">Matricula</th>
+                <th style="text-align: left;padding: 4px 2px">Nome</th>
+                <th style="text-align: left;padding: 4px 2px">Curso</th>
+                <th style="text-align: left;padding: 4px 2px">Tipo Bolsa</th>
+                <th style="text-align: left;padding: 4px 2px">Desconto</th>
+                <th style="text-align: left;padding: 4px 2px">Estado</th>
+                <th style="text-align: left;padding: 4px 2px">Semestre</th>
             </tr>
         </thead>
-        @php
-            $contador = 0;
-        @endphp
         <tbody>
             @foreach ($bolseiros as $item)
-                @php
-                    $contador++;
-                @endphp
                 <tr>
-                    <td style="padding: 5px;text-align: center">{{ $item->codigo}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->matricula}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->nome}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->curso }}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->tipobolsa}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->desconto}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->status}}</td>
-                    <td style="padding: 5px;text-align: center">{{ $item->semestre}}</td>
-
-
-
-
-                    </td>
+                    <td style="padding: 5px;text-align: left">{{ $item->codigo}}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->matricula}}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->nome}}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->curso }}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->tipobolsa}}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->desconto}}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->status == 0 ? 'ACTIVO' : 'DESACTIVO' }}</td>
+                    <td style="padding: 5px;text-align: left">{{ $item->semestre == 1 ? 'I-SEMESTRE' : ($item->semestre == 2 ? 'II-SEMESTRE' : 'TODOS' )}}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -17,31 +17,31 @@
             <form @submit.prevent="save" id="form_talao">
               <div class="form-group">
                 <label for="">Matricula</label>
-                <input type="text" v-model="form.matricula" class="form-control" :class="{'active': form.errors.matricula}">
+                <input type="text" v-model="form.matricula" class="form-control form-control-sm " :class="{'active': form.errors.matricula}">
                 <span v-if="form.errors.matricula" class="text-danger error">{{ form.errors.matricula }}</span>
               </div>
 
               <div class="form-group">
                 <label for="">Nº Operação 1</label>
-                <input type="text" class="form-control" v-model="form.operacao1" :class="{'active': form.errors.operacao1}">
+                <input type="text" class="form-control form-control-sm " v-model="form.operacao1" :class="{'active': form.errors.operacao1}">
                 <span v-if="form.errors.operacao1" class="text-danger error">{{ form.errors.operacao1 }}</span>
               </div>
 
               <div class="form-group">
                 <label for="">Nº Operação 2</label>
-                <input type="text" class="form-control" v-model="form.operacao2" :class="{'active': form.errors.operacao2}">
+                <input type="text" class="form-control form-control-sm " v-model="form.operacao2" :class="{'active': form.errors.operacao2}">
                 <span v-if="form.errors.operacao2" class="text-danger error">{{ form.errors.operacao2 }}</span>
               </div>
 
               <div class="form-group">
                 <label for="">Valor Depositado</label>
-                <input type="text" class="form-control" v-model="form.valor" :class="{'active': form.errors.valor}">
+                <input type="text" class="form-control form-control-sm " v-model="form.valor" :class="{'active': form.errors.valor}">
                 <span v-if="form.errors.valor" class="text-danger error">{{ form.errors.valor }}</span>
               </div>
 
               <div class="form-group">
                 <label for="">Descrição</label>
-                <textarea type="text" class="form-control" v-model="form.descricao" :class="{'active': form.errors.descricao}"></textarea>
+                <textarea type="text" class="form-control form-control-sm " v-model="form.descricao" :class="{'active': form.errors.descricao}"></textarea>
                 <span v-if="form.errors.descricao" class="text-danger error">{{ form.errors.descricao }}</span>
               </div>
 
@@ -49,7 +49,7 @@
                 <div class="col-12 col md 6">
                   <div class="form-group">
                     <label for="">Comprovativo</label>
-                    <input type="file" accept="image/*" class="form-control" @input="previewImage($event)" >
+                    <input type="file" accept="image/*" class="form-control form-control-sm " @input="previewImage($event)" >
                   </div>
                 </div>
 

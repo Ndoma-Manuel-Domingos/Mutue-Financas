@@ -32,8 +32,8 @@ class InstituicaoSemRenunciaController extends Controller
             $query->orWhere("sigla", "like", "%{$value}%");
         })
         ->where('tipo_instituicao', 1)
-        ->orderBy('codigo', 'desc')
-        ->paginate(5)
+        ->orderBy('Instituicao', 'asc')
+        ->paginate(20)
         ->withQueryString();
         
         $data['tipo_bolsa'] = Bolsa::get();

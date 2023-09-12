@@ -27,14 +27,14 @@
 
                                 <div class="card-tools">
                                     <div class="input-group input-group-md" style="width: 300px">
-                                        <input type="text" v-model="search" class="form-control float-right" placeholder="Search" />
+                                        <input type="text" v-model="search" class="form-control form-control-sm  float-right" placeholder="Search" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                         <thead>
                                             <tr>
                                                 <th>Codigo</th>
@@ -112,13 +112,13 @@
                         <form id="salvarTipoBolsa" class="row">
                             <div class="form-group col-12 col-md-12">
                                 <label for="recipient-name" class="col-form-label">Designação</label>
-                                <input type="text" itemid="designacao" class="form-control mb-1" id="" v-model="form.designacao">
+                                <input type="text" itemid="designacao" class="form-control form-control-sm  mb-1" id="" v-model="form.designacao">
                                 <span class="text-danger d-block">{{ form.errors.designacao }}</span>
                             </div>
 
                             <!-- <div class="form-group col-12 col-md-12" v-show="compo == true">
                                 <label for="recipient-name" class="col-form-label">Tipo Instituição</label>
-                                <select class="form-control form-control" id="tipo_instituicao_id" v-model="tipo_instituicao_id">
+                                <select class="form-control form-control-sm  form-control" id="tipo_instituicao_id" v-model="tipo_instituicao_id">
                                     <option v-for="tipo in tipo_instituicao" :value="tipo.codigo" :key="tipo.codigo">{{ tipo.designacao }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.tipo_instituicao }}</span>
@@ -126,7 +126,7 @@
 
                             <!-- <div class="form-group col-12 col-md-12" v-show="compo == true">
                                 <label for="recipient-name" class="col-form-label">Instituição</label>
-                                <select class="form-control form-control" id="instituicao_id" v-model="form.instituicao_id">
+                                <select class="form-control form-control-sm  form-control" id="instituicao_id" v-model="form.instituicao_id">
                                     <option v-for="instituicao in instituicoes" :value="instituicao.codigo" :key="instituicao.codigo">{{ instituicao.Instituicao }}</option>
                                 </select>
                                 <span class="text-danger d-block">{{ form.errors.instituicao_id }}</span>
@@ -153,7 +153,7 @@
 
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                                 <thead>
                                     <tr>
                                         <th>Codigo</th>

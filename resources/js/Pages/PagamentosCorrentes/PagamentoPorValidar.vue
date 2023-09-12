@@ -29,7 +29,7 @@
                         <select
                           v-model="prestacao"
                           @change="search"
-                          class="form-control form-control"
+                          class="form-control form-control-sm  form-control"
                           placeholder="Type your keywords here"
                         >
                           <option value="">TODAS</option>
@@ -48,7 +48,7 @@
                         <select
                           v-model="forma_pagamento"
                           @change="search"
-                          class="form-control"
+                          class="form-control form-control-sm "
                           placeholder="Selecione a Forma de Pagamento"
                         >
                           <option value="">TODAS</option>
@@ -61,14 +61,14 @@
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Inicio:</label>
-                      <input type="date" v-model="data_inicio" @keyup.enter="search" class="form-control"/>
+                      <input type="date" v-model="data_inicio" @keyup.enter="search" class="form-control form-control-sm "/>
                     </div>
                   </div>
 
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Final:</label>
-                      <input type="date" v-model="data_final" @keyup.enter="search"  class="form-control"/>
+                      <input type="date" v-model="data_final" @keyup.enter="search"  class="form-control form-control-sm "/>
                     </div>
                   </div>
                 </div>
@@ -90,7 +90,7 @@
 
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
                         <th>Matricula</th>

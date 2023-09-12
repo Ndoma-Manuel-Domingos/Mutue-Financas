@@ -19,7 +19,7 @@
                     <div class="card-header row">
 
                         <h6 class="col-10"> Ano Lectivo:  <span class="badge badge-pill badge-info">{{ ano_lectivo }}</span> </h6>
-                        <select type="text" class="form-control col-2" v-model="ano_lectivo_selecionado" @change="search">
+                        <select type="text" class="form-control form-control-sm  col-2" v-model="ano_lectivo_selecionado" @change="search">
                             <option :value="ano.Codigo" v-for="ano in anos_lectivos" :key="ano.Codigo">
                                 {{ ano.Designacao }}
                             </option>

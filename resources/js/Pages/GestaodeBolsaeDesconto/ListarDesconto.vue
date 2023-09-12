@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-uppercase">Tipo de Descontos</h1>
+                        <h4 class="m-0 text-uppercase">Tipo de Descontos</h4>
                     </div>
                     <div class="col-sm-6">
                         <a href="" class="btn btn-success btn-sm float-sm-right"><i class="fas fa-file-excel"></i>
@@ -26,8 +26,8 @@
                             <div class="card-header">
                                 <button type="button" class="btn-sm btn-primary" data-toggle="modal" data-target="#modalTipoDesconto">Novo Tipo de Desconto </button>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-hover text-nowrap">
+                            <div class="card-body">
+                                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
 
                                     <thead>
                                         <tr>
@@ -42,9 +42,9 @@
                                     <tbody>
                                         
                                         <tr>
-                                            <td><input type="text" class="form-control" placeholder="Codigo" v-model="codigo_busca"></td>
-                                            <td><input type="text" class="form-control" placeholder="Designação" v-model="designcao_busca"></td>
-                                            <td><input type="text" class="form-control" placeholder="Valor do desconto" v-model="valor_busca"></td>
+                                            <td><input type="text" class="form-control form-control-sm " placeholder="Codigo" v-model="codigo_busca"></td>
+                                            <td><input type="text" class="form-control form-control-sm " placeholder="Designação" v-model="designcao_busca"></td>
+                                            <td><input type="text" class="form-control form-control-sm " placeholder="Valor do desconto" v-model="valor_busca"></td>
                                         </tr>
                                     
                                         <tr v-for="item in listarDescontos.data"
@@ -96,13 +96,13 @@
                         <form id="salvarInstuicao" class="row">
                             <div class="form-group col-12 col-md-4">
                                 <label for="recipient-name" class="col-form-label">Designação</label>
-                                <input v-model="form.designacao" type="text" class="form-control" placeholder="Informe a Designação" :class="{ 'is-invalid': form.errors.designacao }">
+                                <input v-model="form.designacao" type="text" class="form-control form-control-sm " placeholder="Informe a Designação" :class="{ 'is-invalid': form.errors.designacao }">
                                 <span class="text-danger d-block">{{ form.errors.designacao }}</span>
                             </div>
 
                             <div class="form-group col-12 col-md-4">
                                 <label for="recipient-name" class="col-form-label">Valor do Desconto</label>
-                                <input v-model="form.valor_desconto" type="text" class="form-control" :class="{ 'is-invalid': form.errors.valor_desconto }">
+                                <input v-model="form.valor_desconto" type="text" class="form-control form-control-sm " :class="{ 'is-invalid': form.errors.valor_desconto }">
                                 <span class="text-danger d-block">{{ form.errors.valor_desconto }}</span>
                             </div>
 
@@ -110,7 +110,7 @@
                             <div class="form-group col-12 col-md-4">
                                 <label for="" class="col-form-label">Estado</label>
                                 <div class="input-group input-group">
-                                    <select v-model="form.codigo_status" class="form-control" :class="{ 'is-invalid': form.errors.codigo_status }">
+                                    <select v-model="form.codigo_status" class="form-control form-control-sm " :class="{ 'is-invalid': form.errors.codigo_status }">
                                         <option value="1">Activo</option>
                                         <option value="2">Inactivo</option>
                                     </select>

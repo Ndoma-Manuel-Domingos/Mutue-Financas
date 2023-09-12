@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-uppercase">Serviços (Preçarios)</h1>
+            <h4 class="m-0 text-uppercase">Serviços (Preçarios)</h4>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -38,7 +38,7 @@
                     <input
                       v-model="search"
                       type="text"
-                      class="form-control float-right"
+                      class="form-control form-control-sm  float-right"
                       placeholder="Pesquisar"
                     />
                     <div class="input-group-append">
@@ -51,17 +51,18 @@
               </div>
 
               <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table class="table table-hover text-nowrap">
+                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                     <thead>
                       <tr>
+                        <th class="text-left" width="50px">Nº</th>
                         <th class="text-right" width="700px">Descrição</th>
                         <th class="text-left">Preço</th>
                         <th width="100px">Acções</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="item in servicos.data" :key="item.Codigo">
+                      <tr v-for="(item, index) in servicos.data" :key="item.Codigo">
+                        <td class="text-left">{{ index + 1 }}</td>
                         <td class="text-right">{{ item.Descricao }}</td>
                         <td class="text-left">AOA {{ item.Preco }}</td>
                         <td>
@@ -73,7 +74,6 @@
                       </tr>
                     </tbody>
                   </table>
-                </div>
               </div>
 
               <div class="card-footer row">
@@ -82,7 +82,7 @@
                     <div class="col-12 col-md-3">
                       Por Pagina: 
                     </div>
-                    <select class="form-control col-12 col-md-3" v-model="porPagina">
+                    <select class="form-control form-control-sm  col-12 col-md-3" v-model="porPagina">
                       <option value="" selected disabled>Por Pagina</option>
                       <option value="5">5</option>
                       <option value="10">10</option>
@@ -132,19 +132,19 @@
             <form @submit.prevent="submit" id="formTipoServico">
               <div class="form-group mb-3">
                 <label for="" class="text-secondary">Descrição</label>
-                <input v-model="form.descricao" type="text" class="form-control mb-1" :class="{'is-invalid': form.errors.descricao }" id="">
+                <input v-model="form.descricao" type="text" class="form-control form-control-sm  mb-1" :class="{'is-invalid': form.errors.descricao }" id="">
                 <span class="text-danger d-block">{{ form.errors.descricao }}</span>
               </div>
 
               <div class="form-group mb-3">
                 <label for="" class="text-secondary">Preço</label>
-                <input v-model="form.preco" type="text" class="form-control" :class="{'is-invalid': form.errors.preco }" id="">
+                <input v-model="form.preco" type="text" class="form-control form-control-sm " :class="{'is-invalid': form.errors.preco }" id="">
                 <span class="text-danger d-block">{{ form.errors.preco }}</span>
               </div>
 
               <div class="form-group mb-3">
                 <label for="" class="text-secondary">Periodicidade</label>
-                <select v-model="form.tipoServico" :class="{'is-invalid': form.errors.tipoServico }" class="form-control">
+                <select v-model="form.tipoServico" :class="{'is-invalid': form.errors.tipoServico }" class="form-control form-control-sm ">
                   <option value="Normal">Normal</option>
                   <option value="Semestral">Semestral</option>
                   <option value="ANUAL">Anual</option>
