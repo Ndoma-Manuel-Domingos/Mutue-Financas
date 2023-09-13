@@ -134,7 +134,7 @@
 
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label>Período</label>
+                                            <label>Período da Bolsa</label>
                                             <div class="input-group input-group">
                                                 <select v-model="Semestre" class="form-control form-control-sm ">
                                                     <option value="">TODOS</option>
@@ -164,7 +164,7 @@
                                             <th class="text-center">Nome</th>
                                             <th>Curso</th>
                                             <th>Tipo de Bolsa</th>
-                                            <th>Desconto</th>
+                                            <th>Percentagem</th>
                                             <th>Estado</th>
                                             <th>Semestre</th>
                                             <th style="width: 150px">Acções</th>
@@ -203,7 +203,7 @@
                                             <td class="text-center"><a :href="route('mf.estudante-visualizar-perfil', item.codigo_matricula)">{{ item.nome }}</a></td>
                                             <td class="text-center">{{ item.curso }}</td>
                                             <td class="text-center">{{ item.tipobolsa }}</td>
-                                            <td class="text-center">{{ item.desconto }}</td>
+                                            <td class="text-center">{{ item.desconto }} %</td>
                                             <td v-if="item.status ==0" class="text-center">
                                                 <span class="text-success">ACTIVO</span>
                                             </td>
@@ -335,14 +335,14 @@
 
                         <tr>
                             <th>Tipo De Bolsa</th>
-                            <th>Desconto</th>
+                            <th>Percentagem</th>
                             <th>Data de inicio</th>
                             <th>Data De Fim</th>
                         </tr>
 
                         <tr>
                             <td>{{ bolsa.designacao }}</td>
-                            <td>{{ bolsa.desconto }}</td>
+                            <td>{{ bolsa.desconto }} </td>
                             <td>{{ bolsa.data_inicio_bolsa }}</td>
                             <td>{{ bolsa.data_fim_bolsa }}</td>
                         </tr>

@@ -257,7 +257,7 @@
                       }"
                     >
                       <i class="fas fa-building nav-icon"></i>
-                      <p>Com Renúncias</p>
+                      <p>Com Despesa</p>
                     </Link>
                   </li>
                   <li class="nav-item">
@@ -271,7 +271,7 @@
                       }"
                     >
                       <i class="far fa-building nav-icon"></i>
-                      <p>Sem Renúncias</p>
+                      <p>Com Receita</p>
                     </Link>
                   </li>
     

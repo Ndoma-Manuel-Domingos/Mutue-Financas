@@ -53,7 +53,6 @@
                       </div>
                     </div>
                   </div>
-    
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Inicio:</label>
@@ -64,7 +63,6 @@
                       />
                     </div>
                   </div>
-    
                   <div class="col-12 col-md-3">
                     <div class="form-group">
                       <label>Data Final:</label>
@@ -80,11 +78,11 @@
             </div>
           </div>
         </div>
-        
+
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card">
-    
+
               <div class="card-body">
                 <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
                   <thead>
@@ -116,7 +114,6 @@
                   </tbody>
                 </table>
               </div>
-    
               <div class="card-footer">
                 <Link href="" class="text-secondary">
                   TOTAL REGISTROS: {{ saldos.total }}
@@ -128,7 +125,6 @@
                 />
               </div>
             </div>
-          
           </div>
         </div>
       </div>
@@ -164,7 +160,7 @@
                   <tr>
                     <td colspan="1" class="text-left">Anexo:</td>
                     <td colspan="5">
-                      <strong>{{ detalhe.url_anexo ?? "sem anexo" }}</strong>
+                      <strong>{{ detalhe.url_anexo ?? "Sem anexo" }}</strong>
                     </td>
                   </tr>
                 </tbody>

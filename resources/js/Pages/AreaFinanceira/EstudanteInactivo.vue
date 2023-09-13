@@ -34,7 +34,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label>Ano De Ingresso Fim</label>
@@ -69,7 +69,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-12 col-md-2">
                                         <div class="form-group">
                                             <label>Cursos</label>
@@ -128,10 +128,10 @@
                                 <Link href="" class="text-secondary">
                                     TOTAL REGISTROS: {{ estudantes_total }}
                                 </Link>
-                                <Paginacao 
-                                    :links="estudantes.links" 
+                                <Paginacao
+                                    :links="estudantes.links"
                                     :prev="estudantes.prev_page_url"
-                                    :next="estudantes.next_page_url" 
+                                    :next="estudantes.next_page_url"
                                 />
                             </div>
                         </div>
@@ -147,7 +147,7 @@
 <script>
     import { Link } from '@inertiajs/inertia-vue3';
     import Paginacao from '../../Shared/Paginacao.vue';
-    
+
     export default{
         props: [
             "anolectivos",
@@ -157,63 +157,74 @@
             "estudantes_total",
             "graus",
         ],
-        components: { 
+        components: {
             Paginacao,
-            Link
+            Link,
         },
         data() {
             return {
                 ano_inicio: 21,
                 ano_final: 21,
-                
                 grau: "",
                 faculdade: "",
                 curso: "",
-                
-                params: {},
+                params: {
+
+                },
             }
         },
-                
+
+        created(){
+
+   console.log(this.estudantes)
+
+        },
+
         watch: {
             options: function(val) {
-              this.params.page = val.page;
-              this.params.page_size = val.itemsPerPage;
-              if (val.sortBy.length != 0) {
-                this.params.sort_by = val.sortBy[0];
-                this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
-              } else {
-                this.params.sort_by = null;
-                this.params.order_by = null;
-              }
-              this.updateData();
-            },
-            
+            this.params.page = val.page;
+            this.params.page_size = val.itemsPerPage;
+            if (val.sortBy.length != 0) {
+              this.params.sort_by = val.sortBy[0];
+              this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
+            } else {
+              this.params.sort_by = null;
+              this.params.order_by = null;
+            }
+            this.updateData();
+          },
+
             ano_inicio: function(val) {
               this.params.ano_inicio = val;
               this.updateData();
             },
-            
+
             ano_final: function(val) {
               this.params.ano_final = val;
               this.updateData();
             },
-            
+
             grau: function(val) {
               this.params.grau = val;
               this.updateData();
             },
-            
+
             faculdade: function(val) {
               this.params.faculdade = val;
               this.updateData();
             },
-            
+
             curso: function(val) {
+              this.params.curso = val;
+              this.updateData();
+            },
+
+            page: function(val) {
               this.params.curso = val;
               this.updateData();
             }
         },
-        
+
         methods: {
             updateData() {
                 this.$Progress.start();
@@ -225,15 +236,15 @@
                     }
               });
             },
-       
+
             imprimirPDF() {
                 window.open("/estudantes/inactivos/pdf?ano_inicio="+this.ano_inicio+"&ano_final="+this.ano_final+"&grau="+this.grau+"&faculdade="+this.faculdade+"&curso="+this.curso, "_blank");
             },
-            
+
             imprimirEXCEL() {
                 window.open("/estudantes/inactivos/excel?ano_inicio="+this.ano_inicio+"&ano_final="+this.ano_final+"&grau="+this.grau+"&faculdade="+this.faculdade+"&curso="+this.curso, "_blank");
             }
         },
-    
+
     }
 </script>

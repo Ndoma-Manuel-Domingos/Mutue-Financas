@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\EstudanteDevedorExport;
 use App\Exports\EstudantePropinaPagaExport;
 use App\Exports\PagamentoPropinasPorMesExport;
+use App\Models\AlunoAdmissao;
 use App\Models\AnoLectivo;
 use App\Models\Bolseiro;
 use App\Models\Curso;
@@ -15,6 +16,7 @@ use App\Models\Matricula;
 use App\Models\Mes;
 use App\Models\MesTemp;
 use App\Models\Pagamento;
+use App\Models\PreInscricao;
 use App\Models\TipoServico;
 use App\Models\Turno;
 use Illuminate\Http\Request;
@@ -34,7 +36,7 @@ class ControloPagamentoPropinaController extends Controller
     // estudantes com propinas pagas
     public function estudantePropinaPaga(Request $request)
     {
-
+             
         $ano = AnoLectivo::where('estado', 'Activo')->first();
        
         $anoSelecionado = $request->searchAnoLectivo;
@@ -185,6 +187,19 @@ class ControloPagamentoPropinaController extends Controller
         $data["ano_lectivo_activo"] = $ano;
 
         $data['requests'] = $request->all('searchFaculdade', 'searchAnoLectivo', 'searchMes', 'searchCurso', 'searchTurno');
+
+        if (isset($matricula)) {
+            $data['bolseiro'] = Bolseiro::where('codigo_matricula', $matricula->Codigo)
+            
+            ->where('codigo_anoLectivo', $ano->Codigo)
+            ->where('status', 0)
+            ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+            ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
+            ->first();
+        } else {
+            // Lida com a situação em que $matricula não está definida
+            // Isso pode incluir a definição de um valor padrão ou a exibição de uma mensagem de erro.
+        }
 
         return Inertia::render('AreaFinanceira/EstudantePropinasPaga', $data);
     }
@@ -487,10 +502,13 @@ class ControloPagamentoPropinaController extends Controller
     // estudantes devedores
     public function estudanteDevedores(Request $request)
     {
+      
+        $admissao = AlunoAdmissao::where('Codigo', $request->Codigo_Aluno)->first();
         $searchFaculdade = $request->searchFaculdade ?? "";
         $searchCurso = $request->searchCurso ?? "";
         $searchTurno = $request->searchTurno ?? ""; 
         $searchMes = $request->searchMes ?? "";
+      
         
         $ano = AnoLectivo::where('estado', 'Activo')->first();
 
@@ -513,7 +531,17 @@ class ControloPagamentoPropinaController extends Controller
                 ->leftJoin('factura_items as fi', 'fi.CodigoFactura', '=', 'f.Codigo')
                 ->where('fi.estado', 1)
                 ->where('fi.mes_temp_id', $searchMes);
+
+                $data['bolseiro'] = Bolseiro::where('codigo_matricula')
+                ->where('status', 0)
+                ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+                ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
+                ->first();
+                
         })
+
+       
+
         ->whereNotIn('Codigo', function ($query) use($anoSelecionado) {
             $query->select('codigo_matricula')
                 ->from('tb_bolseiros')
@@ -539,49 +567,12 @@ class ControloPagamentoPropinaController extends Controller
         ->withQueryString();
            
             
-        // $data['facturas'] = Matricula::select('tb_matriculas.Codigo as matricula', 'tb_preinscricao.Nome_Completo as nome', 'tb_cursos.Designacao as curso', 'tp2.Designacao as turno', 'tp.id as polo_id')
-        // ->join('tb_admissao', 'tb_admissao.codigo', '=', 'tb_matriculas.Codigo_Aluno')
-        // ->join('tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        // ->join('polos as tp', 'tb_preinscricao.polo_id', '=', 'tp.id')
-        // ->join('tb_cursos', 'tb_cursos.Codigo', '=', 'tb_matriculas.Codigo_Curso')
-        // ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
-        // ->whereRaw('tb_matriculas.Codigo IN (SELECT tgca.codigo_matricula FROM tb_grade_curricular_aluno tgca WHERE tgca.codigo_ano_lectivo = ? AND tgca.Codigo_Status_Grade_Curricular IN (2, 3))', [$anoSelecionado])
-        // ->whereNotIn('tb_matriculas.Codigo', function ($query) use($searchMes) {
-        //     $query->select('tm_pp.Codigo')
-        //         ->from('tb_matriculas as tm_pp')
-        //         ->join('tb_admissao as tb_admissao', 'tb_admissao.codigo', '=', 'tm_pp.Codigo_Aluno')
-        //         ->join('tb_preinscricao as tb_preinscricao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
-        //         ->join('tb_cursos as tb_cursos', 'tb_cursos.Codigo', '=', 'tm_pp.Codigo_Curso')
-        //         ->join('tb_periodos as tp2', 'tp2.Codigo', '=', 'tb_preinscricao.Codigo_Turno')
-        //         ->join('factura as f', 'f.CodigoMatricula', '=', 'tm_pp.Codigo')
-        //         ->leftJoin('factura_items as fi', 'fi.CodigoFactura', '=', 'f.Codigo')
-        //         ->where('fi.estado', 1)
-        //         ->where('fi.mes_temp_id', $searchMes);
-        // })
-        // ->where('tb_cursos.tipo_candidatura', 1)
-        // ->when($searchTurno, function ($query) use ($searchTurno) {
-        //     $query->where('tb_preinscricao.Codigo_Turno', $searchTurno);
-        // })
-        // ->when($searchCurso, function ($query) use ($searchCurso) {
-        //     $query->where('tb_cursos.Codigo', $searchCurso);
-        // })
-        // ->when($searchFaculdade, function ($query) use ($searchFaculdade) {
-        //     $query->where('tb_cursos.faculdade_id', $searchFaculdade);
-        // })
-        // ->whereNotIn('tb_matriculas.Codigo', function ($query) use($anoSelecionado) {
-        //     $query->select('codigo_matricula')
-        //         ->from('tb_bolseiros')
-        //         ->where('codigo_anoLectivo', $anoSelecionado)
-        //         ->where('status', 0)
-        //         ->whereIn('desconto', [100, 0]);
-        // })
-        // ->orderBy('tb_preinscricao.Nome_Completo', 'ASC')
-        // ->paginate(20)
-        // ->withQueryString();
-
+       
         $data["anolectivos"] = AnoLectivo::orderBy('ordem', 'asc')->get();
         $data["turnos"] = Turno::where('status', 1)->get();
         $data["faculdades"] = Faculdade::where('estado', 1)->get();
+
+           
 
         $data["mesTemps"] = MesTemp::when($anoSelecionado, function ($query, $value) {
             $query->where('ano_lectivo', $value);
@@ -596,8 +587,30 @@ class ControloPagamentoPropinaController extends Controller
 
         $data["filters"] = $request->all("searchAnoLectivo", "searchTurno", "searchMes", "searchCurso", "searchFaculdade");
         $data["ano_lectivo_activo"] = $ano;
+        
 
-        return Inertia::render('AreaFinanceira/EstudanteDevedores', $data);
+              
+        if (isset($matricula)) {
+            $data['bolseiro'] = Bolseiro::where('codigo_matricula', $matricula->Codigo)
+            
+            ->where('codigo_anoLectivo', $ano->Codigo)
+            ->where('status', 0)
+            ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+            ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
+            ->first();
+        } else {
+            // Lida com a situação em que $matricula não está definida
+            // Isso pode incluir a definição de um valor padrão ou a exibição de uma mensagem de erro.
+        }
+
+        // $data['bolseiro'] = Bolseiro::where('codigo_matricula',$matricula->Codigo)
+        //     ->where('codigo_anoLectivo', $ano->Codigo)
+        //     ->where('status', 0)
+        //     ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+        //     ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
+        //     ->first();
+
+        return Inertia::render('AreaFinanceira/EstudanteDevedores',$data);
     }
 
     public function ImprimirPDFestudanteDevedores(Request $request)
@@ -658,6 +671,8 @@ class ControloPagamentoPropinaController extends Controller
         $data['turno'] = Turno::find($request->searchTurno);
         $data['mes'] = MesTemp::find($request->searchMes);
         $data['ano'] = AnoLectivo::find($anoSelecionado);
+
+
             
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('pdf.estudantes.estudante-devedores', $data);
@@ -671,4 +686,18 @@ class ControloPagamentoPropinaController extends Controller
         return Excel::download(new EstudanteDevedorExport($request), 'estudante-devedores.xlsx');
     }
 
+
+    public function getDescricaoTiposAlunos()
+    {
+
+        $data['descricao_tipo1'] = DB::table('tb_tipo_aluno')->select('designacao', 'descricao', 'status')->where('id', 1)->where('status', 1)->first();
+
+        $data['descricao_tipo2'] = DB::table('tb_tipo_aluno')->select('designacao', 'descricao', 'status')->where('id', 2)->where('status', 1)->first();
+
+        $data['descricao_tipo3'] = DB::table('tb_tipo_aluno')->select('designacao', 'descricao', 'status')->where('id', 3)->where('status', 1)->first();
+
+        $data['descricao_tipo4'] = DB::table('tb_tipo_aluno')->select('designacao', 'descricao', 'status')->where('id', 4)->where('status', 1)->first();
+
+        return response()->json($data);
+    }
 }

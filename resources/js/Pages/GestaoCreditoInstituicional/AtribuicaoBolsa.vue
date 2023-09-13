@@ -166,7 +166,7 @@
 
                                 <div class="col-12 col-md-2">
                                     <div class="form-group">
-                                        <label for="" class="text-secondary">Período</label>
+                                        <label for="" class="text-secondary">Período de Bolsa</label>
                                         <div class="input-group input-group">
                                             <select v-model="form.semestre" disabled class="form-control form-control-sm  form-control"
                                                 placeholder="Type your keywords here" id="semestre"

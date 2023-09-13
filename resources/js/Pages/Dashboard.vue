@@ -24,7 +24,7 @@
                 ><i class="fas fa-users"></i
               ></span>
               <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break">Estudantes ACTIVOS</span>
+                <span class="info-box-text text-uppercase word-break"> <br>Estudantes ACTIVOS</span>
                 <span class="info-box-number">{{ total_estudantes }}</span>
 
                 <div class="progress">
@@ -47,7 +47,7 @@
                 ><i class="fas fa-users"></i
               ></span>
               <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break">BOLSEIROS</span>
+                <span class="info-box-text text-uppercase word-break"> TOTAL ESTUDANTES COM CRÉDITO <br> EDUCACIONAL</span>
                 <span class="info-box-number">{{ bolseiros }}</span>
 
                 <div class="progress">
@@ -59,8 +59,8 @@
             </div>
             <!-- /.info-box -->
           </div>
-          <!-- /.col --> 
-          
+          <!-- /.col -->
+
           <div class="col-md-3 col-sm-6 col-12">
             <div
               class="info-box"
@@ -70,11 +70,11 @@
               <span class="info-box-icon"><i class="fas fa-users"></i> </span>
               <div class="info-box-content">
                 <span class="info-box-text text-uppercase word-break"
-                  >BOLSEIROS COM RENUNCIA</span
+                  >ESTUDANTES COM CRÉDITO <br> EDUCACIONAL (Despesa)</span
                 >
                 <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
                 <span class="info-box-number">{{ bolseiros_com_renuncia }}</span>
-                
+
                 <div class="progress">
                   <div class="progress-bar" style="width: 70%"></div>
                 </div>
@@ -85,7 +85,7 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          
+
           <div class="col-md-3 col-sm-6 col-12">
             <div
               class="info-box"
@@ -95,12 +95,12 @@
               <span class="info-box-icon"><i class="fas fa-users"></i> </span>
               <div class="info-box-content">
                 <span class="info-box-text text-uppercase word-break"
-                  >BOLSEIROS SEM RENUNCIA</span
+                  >ESTUDANTES COM CRÉDITO <br> EDUCACIONAL (Receita)</span
                 >
                 <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
-                
+
                 <span class="info-box-number">{{ bolseiros_sem_renuncia }}</span>
-                
+
                 <div class="progress">
                   <div class="progress-bar" style="width: 70%"></div>
                 </div>
@@ -110,7 +110,7 @@
             </div>
             <!-- /.info-box -->
           </div>
-          
+
           <div class="col-md-3 col-sm-6 col-12">
             <div
               class="info-box"
@@ -120,12 +120,12 @@
               <span class="info-box-icon"><i class="fas fa-users"></i> </span>
               <div class="info-box-content">
                 <span class="info-box-text text-uppercase word-break"
-                  >ESTUDANTES MENSAL. PAGAS</span
+                  > <br> ESTUDANTES MENSAL. PAGAS</span
                 >
                 <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
-                
+
                 <span class="info-box-number">{{ estudante_propinas_pagas }}</span>
-                
+
                 <div class="progress">
                   <div class="progress-bar" style="width: 70%"></div>
                 </div>
@@ -136,7 +136,7 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          
+
           <!-- /.col -->
           <div class="col-md-3 col-sm-6 col-12">
             <div
@@ -146,7 +146,7 @@
               <span class="info-box-icon"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break">Estudantes Devedores</span>
+                <span class="info-box-text text-uppercase word-break"> <br> Estudantes Devedores</span>
                 <!-- <span class="info-box-number">{{ total_estudantes_devedores }}</span> -->
                 <span class="info-box-number">{{ total_estudantes_devedores }}</span>
 
@@ -160,8 +160,8 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          
-          
+
+
         </div>
 
         <div class="row">
@@ -217,8 +217,8 @@
                       </select>
                     </div>
                   </div>
-                  
-                  
+
+
                   <!-- <div class="col-12 col-md-3">
                     <div class="row">
                       <label
@@ -240,14 +240,14 @@
                       </select>
                     </div>
                   </div> -->
-                  
+
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-      
+
+
         <div class="row mt-2">
           <div class="col-12 col-md-8">
             <div class="card">
@@ -269,7 +269,7 @@
                 ></column-chart>
               </div>
               <div class="card-footer">
-                
+
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@
                 ></column-chart>
               </div>
               <div class="card-footer">
-                
+
               </div>
             </div>
           </div>
@@ -313,28 +313,27 @@ export default {
 
       utilizadores: "",
       estudante_propinas_pagas: "",
-      
+
       bolseiros: "",
       bolseiros_com_renuncia: "",
       bolseiros_sem_renuncia: "",
-      
+
       mesTemps: [],
       mes_temp_id: "",
-      
+
       total_estudantes: "",
       total_estudantes_devedores: "",
       ano_lectivo_selecionado: this.ano.Codigo,
 
       quantidade_estudantes: "100",
       estado_pagamentos: "0",
-      
+
       color:['#17a08c'],
 
       charts_turno: [],
       charts_meses: [],
 
       ano_lectivo: "",
-      
       selected: null,
       options: [
         { value: null, text: 'Please select some item' },
@@ -401,7 +400,7 @@ export default {
         this.mes_temp_id,
         this.estado_pagamentos
       );
-      // ************************************************************/  
+      // ************************************************************/
       this.carregar_grafico_estudantes_devedores(
         this.ano_lectivo_selecionado,
         this.mes_temp_id,
@@ -413,7 +412,7 @@ export default {
         this.estado_pagamentos
       );
     },
-    
+
     search_meses(){
       this.carregar_grafico_estudantes_devedores(
         this.ano_lectivo_selecionado,
@@ -439,7 +438,7 @@ export default {
         })
         .then((response) => {
           this.utilizadores = response.data.utilizadores;
-          
+
           this.estudante_propinas_pagas = response.data.estudante_propinas_pagas;
           this.total_estudantes = response.data.total_estudantes;
           this.total_estudantes_devedores = response.data.total_estudantes_devedores;
@@ -467,14 +466,14 @@ export default {
         .then((response) => {
           this.charts_meses = response.data.charts_meses;
           this.mesTemps = response.data.mesTemps;
-          
+
           this.$Progress.finish();
         })
         .catch((errors) => {
           this.$Progress.fail();
         });
     },
-        
+
     carregar_grafico_estudantes_devedores(index, mes_temp_id, estado) {
       this.$Progress.start();
       axios
@@ -487,7 +486,7 @@ export default {
         })
         .then((response) => {
           this.total_estudantes_devedores = response.data.total_estudantes_devedores;
-          
+
           this.$Progress.finish();
         })
         .catch((errors) => {
@@ -515,7 +514,7 @@ export default {
           this.$Progress.fail();
         });
     },
-    
+
     carregar_grafico_estudantes_bolseiros(index, mes_temp_id, estado) {
       this.$Progress.start();
       axios
@@ -527,7 +526,7 @@ export default {
           },
         })
         .then((response) => {
-          
+
           this.bolseiros = response.data.bolseiros;
           this.bolseiros_com_renuncia = response.data.bolseiros_com_renuncia;
           this.bolseiros_sem_renuncia = response.data.bolseiros_sem_renuncia;

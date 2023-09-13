@@ -118,6 +118,7 @@
                     <tr>
                       <th title="codigo do pagamentos">Codigo</th>
                       <th title="número da matricula do estudante">Matricula</th>
+                      <th title="número da matricula do estudante">Tipo de Estudante</th>
                       <th title="Nome do estudante">Nome</th>
                       <th title="faculdade que o estudante frequenta">Faculdade</th>
                       <th title="curso que o estudante frequenta">Curso</th>
@@ -132,7 +133,30 @@
                     <tr v-for="factura in facturas.data" :key="factura.matricula">
                       <td>{{ factura.CodigoPagamento }}</td>
                       <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.matricula }}</a></td>
+                      <tb>
+
+                        <div class="col s12 m6" v-if="bolseiro" style="float: right">
+                                                    <template v-if="bolseiro.desconto == 100">
+                                                        <b>{{ estudante_tipo4.descricao }}</b>
+                                                    </template>
+                                                    <template
+                                                        v-else-if="bolseiro.desconto < 100 && bolseiro.codigo_tipo_bolsa != 32">
+                                                        <span>{{ estudante_tipo3.designacao }} {{ estudante_tipo3.descricao
+                                                        }} </span>
+                                                    </template>
+                                                    <template
+                                                        v-else-if="bolseiro.desconto < 100 && bolseiro.codigo_tipo_bolsa == 32">
+                                                        <span style="font-size: 10">{{ estudante_tipo2.designacao }}{{
+                                                            estudante_tipo2.descricao}}</span>
+                                                    </template>
+                                                </div>
+                                                <div class="col s12 m6" v-else style="float: right">
+                                                    <span>{{ estudante_tipo1.designacao }} 
+                                                    </span>
+                                                </div>
+                      </tb>
                       <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.aluno }}</a></td>
+                     
                       <td>{{ factura.faculdade }}</td>
                       <td>{{ factura.curso }}</td>
                       <td>{{ factura.turno }}</td>
@@ -187,11 +211,24 @@
         searchCurso: "",
         searchTurno: "",
         valor_total_facturas:"",
+        estudante_tipo1: {},
+            estudante_tipo2: {},
+            estudante_tipo3: {},
+            estudante_tipo4: {},
+            bolseiro:"",
 
         params: {},
 
       }
+
+      
     },
+
+    mounted() {
+
+this.pegarDescricaoBolseiro();
+
+},
 
     watch: {
       options: function(val) {
@@ -229,6 +266,24 @@
     },
 
     methods: {
+
+      
+      pegarDescricaoBolseiro() {
+            axios
+                .get(`/estudante/pegar-descricao-bolseiro`)
+                .then((response) => {
+                    this.estudante_tipo1 = response.data.descricao_tipo1;
+                    this.estudante_tipo2 = response.data.descricao_tipo2;
+                    this.estudante_tipo3 = response.data.descricao_tipo3;
+                    this.estudante_tipo4 = response.data.descricao_tipo4;
+                })
+                .catch((error) => {
+                    console.error("Erro ao buscar dados do bolseiro:", error);
+                })
+                
+
+                },
+
       updateData() {
         this.$Progress.start();
         this.$inertia.get("/estudantes/propina-pagar", this.params, {

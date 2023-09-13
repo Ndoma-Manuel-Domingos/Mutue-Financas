@@ -346,11 +346,15 @@ class PagamentoCorrentesController extends Controller
     }
 
     public function pagamentoPorValidar(Request $request)
-    {
+    { 
+
+      
+        // ... outras condições ...
+       
     
         // dd($request->all());
 
-        //filtro_estudante
+        // filtro_estudante
 
         if ($request->page_size == -1) {
             $request->page_size = 15;
@@ -411,7 +415,21 @@ class PagamentoCorrentesController extends Controller
             'tb_pagamentos.forma_pagamento',
             'tb_pagamentos.valor_depositado',
             'tb_tipo_candidatura.designacao AS grau_academico',
-            'tb_tipo_servicos.Descricao AS servico',
+            'tb_tipo_servicos.Descricao AS servico'
+        )
+        ->distinct() // Adicione a cláusula distinct
+        ->groupBy(
+            'tb_matriculas.Codigo',
+            'tb_preinscricao.Nome_Completo',
+            'tb_pagamentos.codigo_factura',
+            'tb_pagamentos.Codigo',
+            'tb_pagamentos.DataBanco',
+            'tb_pagamentos.Data',
+            'tb_pagamentos.estado',
+            'tb_pagamentos.forma_pagamento',
+            'tb_pagamentos.valor_depositado',
+            'tb_tipo_candidatura.designacao',
+            'tb_tipo_servicos.Descricao'
         )
         ->paginate(20)
         ->withQueryString();
