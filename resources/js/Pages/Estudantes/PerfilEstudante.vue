@@ -35,34 +35,10 @@
                     </p>
 
                     <p class="text-muted text-center">Situação Actual</p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO REGULAR'">
-                      <span style="color: #0CF25D;">{{ estado_estudante.designacao }}</span>
+                    <p class="text-muted text-center text-uppercase">
+                      <span :style="estilo_cor_estado_estudante">{{ designacao_estado_estudante }}</span>
+                    <!-- {{ estado_estudante.designacao }} -->
                     </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO SUSPENSO'">
-                      <span style="color: #F2CB05;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO REGULAR'">
-                      <span style="color: #F29F05;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO DEVEDOR AC'">
-                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO DEVEDOR AA'">
-                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'DIPLOMADO'">
-                      <span style="color: #0099DD;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO IRREGULAR'">
-                      <span style="color: #F2CB05;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'ACTIVO FINALISTA'">
-                      <span style="color: #0CF25D;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    <p class="text-muted text-center text-uppercase" v-if="estado_estudante.designacao == 'INACTIVO'">
-                      <span style="color: #F23030;">{{ estado_estudante.designacao }}</span>
-                    </p>
-                    
                     <!-- :href="
                           'https://mutue.ao/storage/documentos/' +
                           pagamento.nome_documento
@@ -2446,6 +2422,7 @@ export default {
     Link,
     Paginacao,
   },
+  
   data() {
     return {
       form_actualizar_saldo: this.$inertia.form({
@@ -2524,8 +2501,9 @@ export default {
       estado_pagamento: "",
       ano_pagamento: "",
       lista_pagamentos: [],
-      
-      estado_estudante: [],
+            
+      cor_estado_estudante: "",
+      designacao_estado_estudante: "",
       
       estudante_tipo1: {},
       estudante_tipo2: {},
@@ -2536,8 +2514,6 @@ export default {
       
       params: {},
       
-      // corDeFundo: this.estado_estudante.cor,
-
       operador_extratos: "",
       tipo_movimentos_extrato: "",
       data_inicio_extrato: new Date().toISOString().substr(0, 10),
@@ -2548,29 +2524,26 @@ export default {
       messagem: "",
     };
   },
+  
   mounted(){
-    
     this.pegaBolseiro();
     this.pegarDescricaoBolseiro();
     
     this.carregar_historicos_actualizacoes();
   
     axios.get("/estudantes/carregar-estado/" + this.matricula.Codigo).then((response) => {
-      
-      console.log(response)
-    
-      this.estado_estudante = response.data.data
+      this.cor_estado_estudante = response.data.data.cor
+      this.designacao_estado_estudante = response.data.data.designacao
     })
     .catch((errors) => {
     });
   },
   
   computed: {
-    estiloDinamico() {
+  
+    estilo_cor_estado_estudante() {
       return {
-        backgroundColor: this.corDeFundo,
-        padding: '10px',
-        color: 'white'
+        color: this.cor_estado_estudante,
       };
     }
   },
@@ -3100,7 +3073,6 @@ export default {
           //console.log(error);
         });
     },
-
     // ############################EXPORTANDO PDF####################################
     imprimirPDF() {
       window.open("/instituicoes-renuncia-pdf?tipo_instituicao=2", "_blank");

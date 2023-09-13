@@ -376,7 +376,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item" title="ATRIBUIR DESCONTO">
               <Link
-                :href="route('mf.atribuicao-desconto')"
+                :href="route('mf.atribuicao-desconto')" 
                 class="nav-link"
                 :class="{
                   active:

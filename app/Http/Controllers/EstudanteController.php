@@ -240,9 +240,9 @@ class EstudanteController extends Controller
 
     public function carregarEstado($id)
     {
-        $response = Http::get("https://mutue.co.ao/mutue/mga/estado_matricula?matricula={$id}");
+        $response = Http::get("http://mutue.co.ao/mutue/mga/estado_matricula?matricula={$id}");
         $data = $response->json();
-        
+    
         return response()->json(['data' => $data], 200);
     }
 

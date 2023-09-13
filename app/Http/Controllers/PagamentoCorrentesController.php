@@ -368,7 +368,6 @@ class PagamentoCorrentesController extends Controller
         $data['items'] = Pagamento::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
         })
-        
         ->when($request->prestacao, function ($query, $value) {
             $query->where('mes_temp.id', $value);
         })
@@ -400,6 +399,7 @@ class PagamentoCorrentesController extends Controller
         ->leftjoin('tb_admissao', 'tb_preinscricao.Codigo', '=', 'tb_admissao.pre_incricao')
         ->leftjoin('tb_matriculas', 'tb_admissao.Codigo', '=', 'tb_matriculas.Codigo_Aluno')
         ->join('tb_tipo_candidatura', 'tb_preinscricao.codigo_tipo_candidatura', '=', 'tb_tipo_candidatura.id')
+        ->distinct('tb_pagamentos.Codigo')
         ->select(
             'tb_matriculas.Codigo AS matricula',
             'tb_preinscricao.Nome_Completo',
@@ -511,7 +511,7 @@ class PagamentoCorrentesController extends Controller
      
         $pagamento = Pagamento::findOrFail($id);   
         
-        $response = Http::get("https://mutue.co.ao/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
+        $response = Http::get("http://mutue.co.ao/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
         $data = $response->json();
 
         return response()->json($data);
