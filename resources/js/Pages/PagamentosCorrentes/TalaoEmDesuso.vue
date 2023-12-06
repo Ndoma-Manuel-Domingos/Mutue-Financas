@@ -18,7 +18,7 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <Link :href="route('mf.adicionar-talao-desuso')"  class="btn btn-primary btn-sm">
+            <Link href="/talao/adicionar"  class="btn btn-primary btn-sm">
               Adicionar Talão
             </Link>
           </div>
@@ -135,7 +135,7 @@
 
   const search = _.throttle(function()
   {
-    Inertia.get(route('mf.talao-desuso'),
+    Inertia.get('/talao/desuso',
       {operador: operador.value, data_inicio: data_inicio.value, data_final: data_final.value},
       {
         onBefore: () => {

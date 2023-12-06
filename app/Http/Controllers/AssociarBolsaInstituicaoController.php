@@ -38,17 +38,24 @@ class AssociarBolsaInstituicaoController extends Controller
         //
         $request->validate([
             'tipo_bolsa' => 'required',
-        ], [
+        ], []);
         
-        ]);
-        
-        $verificar = TipoBolsaInsitituicao::where('tipo_bolsa', $request->tipo_bolsa)->where('instituicao', $request->instituicao)->first();
-        
-        if(!$verificar){
-            $request = TipoBolsaInsitituicao::create([
-                'tipo_bolsa' => $request->tipo_bolsa,
-                'instituicao' => $request->instituicao,
-            ]);
+        try {
+            
+            $verificar = TipoBolsaInsitituicao::where('tipo_bolsa', $request->tipo_bolsa)->where('instituicao', $request->instituicao)->first();
+            
+            if(!$verificar){
+                $request = TipoBolsaInsitituicao::create([
+                    'tipo_bolsa' => $request->tipo_bolsa,
+                    'instituicao' => $request->instituicao,
+                ]);
+            }
+                        
+            return response()->json(['message' => "Dados salvos com sucesso!"], 200);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => "Ocorreu um erro {$th}"], 200);
         }
     }
 

@@ -91,7 +91,6 @@
                   </div>
                 </div>
 
-
                 <!-- <div class="col-12 col-md-2">
                   <div class="form-group">
                     <label for="" class="text-secondary">Estado</label>
@@ -155,7 +154,6 @@
                     />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -164,62 +162,71 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              
-              <div class="card-header">
-                  <h5>TOTAL ARRECADADO: {{ formatValor(total) }}</h5>
-              </div>
-            
-              <div class="card-body">
-                  <table
-                    id="carregarTabelaEstudantes"
-                    style="width: 100%"
-                    class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ items.total }}</span
                   >
-                    <thead>
-                      <tr>
-                        <th>Operador</th>
-                        <th>Data</th>
-                        <th>Valor:</th>
-                        <th>Recibo</th>
-                        <th>Forma Pagamento</th>
-                        <th>Estado</th>
-                        <th width="100px">Acções</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="pagamento in items.data"
-                        :key="pagamento.Codigo"
-                      >
-                        <td>{{ pagamento.operador_novos ? pagamento.operador_novos.nome : "Estudante" }}</td>
-                        <td>{{ formatData(pagamento.DataRegisto) }}</td>
-                        <td>{{ formatValor(pagamento.valor_depositado) }}</td>
-                        <td>{{ pagamento.Codigo }}</td>
-                        <td>{{ pagamento.forma_pagamento }}</td>
-                        <td v-if="pagamento.estado == 1" class="text-success">
-                          Validado
-                        </td>
-                        <td v-if="pagamento.estado == 0" class="text-info">
-                          Pendente
-                        </td>
-                        <td v-if="pagamento.estado == 2" class="text-warning">
-                          Rejeitado
-                        </td>
-                        <td>
-                          <a
-                            class="btn-sm btn-success mr-1"
-                            @click="visualizar_detalhes(pagamento)"
+                  <span class="float-right"
+                    >TOTAL ARRECADADO: {{ formatValor(total) }}</span
+                  >
+                </h5>
+              </div>
+
+              <div class="card-body">
+                <table
+                  id="carregarTabelaEstudantes"
+                  style="width: 100%"
+                  class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+                >
+                  <thead>
+                    <tr>
+                      <th>Operador</th>
+                      <th>Data</th>
+                      <th>Valor:</th>
+                      <th>Recibo</th>
+                      <th>Forma Pagamento</th>
+                      <th>Estado</th>
+                      <th width="100px">Acções</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="pagamento in items.data" :key="pagamento.Codigo">
+                      <td>
+                        {{
+                          pagamento.operador_novos
+                            ? pagamento.operador_novos.nome
+                            : "Estudante"
+                        }}
+                      </td>
+                      <td>{{ formatData(pagamento.DataRegisto) }}</td>
+                      <td>{{ formatValor(pagamento.valor_depositado) }}</td>
+                      <td>{{ pagamento.Codigo }}</td>
+                      <td>{{ pagamento.forma_pagamento }}</td>
+                      <td v-if="pagamento.estado == 1" class="text-success">
+                        Validado
+                      </td>
+                      <td v-if="pagamento.estado == 0" class="text-info">
+                        Pendente
+                      </td>
+                      <td v-if="pagamento.estado == 2" class="text-warning">
+                        Rejeitado
+                      </td>
+                      <td>
+                        <a
+                          class="btn-sm btn-success mr-1"
+                          @click="visualizar_detalhes(pagamento)"
+                        >
+                          <i
+                            class="fas fa-eye"
+                            title="VISUALIZAR DETALHES DO PAGAMENTO"
                           >
-                            <i
-                              class="fas fa-eye"
-                              title="VISUALIZAR DETALHES DO PAGAMENTO"
-                            >
-                            </i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          </i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
               <div class="card-footer">
@@ -316,8 +323,12 @@
                   <tr>
                     <td>{{ pagamento_detalhes.Codigo }}</td>
                     <td>{{ pagamento_detalhes.codigo_factura }}</td>
-                    <td>{{ pagamento_detalhes.N_Operacao_Bancaria ?? " ---- " }}</td>
-                    <td>{{ pagamento_detalhes.N_Operacao_Bancaria2 ?? " ---- " }}</td>
+                    <td>
+                      {{ pagamento_detalhes.N_Operacao_Bancaria ?? " ---- " }}
+                    </td>
+                    <td>
+                      {{ pagamento_detalhes.N_Operacao_Bancaria2 ?? " ---- " }}
+                    </td>
                   </tr>
 
                   <tr>
@@ -328,36 +339,36 @@
                   </tr>
 
                   <tr>
-                    <td>{{ formatValor(pagamento_detalhes.valor_depositado) }}</td>
+                    <td>
+                      {{ formatValor(pagamento_detalhes.valor_depositado) }}
+                    </td>
                     <td>{{ formatData(pagamento_detalhes.DataBanco) }}</td>
                     <td>{{ formatData(pagamento_detalhes.DataRegisto) }}</td>
                     <td>{{ formatData(pagamento_detalhes.updated_at) }}</td>
                   </tr>
-                  
-                  
-                 <tr>
+
+                  <tr>
                     <th colspan="4" class="bg-info">Items do Pagamento</th>
                   </tr>
-                  
+
                   <tr>
                     <th>#</th>
                     <th>Serviço</th>
                     <th>Quantidade</th>
                     <th>Valor</th>
                   </tr>
-                  
+
                   <tr v-for="item2 in pagamento_detalhes.detalhes" :key="item2">
-                    <td>{{ item2.codigo ?? '' }}</td>
-                    <td>{{ item2.servico.Descricao ?? '' }}</td>
-                    <td>{{ item2.Quantidade ?? '' }}</td>
+                    <td>{{ item2.codigo ?? "" }}</td>
+                    <td>{{ item2.servico.Descricao ?? "" }}</td>
+                    <td>{{ item2.Quantidade ?? "" }}</td>
                     <td>{{ formatValor(item2.Valor_Total ?? 0) }}</td>
-                  </tr> 
+                  </tr>
 
                   <tr>
                     <th colspan="2" class="bg-info">Comprovativo 01</th>
                     <th colspan="2" class="bg-info">Comprovativo 02</th>
                   </tr>
-                  
 
                   <tr>
                     <td colspan="2">
@@ -391,8 +402,6 @@
         </div>
       </div>
     </div>
-    
-    
   </MainLayouts>
 </template>
 
@@ -411,7 +420,7 @@ export default {
     "tipoServicos",
     "utilizadores",
     "requests",
-    "total"
+    "total",
   ],
   components: {
     Link,
@@ -424,15 +433,16 @@ export default {
       codigo_produto: this.requests.codigo_produto ?? "",
       mes_temp: this.requests.codigo_produto ?? "",
       anolectivo: this.requests.anolectivo ?? 21,
-      grau_academico: this.requests.grau_academico ?? "" ,
+      grau_academico: this.requests.grau_academico ?? "",
 
-      data_inicio: this.requests.data_inicio ?? new Date().toISOString().substr(0, 10),
+      data_inicio:
+        this.requests.data_inicio ?? new Date().toISOString().substr(0, 10),
       data_final: this.requests.data_final ?? "",
 
       forma_pagamento: this.requests.forma_pagamento ?? "",
       params: {},
       nomeUtilizador: "",
-      
+
       pagamento_detalhes: [],
 
       dados_estudante: {},
@@ -522,11 +532,10 @@ export default {
       axios
         .get("/visualizar-detalhes-pagamento/" + item.Codigo)
         .then((response) => {
-          this.dados_estudante = response.data.dados,
-          this.dados_pagamentos = response.data.detalhes,
-          
-          this.pagamento_detalhes = response.data.pagamento_detalhes;
-          
+          (this.dados_estudante = response.data.dados),
+            (this.dados_pagamentos = response.data.detalhes),
+            (this.pagamento_detalhes = response.data.pagamento_detalhes);
+
           this.$Progress.finish();
         })
         .catch(() => {

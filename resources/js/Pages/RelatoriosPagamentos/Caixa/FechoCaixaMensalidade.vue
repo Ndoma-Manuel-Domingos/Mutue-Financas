@@ -203,7 +203,7 @@
             </div>
             <div class="card-footer">
               <!-- <Link
-                :href="route('mf.fecho-caixa-geral')"
+                href="/fecho/caixa-geral"
                 class="btn btn-primary float-right"
               >
                 <i class="fas fa-broom"></i>

@@ -15,153 +15,177 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-              title="TOTAL DE ESTUDANTES ACTIVOS"
-            >
-              <span class="info-box-icon"
-                ><i class="fas fa-users"></i
-              ></span>
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"> <br>Estudantes ACTIVOS</span>
-                <span class="info-box-number">{{ total_estudantes }}</span>
+            <a href="/listar-estudantes-matriculados">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+                title="TOTAL DE ESTUDANTES ACTIVOS"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break">
+                    <br />TOTAL DE ESTUDANTES ACTIVOS</span
+                  >
+                  <span class="info-box-number">{{ total_estudantes }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
+            </a>
             <!-- /.info-box -->
           </div>
 
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-              title="TOTAL DE ESTUDANTES BOLSEIROS"
-            >
-              <span class="info-box-icon"
-                ><i class="fas fa-users"></i
-              ></span>
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"> TOTAL ESTUDANTES COM CRÉDITO <br> EDUCACIONAL</span>
-                <span class="info-box-number">{{ bolseiros }}</span>
+            <a href="/listar-bolseiros">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+                title="TOTAL DE ESTUDANTES BOLSEIROS"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break">
+                    TOTAL DE ESTUDANTES COM CRÉDITO <br />
+                    EDUCACIONAL</span
+                  >
+                  <span class="info-box-number">{{ bolseiros }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+              <!-- /.info-box -->
+            </a>
           </div>
           <!-- /.col -->
 
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-              title="TOTAL DE ESTUDANTES BOLSEIROS COM RENUNCIA"
-            >
-              <span class="info-box-icon"><i class="fas fa-users"></i> </span>
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"
-                  >ESTUDANTES COM CRÉDITO <br> EDUCACIONAL (Despesa)</span
-                >
-                <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
-                <span class="info-box-number">{{ bolseiros_com_renuncia }}</span>
+            <a href="/listar-bolseiros">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+                title="TOTAL DE ESTUDANTES BOLSEIROS COM RENUNCIA"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i> </span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break"
+                    >ESTUDANTES DE COM CRÉDITO <br />
+                    EDUCACIONAL (Despesa)</span
+                  >
+                  <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
+                  <span class="info-box-number">{{
+                    bolseiros_com_renuncia
+                  }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+              <!-- /.info-box -->
+            </a>
           </div>
           <!-- /.col -->
 
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-              title="TOTAL DE ESTUDANTES BOLSEIROS SEM RENUNCIA"
-            >
-              <span class="info-box-icon"><i class="fas fa-users"></i> </span>
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"
-                  >ESTUDANTES COM CRÉDITO <br> EDUCACIONAL (Receita)</span
-                >
-                <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
+            <a href="/listar-bolseiros">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+                title="TOTAL DE ESTUDANTES BOLSEIROS SEM RENUNCIA"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i> </span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break"
+                    >ESTUDANTES DE COM CRÉDITO <br />
+                    EDUCACIONAL (Receita)</span
+                  >
+                  <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
 
-                <span class="info-box-number">{{ bolseiros_sem_renuncia }}</span>
+                  <span class="info-box-number">{{
+                    bolseiros_sem_renuncia
+                  }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+              <!-- /.info-box -->
+            </a>
           </div>
 
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-              title="TOTAL ESTUDANTES COM MENSALIDADES PAGAS"
-            >
-              <span class="info-box-icon"><i class="fas fa-users"></i> </span>
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"
-                  > <br> ESTUDANTES MENSAL. PAGAS</span
-                >
-                <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
+            <a href="/estudantes/propina-pagar">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+                title="TOTAL ESTUDANTES COM MENSALIDADES PAGAS"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i> </span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break">
+                    <br />TOTAL DE ESTU<wbr />DAN<wbr />TES COM MENSA<wbr />LIDA-<wbr />DES
+                    PAGAS</span
+                  >
+                  <!-- <span class="info-box-number">{{ estudante_propinas_pagas }}</span> -->
 
-                <span class="info-box-number">{{ estudante_propinas_pagas }}</span>
+                  <span class="info-box-number">{{
+                    estudante_propinas_pagas
+                  }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+              <!-- /.info-box -->
+            </a>
           </div>
           <!-- /.col -->
 
           <!-- /.col -->
           <div class="col-md-3 col-sm-6 col-12">
-            <div
-              class="info-box"
-              style="background-color: #336699; color: #ffffff"
-            >
-              <span class="info-box-icon"><i class="fas fa-users"></i></span>
+            <a href="/estudantes/devedores">
+              <div
+                class="info-box"
+                style="background-color: #336699; color: #ffffff"
+              >
+                <span class="info-box-icon"><i class="fas fa-users"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text text-uppercase word-break"> <br> Estudantes Devedores</span>
-                <!-- <span class="info-box-number">{{ total_estudantes_devedores }}</span> -->
-                <span class="info-box-number">{{ total_estudantes_devedores }}</span>
+                <div class="info-box-content">
+                  <span class="info-box-text text-uppercase word-break">
+                    <br />TOTAL DE ESTUDANTES DEVEDORES</span
+                  >
+                  <!-- <span class="info-box-number">{{ total_estudantes_devedores }}</span> -->
+                  <span class="info-box-number">{{
+                    total_estudantes_devedores
+                  }}</span>
 
-                <div class="progress">
-                  <div class="progress-bar" style="width: 70%"></div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                  </div>
+                  <span class="progress-description"> Total </span>
                 </div>
-                <span class="progress-description"> Total </span>
+                <!-- /.info-box-content -->
               </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+              <!-- /.info-box -->
+            </a>
           </div>
           <!-- /.col -->
-
-
         </div>
 
         <div class="row">
@@ -170,7 +194,8 @@
               <div class="card-header">
                 <div class="row">
                   <h5 class="col-12 col-md-4">
-                    Estudantes com pagamento de Mensalidades <!-- {{ ano_lectivo }}-->.
+                    Estudantes com pagamento de Mensalidades
+                    <!-- {{ ano_lectivo }}-->.
                   </h5>
                   <div class="col-12 col-md-2">
                     <div class="row">
@@ -183,7 +208,7 @@
 
                       <select
                         type="text"
-                        class="form-control form-control-sm  col-12 col-md-6"
+                        class="form-control form-control-sm col-12 col-md-6"
                         v-model="ano_lectivo_selecionado"
                         @change="search"
                       >
@@ -197,7 +222,7 @@
                       </select>
                     </div>
                   </div>
-                  
+
                   <div class="col-12 col-md-3">
                     <div class="row">
                       <label
@@ -208,38 +233,21 @@
                       </label>
                       <select
                         type="text"
-                        class="form-control form-control-sm  col-12 col-md-6"
+                        class="form-control form-control-sm col-12 col-md-6"
                         v-model="mes_temp_id"
                         @change="search_meses"
                       >
                         <option value="" disabled>Selecione</option>
-                        <option :value="mes.id" v-for="mes in mesTemps" :key="mes.id">{{ mes.designacao }}</option>
+                        <option
+                          :value="mes.id"
+                          v-for="mes in mesTemps"
+                          :key="mes.id"
+                        >
+                          {{ mes.designacao }}
+                        </option>
                       </select>
                     </div>
                   </div>
-
-
-                  <!-- <div class="col-12 col-md-3">
-                    <div class="row">
-                      <label
-                        for=""
-                        class="col-12 col-md-6 col-form-label text-end"
-                      >
-                        <span class="float-right">Estado Pagamentos</span>
-                      </label>
-                      <select
-                        type="text"
-                        class="form-control form-control-sm  col-12 col-md-6"
-                        v-model="estado_pagamentos"
-                        @change="search"
-                      >
-                        <option value="0">Todos</option>
-                        <option value="1">Pendentes</option>
-                        <option value="2">Validados</option>
-                        <option value="3">Rejeitados</option>
-                      </select>
-                    </div>
-                  </div> -->
 
                 </div>
               </div>
@@ -247,13 +255,12 @@
           </div>
         </div>
 
-
         <div class="row mt-2">
           <div class="col-12 col-md-8">
             <div class="card">
               <div class="card-body">
                 <column-chart
-                :colors="color"
+                  :colors="color"
                   :data="charts_meses"
                   :stacked="true"
                   prefix=""
@@ -268,9 +275,7 @@
                   :download="true"
                 ></column-chart>
               </div>
-              <div class="card-footer">
-
-              </div>
+              <div class="card-footer"></div>
             </div>
           </div>
 
@@ -293,9 +298,7 @@
                   :download="true"
                 ></column-chart>
               </div>
-              <div class="card-footer">
-
-              </div>
+              <div class="card-footer"></div>
             </div>
           </div>
         </div>
@@ -305,12 +308,10 @@
 </template>
 
 <script>
-
 export default {
   props: ["anos_lectivos", "ano"],
   data() {
     return {
-
       utilizadores: "",
       estudante_propinas_pagas: "",
 
@@ -328,7 +329,7 @@ export default {
       quantidade_estudantes: "100",
       estado_pagamentos: "0",
 
-      color:['#17a08c'],
+      color: ["#17a08c"],
 
       charts_turno: [],
       charts_meses: [],
@@ -336,14 +337,14 @@ export default {
       ano_lectivo: "",
       selected: null,
       options: [
-        { value: null, text: 'Please select some item' },
-        { value: 'a', text: 'This is option a' },
-        { value: 'b', text: 'Default Selected Option b' },
-        { value: 'c', text: 'This is option c' },
-        { value: 'd', text: 'This one is disabled', disabled: true },
-        { value: 'e', text: 'This is option e' },
-        { value: 'e', text: 'This is option f' }
-      ]
+        { value: null, text: "Please select some item" },
+        { value: "a", text: "This is option a" },
+        { value: "b", text: "Default Selected Option b" },
+        { value: "c", text: "This is option c" },
+        { value: "d", text: "This one is disabled", disabled: true },
+        { value: "e", text: "This is option e" },
+        { value: "e", text: "This is option f" },
+      ],
     };
   },
 
@@ -356,34 +357,17 @@ export default {
   },
   methods: {
     search(value) {
-
-         if(value.target.value  ==0)
-         {
-            this.color =['#17a08c']; //todos cor verde
-
-         }
-
-         else  if(value.target.value  ==1)
-         {
-            this.color = ['#d68204']; // pedente cor verde
-         }
-
-         else  if(value.target.value  ==2)
-         {
-            this.color =['#03aa27']; // validado cor pedente
-
-         }
-
-         else  if(value.target.value  ==3)
-         {
-            this.color =['#ce0000'];   // Rejeitado cor vermelho
-
-         }
-         else
-         {
-            this.color =['#17a08c']; // Defaoult Todos status
-         }
-
+      if (value.target.value == 0) {
+        this.color = ["#17a08c"]; //todos cor verde
+      } else if (value.target.value == 1) {
+        this.color = ["#d68204"]; // pedente cor verde
+      } else if (value.target.value == 2) {
+        this.color = ["#03aa27"]; // validado cor pedente
+      } else if (value.target.value == 3) {
+        this.color = ["#ce0000"]; // Rejeitado cor vermelho
+      } else {
+        this.color = ["#17a08c"]; // Defaoult Todos status
+      }
 
       this.carregar_grafico_pagamentos_por_meses(
         this.ano_lectivo_selecionado,
@@ -413,7 +397,7 @@ export default {
       );
     },
 
-    search_meses(){
+    search_meses() {
       this.carregar_grafico_estudantes_devedores(
         this.ano_lectivo_selecionado,
         this.mes_temp_id,
@@ -439,9 +423,11 @@ export default {
         .then((response) => {
           this.utilizadores = response.data.utilizadores;
 
-          this.estudante_propinas_pagas = response.data.estudante_propinas_pagas;
+          this.estudante_propinas_pagas =
+            response.data.estudante_propinas_pagas;
           this.total_estudantes = response.data.total_estudantes;
-          this.total_estudantes_devedores = response.data.total_estudantes_devedores;
+          this.total_estudantes_devedores =
+            response.data.total_estudantes_devedores;
 
           this.ano_lectivo = response.data.ano_lectivo;
           this.charts_turno = response.data.charts_turno;
@@ -485,7 +471,8 @@ export default {
           },
         })
         .then((response) => {
-          this.total_estudantes_devedores = response.data.total_estudantes_devedores;
+          this.total_estudantes_devedores =
+            response.data.total_estudantes_devedores;
 
           this.$Progress.finish();
         })
@@ -506,11 +493,14 @@ export default {
           },
         })
         .then((response) => {
-          this.estudante_propinas_pagas = response.data.estudante_propinas_pagas;
+          this.estudante_propinas_pagas =
+            response.data.estudante_propinas_pagas;
           this.$Progress.finish();
         })
         .catch((errors) => {
-          console.log("Erro ao carregar o graficos estudantes com mensalidade pagas");
+          console.log(
+            "Erro ao carregar o graficos estudantes com mensalidade pagas"
+          );
           this.$Progress.fail();
         });
     },
@@ -526,7 +516,6 @@ export default {
           },
         })
         .then((response) => {
-
           this.bolseiros = response.data.bolseiros;
           this.bolseiros_com_renuncia = response.data.bolseiros_com_renuncia;
           this.bolseiros_sem_renuncia = response.data.bolseiros_sem_renuncia;
@@ -537,10 +526,7 @@ export default {
           this.$Progress.fail();
         });
     },
-
   },
-
-
 };
 </script>
 

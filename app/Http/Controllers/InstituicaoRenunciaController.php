@@ -33,6 +33,15 @@ class InstituicaoRenunciaController extends Controller
             $query->orWhere("nif", "like", "%{$value}%");
             $query->orWhere("sigla", "like", "%{$value}%");
         })
+        ->when($request->nome_instituicao_search, function($query, $value){
+            $query->where('Instituicao',"like", "%{$value}%");
+        })
+        ->when($request->sigla_instituicao_search, function($query, $value){
+            $query->where('sigla', "like","%{$value}%");
+        })
+        ->when($request->nif_instituicao_search, function($query, $value){
+            $query->where('nif', "like","%{$value}%");
+        })
         ->where('tipo_instituicao', 2)
         ->orderBy('Instituicao', 'asc')
         ->paginate(20)
@@ -73,24 +82,34 @@ class InstituicaoRenunciaController extends Controller
         ], [
 
         ]);
-
-        $create = InstituicaoRenuncia::create([
-            'Instituicao' => $request->instituicao,
-            'nif' => $request->nif,
-            'contacto' => $request->contacto,
-            'Endereco' =>$request->endereco,
-            'tipo_instituicao' => $request->tipo,
-            'sigla' => $request->sigla,
-        ]);
-
-        foreach($request->tipos_bolsas as $item){
-            $request = TipoBolsaInsitituicao::create([
-                'tipo_bolsa' => $item,
-                'instituicao' => $create->codigo,
+        
+        try {
+            //code...
+            $create = InstituicaoRenuncia::create([
+                'Instituicao' => $request->instituicao,
+                'nif' => $request->nif,
+                'contacto' => $request->contacto,
+                'Endereco' =>$request->endereco,
+                'tipo_instituicao' => $request->tipo,
+                'sigla' => $request->sigla,
             ]);
+    
+            foreach($request->tipos_bolsas as $item){
+                $request = TipoBolsaInsitituicao::create([
+                    'tipo_bolsa' => $item,
+                    'instituicao' => $create->codigo,
+                ]);
+            }
+                     
+            return response()->json(['message' => "Dados salvos com sucesso!"]);
+        } catch (\Throwable $th) {
+            //throw $th;
+                //throw $th;
+            return response()->json(['error' => "Ocorreu um erro! {$th}"]);
         }
 
-        return redirect()->back();
+
+        // return redirect()->back();
 
     }
 
@@ -131,25 +150,37 @@ class InstituicaoRenunciaController extends Controller
         ], [
 
         ]);
-
-        $update = InstituicaoRenuncia::findOrFail($id);
-        $update->Instituicao = $request->instituicao;
-        $update->nif = $request->nif;
-        $update->contacto = $request->contacto;
-        $update->Endereco = $request->endereco;
-        $update->tipo_instituicao = $request->tipo;
-        $update->sigla = $request->sigla;
-        $update->update();
-
-        foreach($request->tipos_bolsas as $item){
-            $request = TipoBolsaInsitituicao::create([
-                'tipo_bolsa' => $item,
-                'instituicao' => $update->codigo,
-            ]);
+                
+        try {
+            //code...
+     
+            $update = InstituicaoRenuncia::findOrFail($id);
+            $update->Instituicao = $request->instituicao;
+            $update->nif = $request->nif;
+            $update->contacto = $request->contacto;
+            $update->Endereco = $request->endereco;
+            $update->tipo_instituicao = $request->tipo;
+            $update->sigla = $request->sigla;
+            $update->update();
+    
+            foreach($request->tipos_bolsas as $item){
+                $request = TipoBolsaInsitituicao::create([
+                    'tipo_bolsa' => $item,
+                    'instituicao' => $update->codigo,
+                ]);
+            }
+                     
+            return response()->json(['message' => "Dados salvos com sucesso!"]);
+        } catch (\Throwable $th) {
+            //throw $th;
+                //throw $th;
+            return response()->json(['error' => "Ocorreu um erro! {$th}"]);
         }
+
+
         // return response()->json(['data' => $data], 200);
         // return response()->json($update);
-        return redirect()->back();
+        // return redirect()->back();
     }
 
     /**
@@ -160,10 +191,20 @@ class InstituicaoRenunciaController extends Controller
      */
     public function destroy($id)
     {
-        $update = InstituicaoRenuncia::findOrFail($id);
-        $update->delete();
+    
+        try {
+            $update = InstituicaoRenuncia::findOrFail($id);
+            $update->delete();
+            //code...
+            
+            return response()->json(['message' => "Dados salvos com sucesso!"]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            
+            return response()->json(['error' => "Ocorreu um erro! {$th}"]);
+        }
 
-        return redirect()->back();
+        // return redirect()->back();
     }
 
 }

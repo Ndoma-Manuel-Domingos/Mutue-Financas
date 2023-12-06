@@ -171,7 +171,7 @@
 
   const search = _.throttle(function()
   {
-    Inertia.get(route('mf.pagamento-por-validar'),
+    Inertia.get('/pagamento/porvalidar',
       {prestacao: prestacao.value, forma_pagamento: forma_pagamento.value, data_inicio: data_inicio.value, data_final: data_final.value},
       {
         onBefore: () => {

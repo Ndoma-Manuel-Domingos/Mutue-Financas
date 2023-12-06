@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -19,8 +20,12 @@ class RoleController extends Controller
             $request->page_size = 15;
         }
 
-        $data['items'] = Role::with('permissions')->paginate($request->page_size ?? 10)
+        $data['items'] = Role::with('permissions')
+        ->where('sistema', 'finance')
+        ->paginate($request->page_size ?? 10)
         ->withQueryString();
+        
+        $data['permissions'] = Permission::where('sistema', 'finance')->get();
         
         return Inertia::render('GestaoPermissions/roles/Index', $data);
     }
@@ -42,7 +47,37 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {  
+        
+        $request->validate([
+            'name' => 'required',
+        ], []);
+    
+        try {
+            $role = Role::create([
+                'name' => $request->name,
+                'guard_name' => 'web',
+                'sistema' => 'finance',
+            ]);
+            
+            // $permissions = Permission::get();
+            
+            foreach ($request->permissions as $permission) {
+                $role->givePermissionTo($permission);
+                // if($permission == "todos"){
+                //     foreach ($permissions as $p) {
+                //     }
+                // }
+                // dd(  $permission );
+            }
+            
+            return response()->json(['message' => "Perfil criado com sucesso!"]);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => "Error ao! {$th}"]);
+        }
+        
         
     }
 

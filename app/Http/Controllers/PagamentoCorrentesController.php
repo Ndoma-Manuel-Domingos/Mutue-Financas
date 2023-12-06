@@ -531,6 +531,7 @@ class PagamentoCorrentesController extends Controller
         
         $response = Http::get("http://mutue.co.ao/mutue/maf/validacao_pagamento?pkPagamento={$pagamento->Codigo}&pkUtilizador={$user->pk_utilizador}");
         $data = $response->json();
+        // dd( $data );
 
         return response()->json($data);
         

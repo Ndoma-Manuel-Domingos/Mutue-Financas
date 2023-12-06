@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+use RealRashid\SweetAlert\Facades\Alert;
 
 use NumberFormatter;
 
@@ -58,8 +59,6 @@ class GestaodeBolsaeDescontoController extends Controller
             $request->page_size = 15;
         }
 
-        // dd("djnglkjshdlk");
-
         $data['tipoBolsas'] = TipoBolsaInsitituicao::when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
         })
@@ -70,11 +69,13 @@ class GestaodeBolsaeDescontoController extends Controller
         ->select('tb_tipo_bolsas.codigo', 'tb_tipo_bolsas.designacao')
         ->get();
 
-        $data['anoLectivos'] = AnoLectivo::orderBy('ordem', 'asc')->get();        // $data['tipoBolsas'] = TipoBolsa::get();
+        $data['anoLectivos'] = AnoLectivo::orderBy('ordem', 'desc')->get();        // $data['tipoBolsas'] = TipoBolsa::get();
+        
         $data['tipo_instituicoes'] = TipoInstituicao::get();
         $data['instituicoes'] = Instituicacao::when($request->tipo_instituicao, function($query, $value){
             $query->where('tipo_instituicao', '=', $value);
         })->get();
+        
         $data['semestres'] = Simestre::get();
         $data['filtros'] = $request->all('anolectivo', 'instituicao');
         $data['anolectivoactivo'] = AnoLectivo::where('estado', 'Activo')->first()->Codigo;
@@ -464,9 +465,6 @@ class GestaodeBolsaeDescontoController extends Controller
         return $pdf->stream();
     }
 
-
-
-
     public function excelImprimirIsencaoPagamento()
     {
         dd("Isencao Pagamento EXCEL");
@@ -474,24 +472,41 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function bolseiros(Request $request)
     {
+        
+        $user = auth()->user();
+        
+        if(!$user->can('LISTAR BOLSEIROS')){
+            Alert::error('Acesso restrito', 'Você não possui permissão para esta operação, por favor, contacte o administrador!');
+            return redirect()->back();
+        }
 
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
+        
+        $ano = AnoLectivo::where('estado', 'Activo')->first();
 
-        $data['bolsa'] = Bolsa::get();
-        $data['anolectivos'] = AnoLectivo::orderBy('ordem', 'asc')->get();        $data['turnos'] = Turno::get();
+        $data['listagem_das_bolsas'] = Bolsa::get();
+        
+        $data['anolectivos'] = AnoLectivo::orderBy('ordem', 'desc')->get();        
+        $data['turnos'] = Turno::get();
         $data['semestres'] = Simestre::get();
         $data['instituicao'] = Instituicacao::get();
         $data['bolseiro'] = Bolseiro::get();
         $data['cursos'] = Curso::get();
+        
+        if($request->ano_lectivo_selecionado){
+            $request->ano_lectivo_selecionado = $request->ano_lectivo_selecionado;
+        }else{
+            $request->ano_lectivo_selecionado = $ano->Codigo;
+        }
 
-        $data['mesTemps'] = MesTemp::when($request->AnoLectivo, function ($query, $value) {
+        $data['mesTemps'] = MesTemp::when($request->ano_lectivo_selecionado, function ($query, $value) {
             $query->where('ano_lectivo', $value);
         })->get();
 
         // inicialmente
-        $data['listarbolseiro'] = Bolseiro::when($request->AnoLectivo, function ($query, $value) {
+        $data['listarbolseiro'] = Bolseiro::when($request->ano_lectivo_selecionado, function ($query, $value) {
             $query->where('tb_bolseiros.codigo_anoLectivo', $value);
         })->when($request->Curso, function ($query, $value) {
             $query->where('tb_cursos.Codigo', $value);
@@ -512,29 +527,43 @@ class GestaodeBolsaeDescontoController extends Controller
             $query->where('tb_bolseiros.semestre', $value);
         })
         //BUSCAS DOS INPUTS
-        ->when($request->busca_nome, function ($query, $value) {
+        ->when($request->busca_nome_lsitagem_bolseiros, function ($query, $value) {
             $query->where('tb_preinscricao.Nome_Completo', "like" ,"%".$value."%");
         })
-
-        ->when($request->busca_matricula, function ($query, $value) {
+        ->when($request->busca_matricula_lsitagem_bolseiros, function ($query, $value) {
             $query->where('tb_matriculas.Codigo', $value);
         })
-
+        ->when($request->busca_curso_lsitagem_bolseiros, function ($query, $value) {
+            $query->where('tb_cursos.Designacao', "like" ,"%".$value."%");
+        })
+        ->when($request->busca_desconto_lsitagem_bolseiros, function ($query, $value) {
+            $query->where('tb_bolseiros.desconto', $value);
+        })
+        ->when($request->busca_tipo_bolsa_lsitagem_bolseiros, function ($query, $value) {
+            $query->where('tb_tipo_bolsas.designacao', "like" ,"%".$value."%");
+        })
+        ->when($request->busca_instituicao_lsitagem_bolseiros, function ($query, $value) {
+            $query->where('tb_Instituicao.Instituicao', "like" ,"%".$value."%");
+        })
         ->join('tb_matriculas', 'tb_bolseiros.codigo_matricula', '=', 'tb_matriculas.Codigo')
         ->join('tb_cursos', 'tb_matriculas.Codigo_Curso', '=', 'tb_cursos.Codigo')
         ->join('tb_admissao', 'tb_matriculas.Codigo_Aluno', '=', 'tb_admissao.codigo')
         ->join('tb_preinscricao', 'tb_admissao.pre_incricao', '=', 'tb_preinscricao.Codigo')
         ->join('tb_tipo_bolsas', 'tb_bolseiros.codigo_tipo_bolsa', '=', 'tb_tipo_bolsas.codigo')
+        ->join('tb_Instituicao', 'tb_bolseiros.codigo_Instituicao', '=', 'tb_Instituicao.codigo')
         ->join('tb_semestres', 'tb_bolseiros.semestre', '=', 'tb_semestres.Codigo')
-         ->select('tb_matriculas.Codigo AS matricula', 'tb_cursos.Designacao AS curso', 'tb_bolseiros.codigo_matricula', 'tb_bolseiros.codigo', 'tb_tipo_bolsas.designacao AS tipobolsa',
-        'tb_bolseiros.desconto', 'tb_bolseiros.status', 'tb_semestres.Designacao AS semestreItem', 'tb_preinscricao.Nome_Completo As nome', 'tb_bolseiros.codigo_anoLectivo',
-        'tb_bolseiros.codigo_Instituicao',
-        'tb_bolseiros.semestre',
-        'tb_bolseiros.afectacao',
-        'tb_bolseiros.codigo_tipo_bolsa',
-        'tb_bolseiros.desconto',
-        'tb_bolseiros.status',
-        'tb_preinscricao.Codigo AS preninscricaoCodigo'
+        ->join('tb_ano_lectivo', 'tb_bolseiros.codigo_anoLectivo', '=', 'tb_ano_lectivo.Codigo')
+        ->select('tb_matriculas.Codigo AS matricula', 'tb_cursos.Designacao AS curso', 'tb_bolseiros.codigo_matricula', 'tb_bolseiros.codigo', 'tb_tipo_bolsas.designacao AS tipobolsa',
+            'tb_bolseiros.desconto', 'tb_bolseiros.status', 'tb_semestres.Designacao AS semestreItem', 'tb_preinscricao.Nome_Completo As nome', 'tb_bolseiros.codigo_anoLectivo',
+            'tb_bolseiros.codigo_Instituicao',
+            'tb_Instituicao.Instituicao',
+            'tb_bolseiros.semestre',
+            'tb_bolseiros.afectacao',
+            'tb_bolseiros.codigo_tipo_bolsa',
+            'tb_bolseiros.desconto',
+            'tb_bolseiros.status',
+            'tb_ano_lectivo.Designacao AS anoLectivo',
+            'tb_preinscricao.Codigo AS preninscricaoCodigo'
         )
         ->paginate($request->page_size ?? 20)
         ->withQueryString();
@@ -589,6 +618,7 @@ class GestaodeBolsaeDescontoController extends Controller
     public function updateBolseiros(Request $request, $id)
     {
 
+        // dd($request->all());
         $request->validate([
             'anolectivo' => 'required',
             'instituicao' => 'required',
@@ -611,6 +641,9 @@ class GestaodeBolsaeDescontoController extends Controller
 
         }else if($request->semestre == 2){
             $bolsaInicio = $ano->dataInicioSegundoSemestre;
+            $bolsaFinal = $ano->dataFimSegundoSemestre;
+        }else{
+            $bolsaInicio = $ano->dataInicioPrimeiroSemestre;
             $bolsaFinal = $ano->dataFimSegundoSemestre;
         }
 
@@ -690,22 +723,31 @@ class GestaodeBolsaeDescontoController extends Controller
 
     public function mudarEstadoDesconto($id)
     {
-        $update = DescontoAluno::findOrFail($id);
-
-        $novo_status = null;
-
-        if($update->estatus_desconto_id == 1){
-            $novo_status = 2;
+            
+        try {
+            $update = DescontoAluno::findOrFail($id);
+    
+            $novo_status = null;
+    
+            if($update->estatus_desconto_id == 1){
+                $novo_status = 2;
+            }
+    
+            if($update->estatus_desconto_id == 2){
+                $novo_status = 1;
+            }
+    
+            $update->estatus_desconto_id = $novo_status;
+            $update->update();
+            
+            return response()->json(['messagem' => 'Dados actualizados com sucesso!']);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['messagem' => 'Ocorreu um erro ao tentar actualizar os dados!'. "{$th}"]);
         }
 
-        if($update->estatus_desconto_id == 2){
-            $novo_status = 1;
-        }
-
-        $update->estatus_desconto_id = $novo_status;
-        $update->update();
-
-        return redirect()->back();
+        // return redirect()->back();
 
     }
 
@@ -720,18 +762,27 @@ class GestaodeBolsaeDescontoController extends Controller
             'semestre' => 'required',
         ], []);
 
-        $update = DescontoAluno::findOrFail($id);
+        try {
+            $update = DescontoAluno::findOrFail($id);
+    
+            $update->codigo_anoLectivo =  $request->anolectivo;
+            $update->instituicao_id =  $request->instituicao_id;
+            $update->semestre = $request->semestre;
+            $update->afectacao = $request->afectacao;
+            $update->codigo_tipo_desconto = $request->desconto;
+            $update->estatus_desconto_id = $request->status;
+    
+            $update->update();
+            
+            return response()->json(['messagem' => 'Dados actualizados com sucesso!']);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['messagem' => 'Ocorreu um erro ao tentar actualizar os dados!'. "{$th}"]);
+        }
 
-        $update->codigo_anoLectivo =  $request->anolectivo;
-        $update->instituicao_id =  $request->instituicao_id;
-        $update->semestre = $request->semestre;
-        $update->afectacao = $request->afectacao;
-        $update->codigo_tipo_desconto = $request->desconto;
-        $update->estatus_desconto_id = $request->status;
 
-        $update->update();
-
-        return redirect()->back();
+        // return redirect()->back();
     }
 
 
@@ -967,19 +1018,28 @@ class GestaodeBolsaeDescontoController extends Controller
             'designacao.required' => "Campo de caracter obrigatório.",
             'valor_desconto.required' => "Campo de caracter obrigatório.",
         ]);
+        
+        try {
+            $request = tipo_Desconto::create([
+                'designacao' => $request->designacao,
+                'valor_desconto' => $request->valor_desconto,
+                'estado' => $request->codigo_status,
+                'codigo_utlizador' => auth()->user()->codigo_importado,
+            ]);
+            
+            return response()->json(['message' => 'Dados actualizados com sucesso!']);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => 'Não foi possível actualizar os dados!' . "{$th}"]);
+        }
 
-        $request = tipo_Desconto::create([
-            'designacao' => $request->designacao,
-            'valor_desconto' => $request->valor_desconto,
-            'estado' => $request->codigo_status,
-            'codigo_utlizador' => auth()->user()->codigo_importado,
-        ]);
 
         return redirect()->back();
     }
 
 
-    public function EditarTipoDesconto(Request $request, $id)
+    public function EditarTipoDesconto(Request $request, $id = null)
     {
         $request->validate([
             'designacao' => 'required',
@@ -988,23 +1048,38 @@ class GestaodeBolsaeDescontoController extends Controller
             'designacao.required' => "Campo de caracter obrigatório.",
             'valor_desconto.required' => "Campo de caracter obrigatório.",
         ]);
+        
+        try {
+        
+            $update = tipo_Desconto::findOrFail($id);
+            $update->designacao = $request->designacao;
+            $update->valor_desconto = $request->valor_desconto;
+            $update->codigo_status = $request->estado;
+            $update->update();
+            
+            return response()->json(['message' => 'Dados actualizados com sucesso!']);
+            //code...
+        } catch (\Exception $ex) {
+            return response()->json(['error' => 'Não foi possível actualizar os dados!' . "{$ex}"]);
+        }
 
-        $update = tipo_Desconto::findOrFail($id);
-        $update->designacao = $request->designacao;
-        $update->valor_desconto = $request->valor_desconto;
-        $update->codigo_status = $request->estado;
-        $update->update();
-
-        return redirect()->back();
     }
 
 
     public function eliminarTipoDesconto($id)
     {
-        $update = tipo_Desconto::findOrFail($id);
-        $update->delete();
+        try { 
+            $update = tipo_Desconto::findOrFail($id);
+            $update->delete();
 
-        return redirect()->back();
+            return response()->json(['message' => 'Dados actualizados com sucesso!']);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => 'Não foi possível eliminar os dados!' . "{$th}"]);
+        }
+       
+        // return redirect()->back();
     }
 
     /**

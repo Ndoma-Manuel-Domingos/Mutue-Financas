@@ -33,4 +33,14 @@ class GradeCurricularAluno extends Model
         'ref_horario',
         'ref_utilizador',
     ];
+    
+    public function matricula()
+    {
+        return $this->belongsTo(Matricula::class, 'codigo_matricula', 'codigo');
+    }
+    
+    public function grade_curricular()
+    {
+        return $this->belongsTo(GradeCurricular::class, 'codigo_grade_curricular', 'Codigo');
+    }
 }

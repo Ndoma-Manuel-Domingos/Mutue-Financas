@@ -143,55 +143,51 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-light">
-                <h3 class="card-title">
-                  <strong>LISTAGEM</strong>
-                </h3>
-                <div class="card-tools"></div>
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ items.total }}</span
+                  >
+                </h5>
               </div>
 
               <div class="card-body">
-                  <table
-                    id="carregarTabelaEstudantes"
-                    style="width: 100%"
-                    class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
-                  >
-                    <thead>
-                      <tr>
-                        <th>Nº Matricula</th>
-                        <th>Nome</th>
-                        <th>Isento de:</th>
-                        <th>Mês</th>
-                        <th>Turno</th>
-                        <th>Curso</th>
-                        <th>Ano Lectivo</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="isencao in items.data" :key="isencao.codigo">
-                        <td>{{ isencao.codigoMatricula }}</td>
-                        <td>{{ isencao.nomeEstudante }}</td>
-                        <td>{{ isencao.servicoIsencao }}</td>
-                        <td>{{ isencao.mesIsencao }}</td>
-                        <td>{{ isencao.turnoIsencao }}</td>
-                        <td>{{ isencao.cursoIsencao }}</td>
-                        <td>{{ isencao.Designacao }}</td>
-                        <td>
-                          <a
-                            :href="
-                              route(
-                                'mf.estudante-visualizar-perfil',
-                                isencao.codigoMatricula
-                              )
-                            "
-                            class="btn-sm btn-primary"
-                          >
-                            <i class="fas fa-user-graduate"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <table
+                  id="carregarTabelaEstudantes"
+                  style="width: 100%"
+                  class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+                >
+                  <thead>
+                    <tr>
+                      <th>Nº Matricula</th>
+                      <th>Nome</th>
+                      <th>Isento de:</th>
+                      <th>Mês</th>
+                      <th>Turno</th>
+                      <th>Curso</th>
+                      <th>Ano Lectivo</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="isencao in items.data" :key="isencao.codigo">
+                      <td>{{ isencao.codigoMatricula }}</td>
+                      <td>{{ isencao.nomeEstudante }}</td>
+                      <td>{{ isencao.servicoIsencao }}</td>
+                      <td>{{ isencao.mesIsencao }}</td>
+                      <td>{{ isencao.turnoIsencao }}</td>
+                      <td>{{ isencao.cursoIsencao }}</td>
+                      <td>{{ isencao.Designacao }}</td>
+                      <td>
+                        <a
+                          :href="`/estudantes/visualizar-perfil/${isencao.codigoMatricula}`"
+                          class="btn-sm btn-primary"
+                        >
+                          <i class="fas fa-user-graduate"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
               <div class="card-footer">

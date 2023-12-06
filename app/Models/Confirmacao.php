@@ -28,6 +28,11 @@ class Confirmacao extends Model
         'principal',
         'ref_horario',
     ];
+    
+    public function ano_lectivo()
+    {
+        return $this->belongsTo(AnoLectivo::class, 'Codigo_Ano_lectivo', 'Codigo');
+    }
 
     public function matricula()
     {

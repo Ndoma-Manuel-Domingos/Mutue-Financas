@@ -47,4 +47,9 @@ class Bolseiro extends Model
     {
         return $this->belongsTo(Instituicacao::class, 'codigo_Instituicao', 'codigo');
     }
+    
+    public function ano_lectivo()
+    {
+        return $this->belongsTo(Instituicacao::class, 'codigo_anoLectivo', 'codigo');
+    }
 }

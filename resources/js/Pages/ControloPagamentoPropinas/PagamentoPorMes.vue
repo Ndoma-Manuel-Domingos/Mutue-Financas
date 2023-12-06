@@ -43,7 +43,7 @@
                         <td>{{ factura.curso }}</td>
                         <td>{{ factura.turno }}</td>
                         <!-- <td>
-                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary">
+                          <a :href="`/estudantes/visualizar-perfil/${factura.matricula}`" class="btn-sm btn-primary">
                             <i class="fas fa-info"></i> Detalhes do Pagamento
                           </a>
                         </td> -->

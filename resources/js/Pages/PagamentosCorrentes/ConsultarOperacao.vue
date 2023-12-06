@@ -72,7 +72,7 @@
                         <td>{{ pagamento.anolectivo.Designacao }}</td>
                         <td class="text-danger">{{ pagamento.canal.designacao }}</td>
                         <td>
-                          <Link :href="route('mf.consultar-operacao-visualizar', pagamento.Codigo)" class="btn-sm btn-primary">Visualizar</Link> 
+                          <Link :href="`/consultar/operacao-visualizar/${pagamento.Codigo}`" class="btn-sm btn-primary">Visualizar</Link> 
                         </td>
                         <td>
                           <a @click="detalhe_pagamento(pagamento.Codigo)" class="btn-sm btn-primary">Mais detalhe <i class="fas fa-eye"></i></a>

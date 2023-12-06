@@ -82,9 +82,20 @@
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card">
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ saldos.total }}</span
+                  >
+                </h5>
+              </div>
 
               <div class="card-body">
-                <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                <table
+                  id="carregarTabelaEstudantes"
+                  style="width: 100%"
+                  class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+                >
                   <thead>
                     <tr>
                       <th>Estudante</th>
@@ -108,7 +119,7 @@
                           class="btn-sm btn-primary"
                         >
                           Ver Mais
-                      </a>
+                        </a>
                       </td>
                     </tr>
                   </tbody>
@@ -146,7 +157,11 @@
           </div>
           <div class="modal-body">
             <div class="table-responsive">
-              <table  id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+              <table
+                id="carregarTabelaEstudantes"
+                style="width: 100%"
+                class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+              >
                 <tbody>
                   <tr>
                     <th colspan="6" class="bg-light">Dados</th>

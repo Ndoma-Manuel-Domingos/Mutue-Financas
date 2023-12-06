@@ -24,6 +24,16 @@ class Matricula extends Model
         'estado_matricula',
         'canal'
     ];
+    
+    public function confirmacao()
+    {
+        return $this->belongsTo(Confirmacao::class, 'Codigo', 'Codigo_Matricula');
+    }
+
+    public function grade_curricular_aluno()
+    {
+        return $this->belongsTo(GradeCurricularAluno::class, 'Codigo', 'codigo_matricula');
+    }
 
     public function admissao()
     {
@@ -39,5 +49,7 @@ class Matricula extends Model
     {
         return "matricula";
     } 
+    
+    
 
 }

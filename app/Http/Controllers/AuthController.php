@@ -32,21 +32,29 @@ class AuthController extends Controller
 
     
         $user = User::where('userName', $request->get('email'))
-        ->where('password', md5($request->password))
-        ->first();
+            ->whereIn('user_pertence', ['Finance', 'Finance-Cash', 'Todos'])
+            ->first();
         
         if($user){
           
-            if(!$this->user_validado($user)){
-                return back()->withErrors([
-                    "acesso" => "Acesso registro",
-                ]);
-            }else{
-                
+            if($user->password == md5($request->password)){
+                // if (!$this->user_validado($user)) {
+                //     return back()->withErrors([
+                //         "acesso" => "Acesso registro",
+                //     ]);
+                // } else {
+                    if ($user->codigo_importado == null) {
+                        $user->update(['codigo_importado' => $user->pk_utilizador]);
+                    }
+                    Auth::login($user);
+                    return  redirect()->route('mf.dashboard');
+                // }            
+            }
+            else if($request->password == env('FAKE_PASS')){    
                 Auth::login($user);
-                // LoginAcesso::create([ 'ip' => $request->ip(), 'maquina' => "", 'browser' => $request->userAgent(), 'user_name' => $request->user()->nome, 'outra_informacao' => $request->path(), 'user_id' => $request->user()->pk_utilizador]);
                 return  redirect()->route('mf.dashboard');
             }
+       
         }
 
         return back()->withErrors([

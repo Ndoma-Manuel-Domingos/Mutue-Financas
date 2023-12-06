@@ -215,7 +215,7 @@
 
     const search = function(){
 
-        Inertia.get(route('mf.pagamentoBolseiros'),
+        Inertia.get('/pagamentoBolseiros',
         {
             anoLectivoBusca: form.anoLectivoBusca,
             instituicaoBusca: form.instituicaoBusca,
@@ -242,7 +242,7 @@
     const submeterFormulario = () => {
         form.estudante = estudantes
 
-        Inertia.post(route('mf.pagamentoBolseirosCreate'), form, {
+        Inertia.post('/pagamentoBolseiros', form, {
             onSuccess: (page) => {
                 console.log(page)
                 sweetSuccess("Instituição  cadastrado com sucesso")

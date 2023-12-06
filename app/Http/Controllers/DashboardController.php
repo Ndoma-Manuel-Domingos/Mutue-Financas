@@ -31,8 +31,8 @@ class DashboardController extends Controller
         
         $data['ano'] = AnoLectivo::where('estado', 'Activo')->first();
 
-        $data['anos_lectivos'] = AnoLectivo::orderBy('ordem', 'asc')->get();
-
+        $data['anos_lectivos'] = AnoLectivo::orderBy('ordem', 'desc')->get();
+        
         return Inertia::render('Dashboard', $data);
     }
 

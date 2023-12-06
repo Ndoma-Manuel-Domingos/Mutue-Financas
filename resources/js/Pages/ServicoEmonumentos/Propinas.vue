@@ -79,10 +79,16 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title"></h3>
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS:
+                    {{ servicos.total }}</span
+                  >
+                </h5>
+              
                 <div class="card-tools">
-                  <div class="input-group input-group-md" style="width: 150px">
+                  <div class="input-group input-group-md" style="width: 450px">
                     <input
                       type="text"
                       name="table_search"

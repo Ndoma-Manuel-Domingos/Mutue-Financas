@@ -93,6 +93,17 @@ class PreInscricao extends Model
         'permitir_inscricao',
         'isencao_multa',
     ];
+    
+    public function nacionalidade()
+    {
+        return $this->belongsTo(Nacionalidade::class, 'Codigo_Nacionalidade', 'Codigo');
+    }
+    
+    public function necessidade()
+    {
+        return $this->belongsTo(NecessidadeEspecial::class, 'necessidade_especial_id', 'id');
+    }
+
 
     public function polo()
     {

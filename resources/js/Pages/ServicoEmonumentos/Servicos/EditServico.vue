@@ -103,7 +103,7 @@
 
     const submiter = () =>{
 
-      Inertia.post(route('mf.servicos-create'), form, {
+      Inertia.post('/servicos/criar', form, {
         onSuccess: (page)=>{
           closeModel()
           sweetSuccess("Serviço cadastrado com sucesso")

@@ -30,4 +30,9 @@ class Curso extends Model
         'numero_max_cadeiras',
         'codigo_director',
     ];
+    
+    public function faculdade()
+    {
+        return $this->belongsTo(Faculdade::class, 'faculdade_id', 'codigo');
+    }
 }

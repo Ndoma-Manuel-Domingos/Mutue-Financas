@@ -34,7 +34,10 @@
                       <label for="" class="text-secondary">Ano Lectivo</label>
 
                       <div class="input-group">
-                        <select v-model="anolectivo" class="form-control form-control-sm ">
+                        <select
+                          v-model="anolectivo"
+                          class="form-control form-control-sm"
+                        >
                           <option
                             :value="item.Codigo"
                             v-for="item in anolectivos"
@@ -52,7 +55,10 @@
                       <label for="" class="text-secondary">Curso</label>
 
                       <div class="input-group">
-                        <select v-model="searchCurso" class="form-control form-control-sm ">
+                        <select
+                          v-model="searchCurso"
+                          class="form-control form-control-sm"
+                        >
                           <option value="">TODOS</option>
                           <option
                             :value="curso.Codigo"
@@ -70,7 +76,10 @@
                     <div class="form-group">
                       <label>Turno</label>
                       <div class="input-group">
-                        <select v-model="searchTurno" class="form-control form-control-sm ">
+                        <select
+                          v-model="searchTurno"
+                          class="form-control form-control-sm"
+                        >
                           <option value="">TODOS</option>
                           <option
                             :value="turno.Codigo"
@@ -92,13 +101,21 @@
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card">
-              <div class="card-header">
-                <h5>TOTAL REGISTROS: {{ estudantes.total }}</h5>
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ estudantes.total }}</span
+                  >
+                </h5>
               </div>
 
               <div class="card-body">
                 <div class="table-responsive">
-                  <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
+                  <table
+                    id="carregarTabelaEstudantes"
+                    style="width: 100%"
+                    class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl"
+                  >
                     <thead>
                       <tr>
                         <th>Matricula</th>
@@ -112,7 +129,12 @@
                     </thead>
                     <tbody>
                       <tr v-for="item in estudantes.data" :key="item.matricula">
-                        <td><a :href="route('mf.estudante-visualizar-perfil', item.matricula)">{{ item.matricula }}</a></td>
+                        <td>
+                          <a
+                            :href="`/estudantes/visualizar-perfil/${item.matricula}`"
+                            >{{ item.matricula }}</a
+                          >
+                        </td>
                         <td>{{ item.bilhete }}</td>
                         <td>{{ item.nome }}</td>
                         <td>{{ item.curso }}</td>
@@ -145,7 +167,13 @@ import { Link } from "@inertiajs/inertia-vue3";
 import Paginacao from "../../../Shared/Paginacao.vue";
 
 export default {
-  props: ["estudantes", "cursos", "turnos", "anolectivos", "ano_lectivo_activo"],
+  props: [
+    "estudantes",
+    "cursos",
+    "turnos",
+    "anolectivos",
+    "ano_lectivo_activo",
+  ],
 
   components: { Link, Paginacao },
   data() {
@@ -196,15 +224,30 @@ export default {
         },
       });
     },
-    
+
     imprimirPDF() {
-      window.open("/estudantes/finalistas/pdf?searchCurso="+this.searchCurso+"&searchTurno="+this.searchTurno+"&anolectivo="+this.anolectivo, "_blank");
+      window.open(
+        "/estudantes/finalistas/pdf?searchCurso=" +
+          this.searchCurso +
+          "&searchTurno=" +
+          this.searchTurno +
+          "&anolectivo=" +
+          this.anolectivo,
+        "_blank"
+      );
     },
-  
+
     imprimirEXCEL() {
-      window.open("/estudantes/finalistas/excel?searchCurso="+this.searchCurso+"&searchTurno="+this.searchTurno+"&anolectivo="+this.anolectivo, "_blank");
-    }
-    
+      window.open(
+        "/estudantes/finalistas/excel?searchCurso=" +
+          this.searchCurso +
+          "&searchTurno=" +
+          this.searchTurno +
+          "&anolectivo=" +
+          this.anolectivo,
+        "_blank"
+      );
+    },
   },
 };
 </script>

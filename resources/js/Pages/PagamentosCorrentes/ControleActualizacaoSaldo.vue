@@ -171,7 +171,7 @@
 
   const search = _.throttle(function()
   {
-    Inertia.get(route('mf.controle-actualizacao-saldo'),
+    Inertia.get('/consultar/actualizacao-saldo',
       {operador: operador.value, data_inicio: data_inicio.value, data_final: data_final.value},
       {
         onBefore: () => {

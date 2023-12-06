@@ -19,9 +19,19 @@
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card mb-4">
-              <div class="card-header">
-                <h5>Volar Total: AOA {{ valor_total_facturas }}</h5>
+              
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ props.facturas.total }}</span
+                  >
+                  
+                  <span class="float-right"
+                    >VALOR TOTAL: {{ valor_total_facturas }}</span
+                  >
+                </h5>
               </div>
+            
               <div class="card-body">
                 <div class="table-responsive">
                   <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">
@@ -33,22 +43,16 @@
                         <th>Curso</th>
                         <th>Turno</th>
                         <th>Valor</th>
-                        <!-- <th width="10px">Acções</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="factura in props.facturas.data" :key="factura.matricula">
-                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" >{{ factura.matricula }}</a></td>
+                        <td><a :href="`/estudantes/visualizar-perfil/${factura.matricula}`" >{{ factura.matricula }}</a></td>
                         <td>{{ factura.aluno }}</td>
                         <td>{{ factura.faculdade }}</td>
                         <td>{{ factura.curso }}</td>
                         <td>{{ factura.turno }}</td>
                         <td>{{ formatValor(factura.valores) }}</td>
-                        <!-- <td>
-                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary text-center">
-                             <i class="fas fa-info"></i>
-                          </a>
-                        </td> -->
                       </tr>
                     </tbody>
                   </table>

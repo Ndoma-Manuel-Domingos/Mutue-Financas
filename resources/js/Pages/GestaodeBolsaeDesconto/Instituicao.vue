@@ -322,8 +322,7 @@ const formInstuiBosla = {
 
 }
 
-Inertia.post(route('mf.tipo-bolsa-instuicao'), formInstuiBosla, {
-
+Inertia.post('/instituicoes/tipo-bolsa', formInstuiBosla, {
 
     onSuccess: (page) => {
         $('#BolsaModal').modal('hide')
@@ -339,7 +338,7 @@ Inertia.post(route('mf.tipo-bolsa-instuicao'), formInstuiBosla, {
 })
 }
 const submiter = () => {
-    Inertia.post(route('mf.intituicao-criar'), form, {
+    Inertia.post('/instuicao/criar', form, {
         onSuccess: (page) => {
             $('#exampleModal').modal('hide')
             sweetSuccess("Instituição  cadastrado com sucesso")
@@ -374,7 +373,7 @@ const updateInstituicao = () => {
 }
 
 const search = _.throttle(function () {
-    Inertia.get(route('mf.instituicoes'),
+    Inertia.get('/instituicoes',
         {
             instituicao: instituicao_busca.value
         },

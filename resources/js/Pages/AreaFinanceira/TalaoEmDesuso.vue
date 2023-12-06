@@ -30,7 +30,7 @@
             <div class="card">
               <div class="card-header">
                 <Link
-                  :href="route('mf.adicionar-talao-desuso')"
+                  href="/talao/adicionar"
                   class="btn btn-primary btn-sm"
                 >
                   Adicionar Talão
@@ -92,6 +92,15 @@
         <div class="row">
           <div class="col-12 col-md-12">
             <div class="card">
+            
+              <div class="card-header bg-light">
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS:
+                    {{ items.total }}</span
+                  >
+                </h5>
+              </div>
     
               <div class="card-body">
                   <table id="carregarTabelaEstudantes" style="width: 100%" class="table-sm table_estudantes table-bordered table-striped table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl table-responsive-xxl">

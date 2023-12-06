@@ -145,14 +145,14 @@
                     </thead>
                     <tbody>
                       <tr v-for="factura in facturas.data" :key="factura.matricula">
-                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.matricula }}</a></td>
-                        <td><a :href="route('mf.estudante-visualizar-perfil', factura.matricula)">{{ factura.aluno }}</a></td>
+                        <td><a :href="`/estudantes/visualizar-perfil/${factura.matricula}`">{{ factura.matricula }}</a></td>
+                        <td><a :href="`/estudantes/visualizar-perfil/${factura.matricula}`">{{ factura.aluno }}</a></td>
                         <td>{{ factura.faculdade }}</td>
                         <td>{{ factura.curso }}</td>
                         <td>{{ factura.turno }}</td>
-                        <td><a :href="route('mf.estudante-por-mes', factura.IdServico)">{{ factura.servico }}</a></td>
+                        <td><a :href="`/pagamentos/propinas-por-mes/${factura.IdServico}`">{{ factura.servico }}</a></td>
                         <td>
-                          <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)" class="btn-sm btn-primary">
+                          <a :href="`/estudantes/visualizar-perfil/${factura.matricula}`" class="btn-sm btn-primary">
                             <i class="fas fa-user-graduate"></i>
                           </a>
                         </td>

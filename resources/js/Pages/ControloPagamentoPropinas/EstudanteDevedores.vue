@@ -127,7 +127,7 @@
                                                 <td>{{ factura.turno }}</td>
                                                 <td>{{ factura.servico }}</td>
                                                 <td>
-                                                    <a :href="route('mf.estudante-visualizar-perfil', factura.matricula)"
+                                                    <a :href="`/estudantes/visualizar-perfil/${factura.matricula}`"
                                                         class="btn-sm btn-primary">
                                                         <i class="fas fa-user-graduate"></i>
                                                     </a>
@@ -186,7 +186,7 @@ const searchTurno = ref(props.filters.searchTurno ?? null)
 
 
 const search = function () {
-    Inertia.get(route('mf.estudante-devedores'), {
+    Inertia.get('/estudantes/devedores', {
         searchAnoLectivo: searchAnoLectivo.value,
         searchMes: searchMes.value,
         searchFaculdade: searchFaculdade.value,

@@ -23,8 +23,18 @@ class InstituicaoController extends Controller
             $request->page_size = 15;
         }
 
-        $data['items'] = Instituicacao::with('bolsas.bolsa', 'tipo_instituicao_descricao')->when($request->sort_by, function ($query, $value) {
+        $data['items'] = Instituicacao::with('bolsas.bolsa', 'tipo_instituicao_descricao')
+        ->when($request->sort_by, function ($query, $value) {
             $query->orderBy($value, request('order_by', 'asc'));
+        })
+        ->when($request->nome_instituicao_search, function($query, $value){
+            $query->where('Instituicao',"like", "%{$value}%");
+        })
+        ->when($request->sigla_instituicao_search, function($query, $value){
+            $query->where('sigla', "like","%{$value}%");
+        })
+        ->when($request->nif_instituicao_search, function($query, $value){
+            $query->where('nif', "like","%{$value}%");
         })
         ->when($request->instituicao_tipo, function ($query, $value) {
             $query->orWhere("tipo_instituicao", $value);

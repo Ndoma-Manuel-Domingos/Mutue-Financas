@@ -20,8 +20,11 @@ class PermissionController extends Controller
         if ($request->page_size == -1) {
             $request->page_size = 15;
         }
-
-        $data['items'] = Permission::with('roles')->orderBy('id', 'desc')->paginate($request->page_size ?? 10)
+        
+        $data['items'] = Permission::with('roles')
+        ->where('sistema', 'finance')
+        ->orderBy('id', 'desc')
+        ->paginate($request->page_size ?? 10)
         ->withQueryString();
         
         $data['roles'] = Role::get();

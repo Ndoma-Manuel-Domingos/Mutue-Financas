@@ -36,13 +36,10 @@
 
                     <p class="text-muted text-center">Situação Actual</p>
                     <p class="text-muted text-center text-uppercase">
-                      <span :style="estilo_cor_estado_estudante">{{ designacao_estado_estudante }}</span>
-                    <!-- {{ estado_estudante.designacao }} -->
+                      <span :style="estilo_cor_estado_estudante">{{
+                        designacao_estado_estudante
+                      }}</span>
                     </p>
-                    <!-- :href="
-                          'https://mutue.ao/storage/documentos/' +
-                          pagamento.nome_documento
-                        " -->
                   </div>
 
                   <div class="col-12 col-md-8">
@@ -59,15 +56,22 @@
                         <b>Ano Curricular:</b>
                         <a class="float-right">{{ ano_curricular }}</a>
                       </li>
+                      <li class="list-group-item">
+                        <b>Média:</b>
+                        <a class="float-right">{{ admissao.mediaFinal }}</a>
+                      </li>
 
                       <li class="list-group-item">
                         <b>Tipo de Estudante:</b>
                         <a class="float-right">
-                            
-                          <div class="col s12 m6" v-if="bolseiro" style="float: right">
+                          <div
+                            class="col s12 m6"
+                            v-if="bolseiro"
+                            style="float: right"
+                          >
                             <template v-if="bolseiro.desconto == 100">
                               <b
-                                >{{ this.estudante_tipo4.designacao }} ({{
+                                >{{ this.estudante_tipo3.designacao }} ({{
                                   estudante_tipo4.descricao
                                 }})</b
                               >
@@ -79,10 +83,9 @@
                               "
                             >
                               <b
-                                >{{ this.estudante_tipo3.designacao }} ({{
+                                >{{ this.estudante_tipo4.designacao }} ({{
                                   estudante_tipo3.descricao
-                                }}
-                                - {{ bolseiro.desconto }}%)</b
+                                }}- {{ bolseiro.desconto }}%)</b
                               >
                             </template>
                             <template
@@ -99,7 +102,19 @@
                               >
                             </template>
                           </div>
-                          
+
+                          <div
+                            class="col s12 m6"
+                            v-else-if="desconto_atribuido"
+                            style="float: right"
+                          >
+                            <b
+                              >{{ this.estudante_tipo2.designacao }} ({{
+                                estudante_tipo2.descricao
+                              }}) - {{ desconto_atribuido.designacao }}</b
+                            >
+                          </div>
+
                           <div class="col s12 m6" v-else style="float: right">
                             <b
                               >{{ estudante_tipo1.designacao }} ({{
@@ -107,16 +122,13 @@
                               }})</b
                             >
                           </div>
-                        
                         </a>
                       </li>
                     </ul>
 
-                    <div class="info-box shadow-none">
-                      <span class="info-box-icon bg-info"
-                        ><i class="fas fa-book"></i
-                      ></span>
-                      <div class="info-box-content" v-if="bolseiro">
+                    <!-- <div class="info-box shadow-none"> -->
+                      <!-- <span class="info-box-icon bg-info"><i class="fas fa-book"></i></span> -->
+                      <!-- <div class="info-box-content" v-if="bolseiro">
                         <span class="info-box-text text-uppercase"
                           ><strong
                             >Este estudante é um bolseiro(A).</strong
@@ -129,23 +141,16 @@
                           <strong>{{ bolseiro.Instituicao }}</strong> com o
                           Desconto de <strong>{{ bolseiro.desconto }}%.</strong>
                         </span>
-                      </div>
+                      </div> -->
 
-                      <div class="info-box-content" v-else>
-                        <span class="info-box-text text-uppercase"
-                          ><strong
-                            >Este estudante não é um bolseiro(A).</strong
-                          ></span
-                        >
-                        <span class="info-box-text"
-                          >Estudante
-                          <strong>{{ admissao.resultado }}</strong> com a média
-                          <strong>{{ admissao.mediaFinal }}</strong
-                          >. Data e hora da Admissão :
-                          <strong>{{ formatData(admissao.data) }}</strong></span
-                        >
-                      </div>
-                    </div>
+                      <!-- <div class="info-box-content"> -->
+                        <!-- <span class="info-box-text text-uppercase"><strong>Este estudante não é um bolseiro(A).</strong></span> -->
+                        <!-- <span class="info-box-text" >Estudante -->
+                        <!-- <strong>{{ admissao.resultado }}</strong> COM MÉDIA <strong>{{ admissao.mediaFinal }}</strong> -->
+                        <!-- . Data e hora da Admissão : -->
+                        <!-- <strong>{{ formatData(admissao.data) }}</strong></span> -->
+                      <!-- </div> -->
+                    <!-- </div  > -->
                   </div>
                 </div>
               </div>
@@ -235,6 +240,7 @@
                             </a>
                           </div>
                         </div>
+
                         <div class="col-7 col-sm-10">
                           <div class="tab-content" id="vert-tabs-tabContent">
                             <div
@@ -249,6 +255,52 @@
                                   style="width: 100%"
                                 >
                                   <thead>
+                                    <tr>
+                                      <th colspan="2">
+                                        <span
+                                          class="badge badge-warning p-2"
+                                          style="
+                                            background: #167bba;
+                                            color: #167bba;
+                                          "
+                                          >.</span
+                                        >
+                                        Representa meses cobrido pela bolsa
+                                      </th>
+                                      <th colspan="3">
+                                        <span
+                                          class="badge badge-warning p-2"
+                                          style="
+                                            background: #1de9b6;
+                                            color: #1de9b6;
+                                          "
+                                          >.</span
+                                        >
+                                        Representa os meses Pagos
+                                      </th>
+                                      <th colspan="3">
+                                        <span
+                                          class="badge badge-warning p-2"
+                                          style="
+                                            background: #f77f7f;
+                                            color: #f77f7f;
+                                          "
+                                          >.</span
+                                        >
+                                        Representa os meses Nao Pagos
+                                      </th>
+                                      <th colspan="3">
+                                        <span
+                                          class="badge badge-warning p-2"
+                                          style="
+                                            background: #9e9e9e;
+                                            color: #9e9e9e;
+                                          "
+                                          >.</span
+                                        >
+                                        Representa os meses Isento ou suspenso
+                                      </th>
+                                    </tr>
                                     <template
                                       v-if="
                                         preinscricao.codigo_tipo_candidatura ==
@@ -321,7 +373,7 @@
                                             <select
                                               name=""
                                               id=""
-                                              class="form-control form-control-sm  form-control-sm"
+                                              class="form-control form-control-sm form-control-sm"
                                             >
                                               <option value="">
                                                 Definir Ciclo
@@ -426,19 +478,66 @@
                                             anolectivosinscritosactual.Designacao
                                           }}
                                         </td>
-                                        
+
                                         <td
                                           v-for="mes_temp in prestacoes"
                                           :key="mes_temp.id"
                                           class="text-center py-4 fs-1"
-                                          :class="(mes_temp.bolseiro && (mes_temp.bolseiro.desconto == 100)) ? 'Bolseiro 100%' : (mes_temp.factura_item ? mes_temp.factura_item.valor_pago == 0 ? 'nao_pago' : 'pago' : mes_temp.suspenso ? 'isento' : 'nao_pago')"
+                                          :class="
+                                            mes_temp.bolseiro &&
+                                            (mes_temp.bolseiro.desconto ==
+                                              100 ||
+                                              mes_temp.bolseiro.desconto == 0)
+                                              ? 'bolseiro_com_renuncia'
+                                              : mes_temp.bolseiro
+                                              ? mes_temp.bolseiro.desconto >=
+                                                  1 ||
+                                                (mes_temp.bolseiro.desconto <=
+                                                  50 &&
+                                                  mes_temp.bolseiro.desconto >=
+                                                    51) ||
+                                                mes_temp.bolseiro.desconto <= 99
+                                                ? 'bolseiro_com_renuncia'
+                                                : ''
+                                              : mes_temp.factura_item
+                                              ? mes_temp.factura_item
+                                                  .valor_pago == 0
+                                                ? 'nao_pago'
+                                                : 'pago'
+                                              : mes_temp.suspenso
+                                              ? 'isento'
+                                              : 'nao_pago'
+                                          "
                                         >
-                                          {{ mes_temp.designacao }} <br />
+                                          {{ mes_temp.designacao }}<br />
                                           {{
-                                            (mes_temp.bolseiro && (mes_temp.bolseiro.desconto == 100)) ? 'pago' : (mes_temp.factura_item ? formatValor( mes_temp.factura_item .valor_pago ) : mes_temp.suspenso ? "Suspenso" : "0.00")
+                                            mes_temp.bolseiro &&
+                                            (mes_temp.bolseiro.desconto ==
+                                              100 ||
+                                              mes_temp.bolseiro.desconto == 0)
+                                              ? "Bolseiro 100%"
+                                              : mes_temp.bolseiro
+                                              ? mes_temp.bolseiro.desconto >=
+                                                  1 ||
+                                                (mes_temp.bolseiro.desconto <=
+                                                  50 &&
+                                                  mes_temp.bolseiro.desconto >=
+                                                    51) ||
+                                                mes_temp.bolseiro.desconto <= 99
+                                                ? "Bolseiro"
+                                                : ""
+                                              : mes_temp.factura_item
+                                              ? formatValor(
+                                                  mes_temp.factura_item
+                                                    .valor_pago
+                                                )
+                                              : mes_temp.suspenso
+                                              ? "Suspenso"
+                                              : "0.00"
                                           }}
                                         </td>
                                       </tr>
+
                                       <tr>
                                         <td class="text-center py-4">
                                           {{
@@ -447,13 +546,44 @@
                                         </td>
                                         <td
                                           v-for="mes_temp_anterior in prestacoes_anterior"
-                                          :key="mes_temp_anterior.id" class="text-center py-4 fs-1"
-                                          :class="(mes_temp_anterior.bolseiro && (mes_temp_anterior.bolseiro.desconto == 100)) ? 'pago' :  (mes_temp_anterior.factura_item_anterior ? mes_temp_anterior.factura_item_anterior.valor_pago == 0 ? 'nao_pago' : 'pago': mes_temp_anterior.suspenso_anterior? 'isento': 'nao_pago')"
+                                          :key="mes_temp_anterior.id"
+                                          class="text-center py-4 fs-1"
+                                          :class="
+                                            mes_temp_anterior.bolseiro &&
+                                            (mes_temp_anterior.bolseiro
+                                              .desconto == 100 ||
+                                              mes_temp_anterior.bolseiro
+                                                .desconto == 0)
+                                              ? 'pago'
+                                              : mes_temp_anterior.factura_item_anterior
+                                              ? mes_temp_anterior
+                                                  .factura_item_anterior
+                                                  .valor_pago == 0
+                                                ? 'nao_pago'
+                                                : 'pago'
+                                              : mes_temp_anterior.suspenso_anterior
+                                              ? 'isento'
+                                              : 'nao_pago'
+                                          "
                                         >
                                           {{ mes_temp_anterior.designacao }}
                                           <br />
                                           {{
-                                            (mes_temp_anterior.bolseiro && (mes_temp_anterior.bolseiro.desconto == 100)) ? 'Bolseiro 100%' :  (mes_temp_anterior.factura_item_anterior ? formatValor( mes_temp_anterior .factura_item_anterior .valor_pago ) : mes_temp_anterior.suspenso_anterior ? "Isento" : "0.00")
+                                            mes_temp_anterior.bolseiro &&
+                                            (mes_temp_anterior.bolseiro
+                                              .desconto == 100 ||
+                                              mes_temp_anterior.bolseiro
+                                                .desconto == 0)
+                                              ? "Bolseiro 100%"
+                                              : mes_temp_anterior.factura_item_anterior
+                                              ? formatValor(
+                                                  mes_temp_anterior
+                                                    .factura_item_anterior
+                                                    .valor_pago
+                                                )
+                                              : mes_temp_anterior.suspenso_anterior
+                                              ? "Isento"
+                                              : "0.00"
                                           }}
                                         </td>
                                       </tr>
@@ -540,6 +670,139 @@
                                     </template>
                                   </tbody>
                                 </table>
+
+                                <table
+                                  class="table-sm table-hover table-bordered table-striped mt-3 text-center"
+                                  style="width: 100%"
+                                  v-if="desconto_atribuido"
+                                >
+                                  <tbody>
+                                    <tr>
+                                      <td colspan="5">
+                                        ESTUDANTE COM DESCONTO
+                                        {{ desconto_atribuido.designacao }}
+                                      </td>
+                                    </tr>
+                                    <tr class="bg-dark">
+                                      <td>Valor da Mensalidade</td>
+                                      <td>Valor do Desconto</td>
+                                      <td>Valor da Mensalidade com Desconto</td>
+                                      <td>Valor Anual da Mensalidade</td>
+                                      <td>
+                                        Valor Anual da Mensalidade com Desconto
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        {{
+                                          valor_da_mensalidade(
+                                            preco_curso.Preco ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_do_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            desconto_atribuido.valor_desconto ??
+                                              0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_da_mensalidade_com_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            desconto_atribuido.valor_desconto ??
+                                              0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_anual_da_mensalidade(
+                                            preco_curso.Preco ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_anual_da_mensalidade_com_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            desconto_atribuido.valor_desconto ??
+                                              0
+                                          )
+                                        }}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+
+                                <table
+                                  class="table-sm table-hover table-bordered table-striped mt-3 text-center"
+                                  style="width: 100%"
+                                  v-if="bolseiro"
+                                >
+                                  <tbody>
+                                    <tr>
+                                      <td colspan="5">
+                                        ESTUDANTE BOLSEIRO
+                                        <span class="text-info">
+                                          {{ bolseiro.designacao }}</span
+                                        >
+                                      </td>
+                                    </tr>
+                                    <tr class="bg-dark">
+                                      <td>Valor da Mensalidade</td>
+                                      <td>Valor da Bolsa</td>
+                                      <td>Valor da Mensalidade com Bolsa</td>
+                                      <td>Valor Anual da Mensalidade</td>
+                                      <td>
+                                        Valor Anual da Mensalidade com Bolsa
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        {{
+                                          valor_da_mensalidade(
+                                            preco_curso.Preco ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_do_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            bolseiro.desconto ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_da_mensalidade_com_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            bolseiro.desconto ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_anual_da_mensalidade(
+                                            preco_curso.Preco ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          valor_anual_da_mensalidade_com_desconto(
+                                            preco_curso.Preco ?? 0,
+                                            bolseiro.desconto ?? 0
+                                          )
+                                        }}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                               </div>
                             </div>
                             <div
@@ -561,7 +824,7 @@
                                       >
                                       <div class="col-12 col-sm-5">
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="estudante.contacto_principal"
                                         ></div>
                                       </div>
@@ -573,7 +836,7 @@
                                       >
                                       <div class="col-sm-5 col-12">
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.contacto_alternativo
                                           "
@@ -587,7 +850,7 @@
                                       >
                                       <div class="col-sm-5 col-12">
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="estudante.email"
                                         ></div>
                                       </div>
@@ -618,7 +881,7 @@
                                         >
                                         <div
                                           type="text"
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.nome ?? 'sem-registro'
                                           "
@@ -630,7 +893,7 @@
                                           >Data de Nascimento:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Data_Nascimento ??
                                             'sem-registro'
@@ -643,7 +906,7 @@
                                           >Gênero:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Genero ?? 'sem-registro'
                                           "
@@ -655,7 +918,7 @@
                                           >Número BI:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Numero_BI ??
                                             'sem-registro'
@@ -668,7 +931,7 @@
                                           >Data de Emissão:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Data_Emissao ??
                                             'sem-registro'
@@ -680,7 +943,7 @@
                                           >Data de Validade:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Data_Validade ??
                                             'sem-registro'
@@ -693,7 +956,7 @@
                                           >Nacionalidade:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Nacionalidade ??
                                             'sem-registro'
@@ -706,7 +969,7 @@
                                           >Nome do Pai:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Nome_Pai ?? 'sem-registro'
                                           "
@@ -718,7 +981,7 @@
                                           >Nome da Mãe:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Nome_Mae ?? 'sem-registro'
                                           "
@@ -730,7 +993,7 @@
                                           >Profissão:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Profissao ??
                                             'sem-registro'
@@ -743,7 +1006,7 @@
                                           >Ocupação:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Ocupacao ?? 'sem-registro'
                                           "
@@ -755,7 +1018,7 @@
                                           >Naturalidade:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Naturalidade ??
                                             'sem-registro'
@@ -767,7 +1030,9 @@
                                         <label class="col-form-label"
                                           >Província:</label
                                         >
-                                        <div class="form-control form-control-sm "></div>
+                                        <div
+                                          class="form-control form-control-sm"
+                                        ></div>
                                       </div>
 
                                       <div class="form-group col-12 col-md-2">
@@ -775,7 +1040,7 @@
                                           >Município:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.municipio ??
                                             'sem-registro'
@@ -788,7 +1053,7 @@
                                           >Morada:</label
                                         >
                                         <div
-                                          class="form-control form-control-sm "
+                                          class="form-control form-control-sm"
                                           v-html="
                                             estudante.Morada ?? 'sem-registro'
                                           "
@@ -838,7 +1103,7 @@
                                     <select
                                       v-model="ano"
                                       @change="carregar_inscricoes"
-                                      class="form-control form-control-sm  col-12 col-md-5"
+                                      class="form-control form-control-sm col-12 col-md-5"
                                     >
                                       <option value="">TODOS</option>
                                       <option
@@ -875,11 +1140,17 @@
                                                 v-for="item in inscricoes"
                                                 :key="item"
                                               >
-                                                <td>{{ item.codigo ?? '' }}</td>
-                                                <td>{{ item.disciplina ?? '' }}</td>
-                                                <td>{{ item.classe ?? '' }}</td>
-                                                <td>{{ item.duracao ?? '' }}</td>
-                                                <td>{{ item.semestre ?? '' }}</td>
+                                                <td>{{ item.codigo ?? "" }}</td>
+                                                <td>
+                                                  {{ item.disciplina ?? "" }}
+                                                </td>
+                                                <td>{{ item.classe ?? "" }}</td>
+                                                <td>
+                                                  {{ item.duracao ?? "" }}
+                                                </td>
+                                                <td>
+                                                  {{ item.semestre ?? "" }}
+                                                </td>
                                                 <td>
                                                   {{
                                                     item.horario ??
@@ -1025,7 +1296,7 @@
                                       <label for="">Operador</label>
                                       <select
                                         v-model="operador_extratos"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         @change="carregar_tipo_movimentos"
                                       >
                                         <option value="">TODOS</option>
@@ -1046,7 +1317,7 @@
                                       <label for="">Tipo de Movimento</label>
                                       <select
                                         v-model="tipo_movimentos_extrato"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         @change="carregar_tipo_movimentos"
                                       >
                                         <option value="">TODOS</option>
@@ -1066,7 +1337,7 @@
                                         type="date"
                                         @keyup.enter="carregar_tipo_movimentos"
                                         v-model="data_inicio_extrato"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       />
                                     </div>
 
@@ -1076,7 +1347,7 @@
                                         type="date"
                                         @keyup.enter="carregar_tipo_movimentos"
                                         v-model="data_final_extrato"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       />
                                     </div>
                                   </div>
@@ -1220,7 +1491,7 @@
                                         <div class="col-12 col-md-6">
                                           <input
                                             type="number"
-                                            class="form-control form-control-sm  mt-2"
+                                            class="form-control form-control-sm mt-2"
                                             v-model="
                                               form_actualizar_saldo.saldo_actual
                                             "
@@ -1244,7 +1515,7 @@
                                         <div class="col-12 col-md-6">
                                           <input
                                             type="number"
-                                            class="form-control form-control-sm  mt-2"
+                                            class="form-control form-control-sm mt-2"
                                             v-model="
                                               form_actualizar_saldo.saldo_a_actualizar
                                             "
@@ -1271,7 +1542,7 @@
                                             v-model="
                                               form_actualizar_saldo.saldo_motivo
                                             "
-                                            class="form-control form-control-sm  mt-2"
+                                            class="form-control form-control-sm mt-2"
                                             placeholder="Actualizar para"
                                           ></textarea>
                                         </div>
@@ -1400,7 +1671,7 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_factura"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         @change="carregar_factura_estudantes"
                                       >
                                         <option
@@ -1417,7 +1688,7 @@
                                       <select
                                         v-model="estado_factura"
                                         @change="carregar_factura_estudantes"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option value="">Todos</option>
                                         <option value="0">
@@ -1564,9 +1835,12 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_isencao"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         @change="isencao_pagamentos_search"
                                       >
+                                        <option value="">
+                                          Selecione Ano Lectivo
+                                        </option>
                                         <option
                                           :value="anos.Codigo"
                                           v-for="anos in anolectivos"
@@ -1580,7 +1854,7 @@
                                       <label for="">Serviços</label>
                                       <select
                                         v-model="servico_isencao_multa"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option :value="preco_curso.Codigo">
                                           {{ preco_curso.Descricao }}
@@ -1591,7 +1865,7 @@
                                       <label for="">Motivo</label>
                                       <select
                                         v-model="motivo_isencao_multa"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option
                                           :value="isencao.Codigo"
@@ -1620,6 +1894,14 @@
                                         </option>
                                       </select>
                                     </div>
+
+                                    <p class="text-danger">
+                                      Obs: Se não aparecer os meses para
+                                      isentar, recomendamos que selecione
+                                      primeiro no campo ano lectivo
+                                      acima(Combox) selecione Ano Lectivo, e
+                                      depois volta ao ano lectivo que queres!
+                                    </p>
                                   </div>
                                 </div>
                                 <div class="card-footer">
@@ -1694,9 +1976,12 @@
                                       <label for="">Ano Lectivo</label>
                                       <select
                                         v-model="ano_isencao"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         @change="isencao_pagamentos_search"
                                       >
+                                        <option value="">
+                                          Selecione Ano Lectivo
+                                        </option>
                                         <option
                                           :value="anos.Codigo"
                                           v-for="anos in anolectivos"
@@ -1710,7 +1995,7 @@
                                       <label for="">Serviços</label>
                                       <select
                                         v-model="servico_isencao"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option :value="preco_curso.Codigo">
                                           {{ preco_curso.Descricao }}
@@ -1728,7 +2013,7 @@
                                       <label for="">Motivo</label>
                                       <select
                                         v-model="motivo_isencao"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option
                                           :value="isencao.Codigo"
@@ -1739,7 +2024,7 @@
                                         </option>
                                       </select>
                                     </div>
-                                    
+
                                     <!-- <div class="col-12 col-md-3">
                                       <label for="">Mês:</label>
                                       <select
@@ -1755,18 +2040,23 @@
                                         </option>
                                       </select>
                                     </div> -->
-                                    
+
                                     <div class="col-12 col-md-3">
                                       <label for="recipient2">Mês:</label>
                                       <select
                                         v-model="mes_isencao"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                         id="recipient2"
                                         multiple="multiple"
                                         ref="mySelect2"
                                       >
-                                        <template v-for="mes in listar_meses_isencoes" :key="mes.id">
-                                            <option :value="mes.id">{{ mes.designacao }}</option>
+                                        <template
+                                          v-for="mes in listar_meses_isencoes"
+                                          :key="mes.id"
+                                        >
+                                          <option :value="mes.id">
+                                            {{ mes.designacao }}
+                                          </option>
                                         </template>
                                         <!-- <template v-for="mes_temp in prestacoes" :key="mes_temp.id">
                                             <option :value="mes_temp.id" v-if="!mes_temp.factura_item">{{ mes_temp.designacao }}</option>
@@ -1785,7 +2075,14 @@
                                         </option> -->
                                       </select>
                                     </div>
-                                    
+
+                                    <p class="text-danger">
+                                      Obs: Se não aparecer os meses para
+                                      isentar, recomendamos que selecione
+                                      primeiro no campo ano lectivo
+                                      acima(Combox) selecione Ano Lectivo, e
+                                      depois volta ao ano lectivo que queres!
+                                    </p>
                                   </div>
                                 </div>
                                 <div class="card-footer">
@@ -1898,7 +2195,7 @@
                                       <select
                                         v-model="ano_pagamento"
                                         @change="carregar_pagamentos"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option value="">TODOS</option>
                                         <option
@@ -1915,7 +2212,7 @@
                                       <select
                                         v-model="estado_pagamento"
                                         @change="carregar_pagamentos"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option value="">TODOS</option>
                                         <option value="1">Validado</option>
@@ -2027,7 +2324,7 @@
                                       <select
                                         v-model="ano"
                                         @change="carregar_servicos_pagos"
-                                        class="form-control form-control-sm "
+                                        class="form-control form-control-sm"
                                       >
                                         <option value="">TODOS</option>
                                         <option
@@ -2125,7 +2422,7 @@
                   <input
                     type="email"
                     v-model="assunto"
-                    class="form-control form-control-sm "
+                    class="form-control form-control-sm"
                     id="exampleInputEmail1"
                     placeholder="Assunto:"
                   />
@@ -2135,7 +2432,7 @@
                   <textarea
                     rows="2"
                     v-model="messagem"
-                    class="form-control form-control-sm "
+                    class="form-control form-control-sm"
                     id="exampleInputPassword1"
                     placeholder="Mensagem:"
                   ></textarea>
@@ -2186,7 +2483,7 @@
                     <label for="">Motivo</label>
                     <select
                       v-model="motivo_remover_factura_pagamento"
-                      class="form-control form-control-sm "
+                      class="form-control form-control-sm"
                     >
                       <option
                         :value="motivo.codigo"
@@ -2205,7 +2502,7 @@
                       <textarea
                         rows="2"
                         v-model="message_motivo_remover_factura_pagamento"
-                        class="form-control form-control-sm "
+                        class="form-control form-control-sm"
                         id="message_motivo_remover_factura_pagamento"
                         placeholder="Motivo:"
                       ></textarea>
@@ -2256,7 +2553,7 @@
                   <textarea
                     rows="2"
                     v-model="message_motivo_remover"
-                    class="form-control form-control-sm "
+                    class="form-control form-control-sm"
                     id="message_motivo_remover"
                     placeholder="Motivo:"
                   ></textarea>
@@ -2381,9 +2678,9 @@
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">
-              Close
+              Fechar
             </button>
-            <button type="button" class="btn btn-info">Save changes</button>
+            <!-- <button type="button" class="btn btn-info">Save changes</button> -->
           </div>
         </div>
       </div>
@@ -2401,6 +2698,7 @@ export default {
   props: [
     "estudante",
     "bolseiro",
+    "desconto_atribuido",
     "admissao",
     "preinscricao",
     "matricula",
@@ -2422,7 +2720,7 @@ export default {
     Link,
     Paginacao,
   },
-  
+
   data() {
     return {
       form_actualizar_saldo: this.$inertia.form({
@@ -2453,7 +2751,7 @@ export default {
       mes_temps_isencao: [],
       listar_meses_isencoes: [],
       servicos_isencao: [],
-      
+
       listagem_meses_ano_lectivo: [],
 
       // movimentos das actualizaçoes
@@ -2501,19 +2799,20 @@ export default {
       estado_pagamento: "",
       ano_pagamento: "",
       lista_pagamentos: [],
-            
+
       cor_estado_estudante: "",
       designacao_estado_estudante: "",
-      
+
       estudante_tipo1: {},
       estudante_tipo2: {},
       estudante_tipo3: {},
       estudante_tipo4: {},
-      
+
       bolseiro: {},
-      
+      desconto_atribuido: {},
+
       params: {},
-      
+
       operador_extratos: "",
       tipo_movimentos_extrato: "",
       data_inicio_extrato: new Date().toISOString().substr(0, 10),
@@ -2524,66 +2823,87 @@ export default {
       messagem: "",
     };
   },
-  
-  mounted(){
+
+  mounted() {
     this.pegaBolseiro();
     this.pegarDescricaoBolseiro();
-    
+    this.pegaDescontoAtribuido();
+
     this.carregar_historicos_actualizacoes();
-  
-    axios.get("/estudantes/carregar-estado/" + this.matricula.Codigo).then((response) => {
-      this.cor_estado_estudante = response.data.data.cor
-      this.designacao_estado_estudante = response.data.data.designacao
-    })
-    .catch((errors) => {
-    });
+
+    axios
+      .get(`/estudantes/carregar-estado/${this.matricula.Codigo}`)
+      .then((response) => {
+        this.cor_estado_estudante = response.data.data.cor;
+        this.designacao_estado_estudante = response.data.data.designacao;
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
   },
-  
+
   computed: {
-  
     estilo_cor_estado_estudante() {
       return {
         color: this.cor_estado_estudante,
       };
-    }
+    },
   },
-  
+
   watch: {
-    options: function(val) {
-        this.params.page = val.page;
-        this.params.page_size = val.itemsPerPage;
-        if (val.sortBy.length != 0) {
-          this.params.sort_by = val.sortBy[0];
-          this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
-        } else {
-          this.params.sort_by = null;
-          this.params.order_by = null;
-        }
-        this.updateData();
-      },
-      ano_isencao: function(val) {
-        this.params.ano_isencao = val;
-        this.getMeses();
+    options: function (val) {
+      this.params.page = val.page;
+      this.params.page_size = val.itemsPerPage;
+      if (val.sortBy.length != 0) {
+        this.params.sort_by = val.sortBy[0];
+        this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
+      } else {
+        this.params.sort_by = null;
+        this.params.order_by = null;
       }
+      this.updateData();
+    },
+    ano_isencao: function (val) {
+      this.params.ano_isencao = val;
+      this.getMeses();
+    },
   },
 
   methods: {
-  
     getMeses() {
-        this.$Progress.start();
-        this.$inertia.get("/carregar/meses-anolectivo", this.params, {
-            preserveState: true,
-            preverseScroll: true,
-            onSuccess: () => {
-                this.$Progress.finish();
-            }
+      this.$Progress.start();
+      this.$inertia.get("/carregar/meses-anolectivo", this.params, {
+        preserveState: true,
+        preverseScroll: true,
+        onSuccess: () => {
+          this.$Progress.finish();
+        },
       });
     },
-    
-    getStatusEstudante: function(matricula){
-    
+
+    getStatusEstudante: function (matricula) {},
+
+    valor_da_mensalidade(valor) {
+      let result = valor;
+      return this.formatValor(result);
     },
-    
+    valor_do_desconto(valor, desconto) {
+      let result = valor - valor * (desconto / 100);
+      return this.formatValor(result);
+    },
+    valor_da_mensalidade_com_desconto(valor, desconto) {
+      let result = valor * (desconto / 100);
+      return this.formatValor(result);
+    },
+    valor_anual_da_mensalidade(valor) {
+      let result = valor * 10;
+      return this.formatValor(result);
+    },
+    valor_anual_da_mensalidade_com_desconto(valor, desconto) {
+      let result = valor * (desconto / 100) * 10;
+      return this.formatValor(result);
+    },
+
     carregar_lista_isencoes_pagamentos: function () {
       this.$Progress.start();
       axios
@@ -2593,7 +2913,8 @@ export default {
         )
         .then((response) => {
           this.isencoes_pagamentos = response.data.isencoes_pagamentos;
-          this.isencoes_pagamentos_count = response.data.isencoes_pagamentos_count;
+          this.isencoes_pagamentos_count =
+            response.data.isencoes_pagamentos_count;
 
           this.mes_temps_isencao = response.data.meses;
           this.servicos_isencao = response.data.servicos;
@@ -2680,20 +3001,20 @@ export default {
         .then((response) => {
           /**
            * isenção de pagamentos
-          */
-          
+           */
+
           this.listagem_meses_ano_lectivo = response.data.meses;
-          
+
           this.listar_meses_isencoes = response.data.meses;
           this.servicos_isencao = response.data.servicos;
           this.isencoes_pagamentos = response.data.isencoes_pagamentos;
-          this.isencoes_pagamentos_count = response.data.isencoes_pagamentos_count;
+          this.isencoes_pagamentos_count =
+            response.data.isencoes_pagamentos_count;
           /**
            * isencção de multas
            */
           this.isencoes_multas = response.data.isencoes_multas;
           this.isencoes_multas_count = response.data.isencoes_multas_count;
-          
 
           this.$Progress.finish();
         })
@@ -2755,8 +3076,6 @@ export default {
           this.$Progress.fail();
         });
     },
-    
-    
 
     carregar_inscricoes: function () {
       this.$Progress.start();
@@ -3029,7 +3348,7 @@ export default {
 
       return valorFormatado;
     },
-    
+
     pegaBolseiro: function () {
       this.$Progress.start();
       axios
@@ -3042,8 +3361,20 @@ export default {
           this.$Progress.fail();
         });
     },
-    
-    
+
+    pegaDescontoAtribuido: function () {
+      this.$Progress.start();
+      axios
+        .get(`/estudante/pega-desconto-atribuido/${this.matricula.Codigo}`)
+        .then((response) => {
+          this.desconto_atribuido = response.data;
+          this.$Progress.finish();
+        })
+        .catch((error) => {
+          this.$Progress.fail();
+        });
+    },
+
     pegaFinalista: function () {
       //alert(this.anoLectivo.Codigo)
       this.$Progress.start();
@@ -3059,7 +3390,7 @@ export default {
           this.$Progress.fail();
         });
     },
-    
+
     pegarDescricaoBolseiro: function () {
       axios
         .get(`/estudante/pegar-descricao-bolseiro`)
@@ -3099,4 +3430,11 @@ export default {
   background-color: #9e9e9e;
 }
 
+.bolseiro_com_renuncia {
+  background-color: #1ab6eb;
+}
+
+.bolseiro_sem_renuncia {
+  background-color: #167bba;
+}
 </style>

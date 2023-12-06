@@ -32,7 +32,6 @@
               <div class="card card-light">
                 <div class="card-body">
                   <div class="row">
-                    
                     <div class="col-12 col-md-2">
                       <div class="form-group">
                         <label for="" class="text-secondary"
@@ -55,7 +54,7 @@
                         </div>
                       </div>
                     </div>
-                  
+
                     <div class="col-12 col-md-2">
                       <div class="form-group">
                         <label for="" class="text-secondary"
@@ -165,10 +164,11 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-light">
-                <h3 class="card-title">
-                  <strong>LISTAGEM</strong>
-                </h3>
-                <div class="card-tools"></div>
+                <h5>
+                  <span class="float-left"
+                    >TOTAL REGISTROS: {{ items.total }}</span
+                  >
+                </h5>
               </div>
 
               <div class="card-body">
@@ -194,23 +194,13 @@
                     <tr v-for="item in items.data" :key="item.bolseiro">
                       <td>
                         <a
-                          :href="
-                            route(
-                              'mf.estudante-visualizar-perfil',
-                              item.codigo_matricula
-                            )
-                          "
+                          :href="`/estudantes/visualizar-perfil/${item.codigo_matricula}`"
                           >{{ item.codigo_matricula }}</a
                         >
                       </td>
                       <td>
                         <a
-                          :href="
-                            route(
-                              'mf.estudante-visualizar-perfil',
-                              item.codigo_matricula
-                            )
-                          "
+                          :href="`/estudantes/visualizar-perfil/${item.codigo_matricula}`"
                           >{{ item.nome }}</a
                         >
                       </td>
@@ -289,7 +279,7 @@ export default {
       }
       this.updateData();
     },
-    
+
     ano_lectivo: function (val) {
       this.params.ano_lectivo = val;
       this.updateData();

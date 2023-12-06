@@ -191,8 +191,8 @@
                       </thead>
                       <tbody>
                         <tr v-for="item in items.data" :key="item.Cod_Matricula">
-                          <td><a :href="route('mf.estudante-visualizar-perfil', item.Cod_Matricula)">{{ item.Cod_Matricula }}</a></td>
-                          <td><a :href="route('mf.estudante-visualizar-perfil', item.Cod_Matricula)">{{ item.Nome_Completo }}</a></td>
+                          <td><a :href="`/estudantes/visualizar-perfil/${item.Cod_Matricula}`">{{ item.Cod_Matricula }}</a></td>
+                          <td><a :href="`/estudantes/visualizar-perfil/${item.Cod_Matricula}`">{{ item.Nome_Completo }}</a></td>
                           <td>{{ item.curso }}</td>
                           <td>{{ item.grau }}</td>
                           <td>{{ item.Instituicao }}</td>
